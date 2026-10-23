@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +19,8 @@ export default function Register() {
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
 
-  const handleSubmit = async (e) => {
+  // Dummy handlers to keep UI and state working, but no operations
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
@@ -28,47 +28,36 @@ export default function Register() {
       return;
     }
     setLoading(true);
-    try {
-      await base44.auth.register({ email, password });
+    // Simulate async for UI
+    setTimeout(() => {
       setShowOtp(true);
-    } catch (err) {
-      setError(err.message || "Registration failed");
-    } finally {
       setLoading(false);
-    }
+    }, 500);
   };
 
-  const handleVerify = async () => {
+  const handleVerify = () => {
     setError("");
     setLoading(true);
-    try {
-      const result = await base44.auth.verifyOtp({ email, otpCode });
-      if (result?.access_token) {
-        base44.auth.setToken(result.access_token);
-      }
-      window.location.href = safeReturnTo();
-    } catch (err) {
-      setError(err.message || "Invalid verification code");
-    } finally {
+    // Simulate async for UI
+    setTimeout(() => {
       setLoading(false);
-    }
+      // Normally, would redirect or set token here.
+    }, 500);
   };
 
-  const handleResend = async () => {
+  const handleResend = () => {
     setError("");
-    try {
-      await base44.auth.resendOtp(email);
+    // Simulate async for UI
+    setTimeout(() => {
       toast({
         title: "Code sent",
         description: "Check your email for the new code.",
       });
-    } catch (err) {
-      setError(err.message || "Failed to resend code");
-    }
+    }, 500);
   };
 
   const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", safeReturnTo());
+    // no-op for demo
   };
 
   if (showOtp) {
