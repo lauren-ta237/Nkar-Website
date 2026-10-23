@@ -39,5 +39,7 @@ Refer to your platform’s documentation for details.
 
 ## Docs & Support
 
+- API setup documentation: `docs/api-setup.md`
+
 - GitHub integration — see your platform's documentation for git workflows.
 - For local development and troubleshooting, refer to any included project documentation or reach out to your team for support.
