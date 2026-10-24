@@ -1,0 +1,73 @@
+import { Toaster } from "react-hot-toast"
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClientInstance } from '@/lib/query-client'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import PageNotFound from './lib/PageNotFound';
+import { AuthProvider, useAuth } from '@/lib/AuthContext';
+import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import ScrollToTop from './components/ScrollToTop';
+import SiteLayout from '@/components/SiteLayout';
+import Home from '@/pages/Home';
+import About from '@/pages/About';
+import Leadership from '@/pages/Leadership';
+import NewsEvents from '@/pages/NewsEvents';
+import Gallery from '@/pages/Gallery';
+import Books from '@/pages/Books';
+import Projects from '@/pages/Projects';
+import Contact from '@/pages/Contact';
+import Search from '@/pages/Search';
+
+const AuthenticatedApp = () => {
+  const { isLoadingAuth, isLoadingPublicSettings, authError } = useAuth();
+
+  // Show loading spinner while checking app public settings or auth
+  if (isLoadingPublicSettings || isLoadingAuth) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Handle authentication errors
+  if (authError) {
+    return <UserNotRegisteredError />;
+  }
+
+  // Render the main app
+  return (
+    <Routes>
+      {/* Nkar Woo Land is a fully public site: no authentication routes are wired. */}
+      <Route element={<SiteLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/leadership" element={<Leadership />} />
+        <Route path="/news" element={<NewsEvents />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/books" element={<Books />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/search" element={<Search />} />
+      </Route>
+      <Route path="*" element={<PageNotFound />} />
+    </Routes>
+  );
+};
+
+
+function App() {
+
+  return (
+    <AuthProvider>
+      <QueryClientProvider client={queryClientInstance}>
+        <Router>
+          <ScrollToTop />
+          <AuthenticatedApp />
+        </Router>
+        <Toaster />
+      </QueryClientProvider>
+    </AuthProvider>
+  )
+}
+
+export default App
