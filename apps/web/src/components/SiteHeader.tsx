@@ -57,8 +57,8 @@ export default function SiteHeader() {
       </div>
 
       <div className="bg-forest-800">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4 lg:gap-6 lg:px-6">
-          <Link to="/" className="flex shrink-0 items-center gap-3">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4 lg:gap-6 lg:px-6 justify-between">
+          <Link to="/" className="flex items-center gap-3">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold-300 text-gold-300">
               <svg
                 viewBox="0 0 24 24"
@@ -73,10 +73,10 @@ export default function SiteHeader() {
               </svg>
             </span>
             <span className="leading-none">
-              <span className="block font-display text-2xl text-ivory">
+              <span className="block font-display text-xl sm:text-2xl text-ivory">
                 {site.name}
               </span>
-              <span className="mt-2 block text-[9px] uppercase tracking-[0.34em] text-gold-300 dt:hidden lg:block">
+              <span className="hidden mt-2 sm:block text-[9px] uppercase tracking-[0.34em] text-gold-300 dt:hidden lg:block">
                 Heritage • Identity • Future
               </span>
             </span>
@@ -165,7 +165,7 @@ export default function SiteHeader() {
           )}
         </AnimatePresence>
 
-        <HeritageBorder variant="boxes" />
+        {/* <HeritageBorder variant="boxes" /> */}
       </div>
 
       <AnimatePresence>

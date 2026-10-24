@@ -40,7 +40,7 @@ export default function HeroSection() {
               to="/about"
               className="inline-flex items-center gap-2 bg-gold-400 px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-forest-900 transition-colors hover:bg-gold-300"
             >
-              Enter the archive
+              About Nkar Woo
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <Link
