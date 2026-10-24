@@ -1,7 +1,18 @@
 import { Image } from '@/components/ui/image';
 import Reveal from './Reveal';
+import type { ReactNode } from 'react';
 
 /** Interior page banner: forest ground, photograph, gold eyebrow. */
+interface PageHeroProps {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  note?: string;
+  children?: ReactNode;
+}
+
 export default function PageHero({
   eyebrow,
   title,
@@ -10,7 +21,7 @@ export default function PageHero({
   imageAlt = '',
   note,
   children
-}) {
+}: PageHeroProps) {
   return (
     <section className="relative overflow-hidden bg-forest-900 text-ivory">
       {image && (

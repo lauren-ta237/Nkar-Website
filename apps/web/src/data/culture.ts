@@ -1,11 +1,51 @@
 import { images } from '@/data/images';
 
-export const aboutLead = [
+export interface AboutSection {
+  id: string;
+  eyebrow: string;
+  title: string;
+  image: string | null;
+  imageAlt?: string;
+  paragraphs: string[];
+  pending?: string;
+}
+
+export interface Tradition {
+  title: string;
+  text: string;
+  icon: string;
+}
+
+export interface TimelineEntry {
+  period: string;
+  title: string;
+  text: string;
+}
+
+export interface LeadershipRole {
+  title: string;
+  text: string;
+  icon: string;
+}
+
+export interface CeremonialYearEntry {
+  title: string;
+  text: string;
+}
+
+export interface LeadershipRecord {
+  id: string;
+  label: string;
+  era: string;
+  summary: string;
+}
+
+export const aboutLead: string[] = [
   'Nkar is a village community of the Cameroon Grassfields, in the Northwest Region of the country. Its people live on highland hills and farm the land around them; its fondom, its palace and its customs carry a history that belongs to every Nkar son and daughter.',
   'This archive is being assembled by the community itself. Nothing on these pages is invented: where a name, a date or a photograph has not yet been verified with the palace and the traditional council, the record is left open and clearly marked.'
 ];
 
-export const aboutSections = [
+export const aboutSections: AboutSection[] = [
   {
     id: 'history',
     eyebrow: 'History & origins',
@@ -56,7 +96,7 @@ export const aboutSections = [
   }
 ];
 
-export const traditions = [
+export const traditions: Tradition[] = [
   {
     title: 'Ceremonial cloth',
     text: 'Hand-embroidered cloth worn for palace ceremonies and family celebrations, where colour and pattern mark the occasion and the standing of those who wear it.',
@@ -89,7 +129,7 @@ export const traditions = [
   }
 ];
 
-export const timeline = [
+export const timeline: TimelineEntry[] = [
   {
     period: 'To be verified',
     title: 'The founding of Nkar',
@@ -117,12 +157,12 @@ export const timeline = [
   }
 ];
 
-export const leadershipLead = [
+export const leadershipLead: string[] = [
   'The fondom is the heart of Nkar. The Fon holds the land, the palace and the customs of the village; the traditional council advises and upholds them; the quarter and family heads carry custom into every household.',
   'Nkar Woo Land records the institution with the dignity it deserves. Names, reign dates, portraits and biographies of the Fons are published here only after verification with the palace and the traditional council — never from unconfirmed sources.'
 ];
 
-export const leadershipRoles = [
+export const leadershipRoles: LeadershipRole[] = [
   {
     title: 'The Fon',
     text: 'The traditional ruler of Nkar and custodian of the land, the palace and the customs of the fondom. The Fon receives the village, confers titles, and represents Nkar in tradition.',
@@ -150,7 +190,7 @@ export const leadershipRoles = [
   }
 ];
 
-export const ceremonialYear = [
+export const ceremonialYear: CeremonialYearEntry[] = [
   {
     title: 'Ceremonies of the farming year',
     text: 'The rites that open and close the seasons — planting, first fruits and harvest — held with the Fon and the quarter heads.'
@@ -169,7 +209,7 @@ export const ceremonialYear = [
   }
 ];
 
-export const leadershipRecords = [
+export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'record-1',
     label: 'Earliest recorded reign',

@@ -3,14 +3,19 @@ import { CalendarDays, Check, MapPin } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import { formatShortDate } from '@/lib/format';
 import SampleBadge from './SampleBadge';
+import type { Project } from '@/data/projects';
 
-const statusStyles = {
+const statusStyles: Record<string, string> = {
   Ongoing: 'bg-forest-700 text-ivory',
   Planned: 'bg-gold-100 text-gold-700',
   Completed: 'bg-clay-600 text-ivory'
 };
 
-export default function ProjectCard({ project }) {
+interface ProjectCardProps {
+  project: Project;
+}
+
+export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className="grid overflow-hidden border border-border bg-card md:grid-cols-[0.85fr_1.15fr]">
       {project.image ? (

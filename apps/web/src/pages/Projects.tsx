@@ -12,7 +12,7 @@ export default function Projects() {
   const projectsQuery = useProjects();
   const projects = projectsQuery.data || [];
 
-  const countBy = (status) => projects.filter((project) => project.status === status).length;
+  const countBy = (status: string) => projects.filter((project) => project.status === status).length;
 
   return (
     <>

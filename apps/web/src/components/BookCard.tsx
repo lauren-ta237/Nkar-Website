@@ -1,12 +1,17 @@
 import SampleBadge from './SampleBadge';
+import type { Book } from '@/data/books';
 
-const accents = {
+const accents: Record<string, string> = {
   forest: 'bg-forest-800 text-ivory border-forest-700',
   gold: 'bg-gold-500 text-forest-900 border-gold-600',
   clay: 'bg-clay-600 text-ivory border-clay-700'
 };
 
-export default function BookCard({ book }) {
+interface BookCardProps {
+  book: Book;
+}
+
+export default function BookCard({ book }: BookCardProps) {
   const details = [
     { label: 'Author', value: book.author },
     { label: 'Published', value: book.year },

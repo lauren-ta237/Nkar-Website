@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import type { ReactNode } from 'react';
 
 const DefaultFallback = () => (
   <div className="fixed inset-0 flex items-center justify-center">
@@ -9,7 +10,12 @@ const DefaultFallback = () => (
   </div>
 );
 
-export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement }) {
+interface ProtectedRouteProps {
+  fallback?: ReactNode;
+  unauthenticatedElement?: ReactNode;
+}
+
+export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement = null }: ProtectedRouteProps) {
   const { isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
 
   useEffect(() => {
@@ -23,10 +29,7 @@ export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthe
   }
 
   if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    }
-    return unauthenticatedElement;
+    return <UserNotRegisteredError />;
   }
 
   if (!isAuthenticated) {

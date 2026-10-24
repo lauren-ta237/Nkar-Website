@@ -18,19 +18,21 @@ const schema = z.object({
     .refine((value) => value === true, { message: 'Please confirm before sending.' })
 });
 
+type FormValues = z.infer<typeof schema>;
+
 const fieldClass =
   'mt-2 w-full rounded-sm border border-border bg-ivory px-4 py-3 text-sm text-forest-800 outline-none transition-colors placeholder:text-muted-foreground focus:border-gold-500';
 const labelClass = 'block text-[11px] font-semibold uppercase tracking-[0.24em] text-forest-700';
 const errorClass = 'mt-2 text-xs text-clay-700';
 
 export default function ContactForm() {
-  const [reviewed, setReviewed] = useState(null);
+  const [reviewed, setReviewed] = useState<FormValues | null>(null);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting }
-  } = useForm({
+  } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: '',
@@ -42,7 +44,7 @@ export default function ContactForm() {
     }
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: FormValues) => {
     // The site is frontend-only: this demonstrates the form and its validation.
     // Nothing is transmitted, stored or delivered anywhere.
     await new Promise((resolve) => window.setTimeout(resolve, 700));

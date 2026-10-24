@@ -1,6 +1,11 @@
 import SampleBadge from '@/components/SampleBadge';
+import type { CeremonialYearEntry } from '@/data/culture';
 
-export default function CeremonialYear({ items }) {
+interface CeremonialYearProps {
+  items: CeremonialYearEntry[];
+}
+
+export default function CeremonialYear({ items }: CeremonialYearProps) {
   return (
     <ol className="mt-10 divide-y divide-border border-y border-border">
       {items.map((item, index) => (

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import FacebookIcon from './FacebookIcon';
 import { navLinks, site } from '@/data/site';
 import Ornament from './Ornament';
 import HeritageBorder from './HeritageBorder';
@@ -111,7 +112,7 @@ export default function SiteFooter() {
                 </span>
               </li>
               <li className="flex gap-3">
-                <Facebook className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" aria-hidden="true" />
+                <FacebookIcon className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" aria-hidden="true" />
                 <span className="text-ivory/70">
                   <a
                     href={site.contact.facebookUrl}

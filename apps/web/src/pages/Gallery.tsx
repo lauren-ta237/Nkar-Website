@@ -13,14 +13,16 @@ import { useGallery } from '@/hooks/useContent';
 
 export default function Gallery() {
   const [category, setCategory] = useState('All');
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const galleryQuery = useGallery();
 
   const items = galleryQuery.data || [];
   const visible = category === 'All' ? items : items.filter((item) => item.category === category);
   const close = () => setOpenIndex(null);
-  const prev = () => setOpenIndex((index) => (index - 1 + visible.length) % visible.length);
-  const next = () => setOpenIndex((index) => (index + 1) % visible.length);
+  const prev = () =>
+    setOpenIndex((index) => (index === null ? 0 : (index - 1 + visible.length) % visible.length));
+  const next = () =>
+    setOpenIndex((index) => (index === null ? 0 : (index + 1) % visible.length));
 
   return (
     <>

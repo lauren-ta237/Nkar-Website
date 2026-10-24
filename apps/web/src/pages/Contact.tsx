@@ -1,4 +1,5 @@
-import { Facebook, Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import FacebookIcon from '@/components/FacebookIcon';
 import PageHero from '@/components/PageHero';
 import SectionHeading from '@/components/SectionHeading';
 import ContactForm from '@/components/ContactForm';
@@ -67,7 +68,7 @@ export default function Contact() {
 
               <li className="flex gap-4">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-gold-500/40 bg-gold-50 text-forest-700">
-                  <Facebook className="h-4 w-4" aria-hidden="true" />
+                  <FacebookIcon className="h-4 w-4" aria-hidden="true" />
                 </span>
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold-600">

@@ -1,6 +1,11 @@
 import SampleBadge from './SampleBadge';
+import type { TimelineEntry } from '@/data/culture';
 
-export default function Timeline({ items }) {
+interface TimelineProps {
+  items: TimelineEntry[];
+}
+
+export default function Timeline({ items }: TimelineProps) {
   return (
     <ol className="relative border-l border-gold-500/40 pl-8">
       {items.map((item) => (

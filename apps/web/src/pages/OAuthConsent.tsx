@@ -8,7 +8,7 @@ const COLLAPSED_DATA_ROWS = 6;
 
 // Entity tools arrive one per operation; show each entity once, naming only the
 // operations it actually grants.
-function groupTools(tools) {
+function groupTools(tools: any[]) {
   const operationsByEntity = new Map();
   const agents = [];
   const actions = [];
@@ -29,16 +29,20 @@ function groupTools(tools) {
   return { data, agents, actions };
 }
 
-const humanize = (name) =>
-  name.split(/[_-]+/).filter(Boolean).map((word) => word[0].toUpperCase() + word.slice(1)).join(" ") || name;
+const humanize = (name: string): string =>
+  name
+    .split(/[_-]+/)
+    .filter(Boolean)
+    .map((word: string) => word[0].toUpperCase() + word.slice(1))
+    .join(" ") || name;
 
 // "View, create and delete records" — delete is emphasized so it doesn't hide
 // among harmless verbs.
-function OperationSummary({ operations }) {
+function OperationSummary({ operations }: { operations: string[] }) {
   return (
     <>
-      {operations.map((op, i) => {
-        const verb = OPERATION_VERBS[op];
+      {operations.map((op: string, i: number) => {
+        const verb = (OPERATION_VERBS as Record<string, string>)[op] ?? op;
         const separator = i === 0 ? "" : i === operations.length - 1 ? " and " : ", ";
         return (
           <React.Fragment key={op}>
@@ -54,7 +58,7 @@ function OperationSummary({ operations }) {
   );
 }
 
-function ToolSection({ title, children }) {
+function ToolSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
       <h3 className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-2">{title}</h3>
@@ -63,7 +67,7 @@ function ToolSection({ title, children }) {
   );
 }
 
-function ToolRow({ title, children }) {
+function ToolRow({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
     <li className="flex flex-col gap-0.5 px-3 py-2">
       <span className="font-medium text-foreground">{title}</span>
@@ -136,7 +140,7 @@ export default function OAuthConsent() {
     })();
   }, [ctx]);
 
-  const respond = async (action) => {
+  const respond = async (action: string) => {
     setSubmitting(true);
     setError("");
     // try {
@@ -202,8 +206,8 @@ export default function OAuthConsent() {
     );
   }
 
-  const client = (info && info.client_name) || "An AI client";
-  const appName = (info && info.app_name) || "this app";
+  const client = (info && (info as any).client_name) || "An AI client";
+  const appName = (info && (info as any).app_name) || "this app";
 
   if (decided) {
     return (
@@ -241,7 +245,7 @@ export default function OAuthConsent() {
     );
   }
 
-  const tools = Array.isArray(info.tools) ? info.tools : [];
+  const tools = info && Array.isArray((info as any).tools) ? (info as any).tools : [];
   const { data, agents, actions } = groupTools(tools);
 
   return (

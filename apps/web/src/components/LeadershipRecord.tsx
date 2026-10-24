@@ -1,6 +1,12 @@
 import SampleBadge from './SampleBadge';
+import type { LeadershipRecord } from '@/data/culture';
 
-export default function LeadershipRecord({ record, index }) {
+interface LeadershipRecordProps {
+  record: LeadershipRecord;
+  index: number;
+}
+
+export default function LeadershipRecord({ record, index }: LeadershipRecordProps) {
   return (
     <article className="grid gap-6 border border-border bg-card p-6 md:grid-cols-[150px_1fr] md:p-8">
       <div className="flex min-h-[150px] flex-col items-center justify-center bg-forest-800 p-4 pattern-toghu-light text-center">

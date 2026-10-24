@@ -1,10 +1,16 @@
 import { Image } from '@/components/ui/image';
 import { photoNote } from '@/data/images';
 import SampleBadge from './SampleBadge';
+import type { GalleryItem } from '@/data/gallery';
 
-const aspectClass = { wide: 'aspect-[3/2]', square: 'aspect-square' };
+const aspectClass: Record<string, string> = { wide: 'aspect-[3/2]', square: 'aspect-square' };
 
-export default function GalleryGrid({ items, onOpen }) {
+interface GalleryGridProps {
+  items: GalleryItem[];
+  onOpen: (index: number) => void;
+}
+
+export default function GalleryGrid({ items, onOpen }: GalleryGridProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((item, index) => (

@@ -1,4 +1,14 @@
 import Ornament from './Ornament';
+import type { ReactNode } from 'react';
+
+interface SectionHeadingProps {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: 'left' | 'center';
+  ornament?: boolean;
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+}
 
 export default function SectionHeading({
   eyebrow,
@@ -7,7 +17,7 @@ export default function SectionHeading({
   align = 'left',
   ornament = false,
   as: Heading = 'h2'
-}) {
+}: SectionHeadingProps) {
   const centered = align === 'center';
 
   return (

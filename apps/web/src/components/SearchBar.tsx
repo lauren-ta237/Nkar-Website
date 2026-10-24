@@ -1,17 +1,24 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
+import type { FormEvent } from 'react';
+
+interface SearchBarProps {
+  initialValue?: string;
+  size?: 'large' | 'compact';
+  placeholder?: string;
+}
 
 export default function SearchBar({
   initialValue = '',
   size = 'large',
   placeholder = 'Search the archive — history, people, projects, books…'
-}) {
+}: SearchBarProps) {
   const [value, setValue] = useState(initialValue);
   const navigate = useNavigate();
   const large = size === 'large';
 
-  const submit = (event) => {
+  const submit = (event: FormEvent) => {
     event.preventDefault();
     const term = value.trim();
     navigate(term ? `/search?q=${encodeURIComponent(term)}` : '/search');

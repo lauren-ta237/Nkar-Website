@@ -1,9 +1,29 @@
 import { images } from '@/data/images';
 
+export interface ProjectUpdate {
+  date: string;
+  text: string;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  status: string;
+  progress: number;
+  location: string;
+  lead: string;
+  image: string | null;
+  imageAlt?: string;
+  summary: string;
+  impact: string[];
+  updates: ProjectUpdate[];
+  sample: boolean;
+}
+
 export const projectNote =
   'Sample entry — status, percentage and figures are illustrations, to be replaced with verified project reporting from the committee.';
 
-export const projects = [
+export const projects: Project[] = [
   {
     id: 'water-supply',
     title: 'Nkar community water supply',

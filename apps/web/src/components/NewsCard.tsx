@@ -2,8 +2,14 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 import SampleBadge from './SampleBadge';
+import type { NewsItem } from '@/data/news';
 
-export default function NewsCard({ item, featured = false }) {
+interface NewsCardProps {
+  item: NewsItem;
+  featured?: boolean;
+}
+
+export default function NewsCard({ item, featured = false }: NewsCardProps) {
   const [open, setOpen] = useState(false);
 
   return (

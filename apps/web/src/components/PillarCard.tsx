@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import IconTile from './IconTile';
+import type { Pillar } from '@/data/site';
 
-export default function PillarCard({ pillar, index }) {
+interface PillarCardProps {
+  pillar: Pillar;
+  index: number;
+}
+
+export default function PillarCard({ pillar, index }: PillarCardProps) {
   return (
     <article className="group relative flex h-full flex-col border border-border bg-card p-7 transition-colors hover:border-gold-500/60">
       <span

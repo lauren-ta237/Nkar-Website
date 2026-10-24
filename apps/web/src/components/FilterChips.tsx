@@ -1,4 +1,11 @@
-export default function FilterChips({ options, value, onChange, label = 'Filter' }) {
+interface FilterChipsProps {
+  options: string[];
+  value: string;
+  onChange: (value: string) => void;
+  label?: string;
+}
+
+export default function FilterChips({ options, value, onChange, label = 'Filter' }: FilterChipsProps) {
   return (
     <div className="flex flex-wrap items-center gap-2" role="group" aria-label={label}>
       {options.map((option) => {

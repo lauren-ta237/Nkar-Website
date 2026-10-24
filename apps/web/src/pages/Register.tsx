@@ -7,7 +7,7 @@ import { UserPlus, Mail, Lock, Loader2 } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "react-hot-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 export default function Register() {
@@ -20,7 +20,7 @@ export default function Register() {
   const [otpCode, setOtpCode] = useState("");
 
   // Dummy handlers to keep UI and state working, but no operations
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
@@ -49,10 +49,7 @@ export default function Register() {
     setError("");
     // Simulate async for UI
     setTimeout(() => {
-      toast({
-        title: "Code sent",
-        description: "Check your email for the new code.",
-      });
+      toast("Code sent: Check your email for the new code.");
     }, 500);
   };
 

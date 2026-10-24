@@ -29,6 +29,7 @@ export default function IntroSection() {
           <SectionHeading
             eyebrow="Welcome to Nkar"
             title="A village in the Grassfields, kept by its own people"
+            description="Nkar's heritage, culture, and leadership — recorded by the community that holds them."
             ornament
           />
           <div className="mt-6 space-y-5 text-base leading-relaxed text-forest-800/90">

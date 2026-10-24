@@ -15,7 +15,7 @@ export default function ResetPassword() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (newPassword !== confirmPassword) {
@@ -25,8 +25,8 @@ export default function ResetPassword() {
     setLoading(true);
     try {
       window.location.href = "/login";
-    } catch (err) {
-      setError(err.message || "Failed to reset password");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to reset password");
     } finally {
       setLoading(false);
     }

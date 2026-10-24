@@ -4,8 +4,9 @@ import { ArrowUpRight, Search as SearchIcon } from 'lucide-react';
 import FilterChips from '@/components/FilterChips';
 import LoadingState from '@/components/LoadingState';
 import { searchContent, searchTypes, useSearchIndex } from '@/hooks/useContent';
+import type { FormEvent } from 'react';
 
-const typeStyles = {
+const typeStyles: Record<string, string> = {
   Page: 'border-forest-600 bg-forest-700 text-ivory',
   News: 'border-gold-500 bg-gold-100 text-gold-700',
   Event: 'border-clay-500 bg-clay-100 text-clay-700',
@@ -29,7 +30,7 @@ export default function Search() {
     [indexQuery.data, term, type]
   );
 
-  const submit = (event) => {
+  const submit = (event: FormEvent) => {
     event.preventDefault();
     const next = term.trim();
     setParams(next ? { q: next } : {});
@@ -80,7 +81,7 @@ export default function Search() {
         <div className="mx-auto w-full max-w-5xl px-6">
           <div className="flex flex-wrap items-center justify-between gap-6">
             <FilterChips
-              options={searchTypes}
+              options={Array.from(searchTypes)}
               value={type}
               onChange={setType}
               label="Filter results by type"

@@ -15,7 +15,9 @@ import {
   Utensils
 } from 'lucide-react';
 
-const icons = {
+import type { LucideIcon } from 'lucide-react';
+
+const icons: Record<string, LucideIcon> = {
   landmark: Landmark,
   drum: Drum,
   crown: Crown,
@@ -32,7 +34,12 @@ const icons = {
   heart: Heart
 };
 
-export default function IconTile({ name, className = '' }) {
+interface IconTileProps {
+  name: string;
+  className?: string;
+}
+
+export default function IconTile({ name, className = '' }: IconTileProps) {
   const Icon = icons[name] || Landmark;
   return (
     <span

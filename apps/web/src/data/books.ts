@@ -4,7 +4,25 @@ export const booksIntro =
 export const booksNote =
   'Sample entries — the titles, years and descriptions below are placeholders. Authors’ names are left open until Nkar writers submit their own details, which the custodians then publish with permission.';
 
-export const books = [
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  year: string;
+  pages: string;
+  language: string;
+  format: string;
+  accent: string;
+  summary: string;
+  sample: boolean;
+}
+
+export interface PublicationPolicy {
+  title: string;
+  text: string;
+}
+
+export const books: Book[] = [
   {
     id: 'oral-histories',
     title: 'Echoes of Nkar: An Oral History Collection',

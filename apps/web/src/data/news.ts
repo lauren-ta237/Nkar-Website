@@ -1,4 +1,26 @@
-export const news = [
+export interface NewsItem {
+  id: string;
+  category: string;
+  date: string;
+  title: string;
+  excerpt: string;
+  body: string[];
+  sample: boolean;
+}
+
+export interface EventItem {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  venue: string;
+  organiser: string;
+  description: string;
+  tags: string[];
+  sample: boolean;
+}
+
+export const news: NewsItem[] = [
   {
     id: 'heritage-archive-opens',
     category: 'Announcement',
@@ -85,7 +107,7 @@ export const news = [
   }
 ];
 
-export const eventsUpcoming = [
+export const eventsUpcoming: EventItem[] = [
   {
     id: 'town-hall-water-roads',
     title: 'Development town hall: water and village roads',
@@ -136,7 +158,7 @@ export const eventsUpcoming = [
   }
 ];
 
-export const eventsPast = [
+export const eventsPast: EventItem[] = [
   {
     id: 'palace-thanksgiving',
     title: 'Palace thanksgiving',

@@ -1,8 +1,14 @@
 import { CalendarDays, MapPin, Users } from 'lucide-react';
 import { formatDate, formatDay, formatMonth, formatWeekday } from '@/lib/format';
 import SampleBadge from './SampleBadge';
+import type { EventItem } from '@/data/news';
 
-export default function EventCard({ event, past = false }) {
+interface EventCardProps {
+  event: EventItem;
+  past?: boolean;
+}
+
+export default function EventCard({ event, past = false }: EventCardProps) {
   return (
     <article
       className={`flex h-full gap-5 border p-6 ${

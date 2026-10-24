@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Facebook, Menu, Search, X } from 'lucide-react';
+import { Menu, Search, X } from 'lucide-react';
+import FacebookIcon from './FacebookIcon';
 import { navLinks, site } from '@/data/site';
 import SearchBar from './SearchBar';
 import HeritageBorder from './HeritageBorder';
+import type { FormEvent } from 'react';
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -23,7 +25,7 @@ export default function SiteHeader() {
     };
   }, [open]);
 
-  const onSearchSubmit = (event) => {
+  const onSearchSubmit = (event: FormEvent) => {
     event.preventDefault();
     const next = query.trim();
     setSearchOpen(false);
@@ -47,7 +49,7 @@ export default function SiteHeader() {
               title={site.contact.facebookNote}
               className="inline-flex items-center gap-2 text-ivory/70 transition-colors hover:text-gold-300"
             >
-              <Facebook className="h-3.5 w-3.5" aria-hidden="true" />
+              <FacebookIcon className="h-3.5 w-3.5" aria-hidden="true" />
               Facebook
             </a>
           </div>
@@ -219,7 +221,7 @@ export default function SiteHeader() {
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-ivory/70"
                   >
-                    <Facebook className="h-4 w-4" aria-hidden="true" />
+                    <FacebookIcon className="h-4 w-4" aria-hidden="true" />
                     Nkar Woo Land on Facebook
                   </a>
                 </div>

@@ -2,8 +2,14 @@ import { Image } from '@/components/ui/image';
 import ContentNotice from '@/components/ContentNotice';
 import Reveal from '@/components/Reveal';
 import { photoNote } from '@/data/images';
+import type { AboutSection } from '@/data/culture';
 
-export default function AboutSection({ section, index }) {
+interface AboutSectionProps {
+  section: AboutSection;
+  index: number;
+}
+
+export default function AboutSection({ section, index }: AboutSectionProps) {
   const flipped = index % 2 === 1;
 
   return (

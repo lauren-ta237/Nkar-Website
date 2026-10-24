@@ -1,8 +1,13 @@
 import IconTile from '@/components/IconTile';
 import SampleBadge from '@/components/SampleBadge';
 import Reveal from '@/components/Reveal';
+import type { Tradition } from '@/data/culture';
 
-export default function TraditionsGrid({ traditions }) {
+interface TraditionsGridProps {
+  traditions: Tradition[];
+}
+
+export default function TraditionsGrid({ traditions }: TraditionsGridProps) {
   return (
     <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {traditions.map((tradition, index) => (

@@ -3,12 +3,21 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import { photoNote } from '@/data/images';
 import SampleBadge from './SampleBadge';
+import type { GalleryItem } from '@/data/gallery';
 
-export default function Lightbox({ items, index, onClose, onPrev, onNext }) {
+interface LightboxProps {
+  items: GalleryItem[];
+  index: number;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}
+
+export default function Lightbox({ items, index, onClose, onPrev, onNext }: LightboxProps) {
   const item = items[index];
 
   useEffect(() => {
-    const onKey = (event) => {
+    const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
       if (event.key === 'ArrowLeft') onPrev();
       if (event.key === 'ArrowRight') onNext();

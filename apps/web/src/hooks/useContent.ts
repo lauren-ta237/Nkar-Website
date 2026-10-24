@@ -168,20 +168,20 @@ const pages = [
   },
 ];
 
-const buildIndex = () => [
+const buildIndex = (): SearchIndexItem[] => [
   ...pages,
   ...news.map((item: NewsItem) => ({
     id: `news-${item.id}`,
-    type: "News" as const,
+    type: "News",
     title: item.title,
     summary: item.excerpt,
     meta: item.category,
     to: "/news",
     tags: item.body.join(" "),
   })),
-  [...eventsUpcoming, ...eventsPast].map((item: EventItem) => ({
+  ...[...eventsUpcoming, ...eventsPast].map((item: EventItem) => ({
     id: `event-${item.id}`,
-    type: "Event" as const,
+    type: "Event",
     title: item.title,
     summary: item.description,
     meta: `${item.venue} · ${item.tags.join(", ")}`,
@@ -190,7 +190,7 @@ const buildIndex = () => [
   })),
   ...projects.map((item: Project) => ({
     id: `project-${item.id}`,
-    type: "Project" as const,
+    type: "Project",
     title: item.title,
     summary: item.summary,
     meta: `${item.status} · ${item.location}`,
@@ -199,7 +199,7 @@ const buildIndex = () => [
   })),
   ...books.map((item: Book) => ({
     id: `book-${item.id}`,
-    type: "Publication" as const,
+    type: "Publication",
     title: item.title,
     summary: item.summary,
     meta: item.language,
@@ -208,7 +208,7 @@ const buildIndex = () => [
   })),
   ...galleryItems.map((item: GalleryItem) => ({
     id: `photo-${item.id}`,
-    type: "Gallery" as const,
+    type: "Gallery",
     title: item.title,
     summary: item.caption,
     meta: item.category,
@@ -217,9 +217,15 @@ const buildIndex = () => [
   })),
 ];
 
-export type SearchIndexItem =
-  | (typeof pages)[number]
-  | ReturnType<typeof buildIndex>[number];
+export interface SearchIndexItem {
+  id: string;
+  type: string;
+  title: string;
+  summary: string;
+  meta?: string;
+  to: string;
+  tags?: string;
+}
 
 export const useSearchIndex = () =>
   useQuery({
