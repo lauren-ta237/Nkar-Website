@@ -9,11 +9,10 @@
 //   clears a dead token on 401 so a single retry can re-authenticate.
 
 import axios from "axios";
-import { getToken, clearToken } from "./auth-token";
+import { getToken, clearToken } from "../../auth-token";
+import {env} from "@/lib/env";
 
-const BASE_URL =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL) ||
-  "/api";
+const BASE_URL = `${env.BASE_API_URL}/api/v1`
 
 export const api = axios.create({
   baseURL: BASE_URL,

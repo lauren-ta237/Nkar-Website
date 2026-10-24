@@ -17,8 +17,8 @@ This project is a **Vite + React 18 single‑page application** that uses **TanS
   - Persists the token in `localStorage` under the key `nkar_auth_token` so the token survives page reloads.
   - Exported helpers: `getToken()`, `setToken(token)`, `clearToken()`, `subscribe(fn)`.
 
-- **Auth API** – `src/lib/api/auth.api.ts`
-  - TypeScript module (Vite compiles it automatically; the project’s `jsconfig.json` excludes `src/lib` from type‑checking, so the file does not affect the current CI flow).
+- **Auth API + Hooks** – `src/lib/api/auth.api.ts`
+  - TypeScript module (Vite compiles it automatically; the project's `jsconfig.json` excludes `src/lib` from type‑checking, so the file does not affect the current CI flow).
   - Exports four functions that map 1:1 to typical auth endpoints:
     - `login(payload)` → `POST /auth/login`
     - `register(payload)` → `POST /auth/register`
@@ -26,22 +26,27 @@ This project is a **Vite + React 18 single‑page application** that uses **TanS
     - `logout()` → `POST /auth/logout`
   - `login` and `register` store the returned token via `setToken`.
   - `logout` always clears the local token, even if the network request fails.
+  - **Also exports TanStack Query hooks** that consume these endpoints:
+    - `useMe(options?)` — `useQuery` for `GET /auth/me`
+    - `useLogin()` — `useMutation` for `POST /auth/login`
+    - `useRegister()` — `useMutation` for `POST /auth/register`
+    - `useLogout()` — `useMutation` for `POST /auth/logout`
+  - Query keys are namespaced under `['nkar', 'auth']` to match the existing content hooks pattern.
 
 - **Barrel export** – `src/lib/api/index.js`
-  - Re‑exports the axios instance (`api`), the token helpers and the auth API so callers can simply `import { api, login, useMe } from '@/lib/api';`.
+  - Re‑exports the axios instance (`api`), the token helpers and the auth API + hooks so callers can simply `import { api, login, useMe } from '@/lib/api';`.
 
 ---
 
 ## 2. Consuming the API with TanStack Query
 
-All data fetching should happen through TanStack Query hooks located in `src/hooks/`.
+All data fetching should happen through TanStack Query hooks located in `src/lib/api/auth.api.ts`.
 
-### 2.1. Auth hooks (`useAuthApi.js`)
+### 2.1. Auth hooks (in `auth.api.ts`)
 
-```js
-// src/hooks/useAuthApi.js
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { queryClientInstance } from '@/lib/query-client';
+```ts
+// src/lib/api/auth.api.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { login, register, me, logout } from '@/lib/api';
 
 const AUTH_KEY = ['nkar', 'auth'];
@@ -55,41 +60,42 @@ export function useMe(options = {}) {
 }
 
 export function useLogin() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: login,
     onSuccess: () => {
-      // Refresh the cached user after a successful login.
-      queryClientInstance.invalidateQueries({ queryKey: AUTH_KEY });
+      queryClient.invalidateQueries({ queryKey: AUTH_KEY });
     },
   });
 }
 
 export function useRegister() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: register,
     onSuccess: () => {
-      queryClientInstance.invalidateQueries({ queryKey: AUTH_KEY });
+      queryClient.invalidateQueries({ queryKey: AUTH_KEY });
     },
   });
 }
 
 export function useLogout() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      // Remove any cached auth data when we log out.
-      queryClientInstance.removeQueries({ queryKey: AUTH_KEY });
+      queryClient.removeQueries({ queryKey: AUTH_KEY });
     },
   });
 }
 ```
 
 > **Why `useMutation` for login/register?**
-> These are write‑operations (they create a session) and should not be retried automatically. TanStack Query’s `useMutation` is the appropriate primitive for such actions. Reads (e.g. `me`) continue to use `useQuery` as the user requested.
+> These are write‑operations (they create a session) and should not be retried automatically. TanStack Query's `useMutation` is the appropriate primitive for such actions. Reads (e.g. `me`) continue to use `useQuery` as the user requested.
 
 ### 2.2. Adding a new API module
 
-If you need to call a new REST endpoint, create a file under `src/lib/api/` (e.g. `posts.api.ts`) that exports thin wrapper functions using the shared `api` instance. Then add a matching hook in `src/hooks/` that calls the wrapper via `useQuery` (for GET) or `useMutation` (for POST/PUT/DELETE).
+If you need to call a new REST endpoint, create a file under `src/lib/api/` (e.g. `posts.api.ts`) that exports thin wrapper functions using the shared `api` instance **and** the corresponding TanStack Query hooks. Then re-export from `src/lib/api/index.js`.
 
 ---
 
@@ -121,7 +127,7 @@ If you need to call a new REST endpoint, create a file under `src/lib/api/` (e.g
 
 ## 5. Extending the API layer
 
-- **Add new endpoints** – create a new file next to `auth.api.ts` and export the functions.
+- **Add new endpoints** – create a new file next to `auth.api.ts` and export the functions + hooks.
 - **Custom error handling** – extend the response interceptor in `axios-client.js` to map additional status codes to UI‑friendly messages.
 - **Global cache reset** – call `resetQueryClient()` (exported from `query-client.js`) after a hard logout or when the user switches accounts.
 
@@ -131,13 +137,12 @@ If you need to call a new REST endpoint, create a file under `src/lib/api/` (e.g
 
 - ✅ `src/lib/api/axios-client.js` – shared Axios instance.
 - ✅ `src/lib/api/auth-token.js` – token store.
-- ✅ `src/lib/api/auth.api.ts` – demo auth routes.
+- ✅ `src/lib/api/auth.api.ts` – demo auth routes **and** TanStack Query hooks.
 - ✅ `src/lib/api/index.js` – barrel export.
-- ✅ `src/hooks/useAuthApi.js` – TanStack Query hooks.
 - ✅ `src/lib/query-client.js` – QueryClient with mutation defaults and `resetQueryClient()` helper.
 - ✅ `docs/api-setup.md` – this documentation file.
 - ✅ Update **README.md** to point developers to the new docs.
 
 ---
 
-**That’s the complete API‑layer implementation plan.** Feel free to adjust the base URL, add more API modules, or expose additional hooks as the backend evolves. Happy coding!
+**That's the complete API‑layer implementation plan.** Feel free to adjust the base URL, add more API modules, or expose additional hooks as the backend evolves. Happy coding!

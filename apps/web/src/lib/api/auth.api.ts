@@ -1,6 +1,6 @@
 // auth.api.ts
 //
-// Demo authentication API route module.
+// Demo authentication API route module + TanStack Query hooks.
 //
 // Every function here is a thin wrapper around the shared axios instance in
 // axios-client.js. Nothing auth-specific lives in the interceptor — the token
@@ -8,11 +8,11 @@
 //
 // These are DEMO endpoints: the project has no backend, so they will 404
 // against a real server until one is wired up. The shapes below are the
-// contract the frontend assumes, and the hooks in src/hooks/ consume them
+// contract the frontend assumes, and the hooks in this file consume them
 // through TanStack Query.
 
-import { api } from "./axios-client";
-import { setToken, clearToken } from "./auth-token";
+import { api } from "./config/axios-client";
+import { setToken, clearToken } from "../auth-token";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // ---- types ---------------------------------------------------------------
@@ -51,30 +51,31 @@ export type RegisterResponse = {
  * POST /auth/login
  * Returns a bearer token + the authenticated user.
  */
-export function login(payload: LoginPayload): Promise<LoginResponse> {
-  return api.post<LoginResponse>("/auth/login", payload).then((res) => {
-    setToken(res.data.token);
-    return res.data;
-  });
+export async function login(payload: LoginPayload): Promise<LoginResponse> {
+  const res = await api.post<LoginResponse>("/auth/login", payload);
+  setToken(res.data.token);
+  return res.data;
 }
 
 /**
  * POST /auth/register
  * Returns a bearer token + the newly created user.
  */
-export function register(payload: RegisterPayload): Promise<RegisterResponse> {
-  return api.post<RegisterResponse>("/auth/register", payload).then((res) => {
-    setToken(res.data.token);
-    return res.data;
-  });
+export async function register(
+  payload: RegisterPayload
+): Promise<RegisterResponse> {
+  const res = await api.post<RegisterResponse>("/auth/register", payload);
+  setToken(res.data.token);
+  return res.data;
 }
 
 /**
  * GET /auth/me
  * Returns the currently authenticated user, or 401 if none.
  */
-export function me(): Promise<AuthUser> {
-  return api.get<AuthUser>("/auth/me").then((res) => res.data);
+export async function me(): Promise<AuthUser> {
+  const res = await api.get<AuthUser>("/auth/me");
+  return res.data;
 }
 
 /**
@@ -91,6 +92,8 @@ export async function logout(): Promise<void> {
   }
 }
 
+// ---- hooks ---------------------------------------------------------------
+
 const AUTH_KEY = ["nkar", "auth"];
 
 /** GET /auth/me — re-fetched on window focus by default; disable per-call if needed. */
@@ -102,14 +105,11 @@ export function useMe(options = {}) {
   });
 }
 
-
 /** POST /auth/login — a write, so useMutation. */
 export function useLogin() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: login,
-    // On success the logged-in user is now the current user — prime the cache
-    // so useMe doesn't need a round trip.
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: AUTH_KEY });
     },
