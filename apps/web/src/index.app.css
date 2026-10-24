@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Highland Earth & Royalty */
+    --background: 48 55% 98%;
+    --foreground: 153 18% 13%;
+    --card: 45 60% 99%;
+    --card-foreground: 153 18% 13%;
+    --popover: 45 60% 99%;
+    --popover-foreground: 153 18% 13%;
+    --primary: 155 39% 20%;
+    --primary-foreground: 48 55% 98%;
+    --secondary: 41 54% 93%;
+    --secondary-foreground: 157 43% 12%;
+    --muted: 41 40% 94%;
+    --muted-foreground: 155 12% 32%;
+    --accent: 45 65% 84%;
+    --accent-foreground: 155 45% 15%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 24% 87%;
+    --input: 40 24% 87%;
+    --ring: 46 60% 42%;
+    --chart-1: 155 39% 20%;
+    --chart-2: 45 100% 33%;
+    --chart-3: 19 42% 38%;
+    --chart-4: 46 60% 47%;
+    --chart-5: 155 25% 45%;
+    --radius: 0.5rem;
+    --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+    --font-heading: 'Cormorant Garamond', ui-serif, Georgia, serif;
+    --font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    font-size: 16px;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background-color: #F1E4BC;
+    color: #0F261D;
+  }
+
+  :focus-visible {
+    outline: 2px solid #A67C00;
+    outline-offset: 4px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+
+@layer utilities {
+  /* Traditional grassfields geometry, drawn in gold */
+  .pattern-toghu {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23A67C00' stroke-opacity='0.3' stroke-width='1.1'%3E%3Cpath d='M24 4l20 20-20 20L4 24z'/%3E%3Cpath d='M24 14l10 10-10 10-10-10z'/%3E%3Cpath d='M0 24h48M24 0v48'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 48px 48px;
+  }
+
+  .pattern-toghu-light {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23F1E4BC' stroke-opacity='0.18' stroke-width='1.1'%3E%3Cpath d='M24 4l20 20-20 20L4 24z'/%3E%3Cpath d='M24 14l10 10-10 10-10-10z'/%3E%3Cpath d='M0 24h48M24 0v48'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 48px 48px;
+  }
+
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-gold-500/60 to-transparent;
+  }
+
+  .scrim-hero {
+    background-image: linear-gradient(100deg, rgba(10, 26, 20, 0.95) 0%, rgba(10, 26, 20, 0.78) 38%, rgba(10, 26, 20, 0.34) 100%);
+  }
+
+  .scrim-bottom {
+    background-image: linear-gradient(to top, rgba(10, 26, 20, 0.94) 0%, rgba(10, 26, 20, 0.5) 46%, rgba(10, 26, 20, 0.06) 100%);
+  }
+
+  .writing-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .text-shadow-ink {
+    text-shadow: 0 1px 24px rgba(10, 26, 20, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
