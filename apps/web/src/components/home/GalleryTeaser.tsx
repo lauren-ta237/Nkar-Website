@@ -4,7 +4,6 @@ import { Image } from '@/components/ui/image';
 import SectionHeading from '@/components/SectionHeading';
 import LoadingState from '@/components/LoadingState';
 import SampleBadge from '@/components/SampleBadge';
-import { photoNote } from '@/data/images';
 import { useGallery } from '@/hooks/useContent';
 
 export default function GalleryTeaser() {
@@ -41,7 +40,7 @@ export default function GalleryTeaser() {
               >
                 <Image
                   src={item.image}
-                  alt={`${item.title} — ${photoNote}`}
+                  alt={`${item.title}`}
                   className="absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-[1.04]"
                   fittingType="fill"
                   quality={80}

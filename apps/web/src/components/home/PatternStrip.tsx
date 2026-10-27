@@ -1,5 +1,5 @@
 import { Image } from '@/components/ui/image';
-import { images, photoNote } from '@/data/images';
+import { images } from '@/data/images';
 
 export default function PatternStrip() {
   return (
@@ -19,9 +19,6 @@ export default function PatternStrip() {
           Heritage kept by hand, passed on by hand.
         </p>
       </div>
-      <p className="absolute bottom-3 right-4 text-right text-[9px] uppercase tracking-[0.2em] text-ivory/40">
-        {photoNote}
-      </p>
     </section>
   );
 }

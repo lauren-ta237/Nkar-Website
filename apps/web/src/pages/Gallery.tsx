@@ -8,7 +8,6 @@ import GalleryGrid from '@/components/GalleryGrid';
 import Lightbox from '@/components/Lightbox';
 import LoadingState from '@/components/LoadingState';
 import { galleryCategories } from '@/data/gallery';
-import { photoNote } from '@/data/images';
 import { useGallery } from '@/hooks/useContent';
 
 export default function Gallery() {
@@ -30,7 +29,6 @@ export default function Gallery() {
         eyebrow="Gallery"
         title="Nkar, seen and remembered"
         description="Photographs of the land, the crafts, the ceremonies and the daily life of the village — gathered here for the people who live it and the ones who left."
-        note={photoNote}
       />
 
       <section className="bg-ivory py-16 md:py-20">

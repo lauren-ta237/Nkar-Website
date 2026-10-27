@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Image } from '@/components/ui/image';
-import { photoNote } from '@/data/images';
 import SampleBadge from './SampleBadge';
 import type { GalleryItem } from '@/data/gallery';
 
@@ -97,7 +96,6 @@ export default function Lightbox({ items, index, onClose, onPrev, onNext }: Ligh
       >
         <h2 className="font-display text-2xl text-gold-200">{item.title}</h2>
         <p className="mt-3 text-sm leading-relaxed text-ivory/75">{item.caption}</p>
-        <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-ivory/45">{photoNote}</p>
         {item.sample && <SampleBadge className="mt-4 bg-ivory" />}
       </div>
     </div>

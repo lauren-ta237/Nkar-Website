@@ -8,7 +8,7 @@ import LoadingState from '@/components/LoadingState';
 import LeadershipRecord from '@/components/LeadershipRecord';
 import RolesGrid from '@/components/leadership/RolesGrid';
 import CeremonialYear from '@/components/leadership/CeremonialYear';
-import { images, photoNote } from '@/data/images';
+import { images } from '@/data/images';
 import { leadershipLead } from '@/data/culture';
 import { useLeadershipContent } from '@/hooks/useContent';
 
@@ -26,7 +26,6 @@ export default function Leadership() {
         description="The Fon, the traditional council, the quarter and family heads — and the customs that hold Nkar together across the generations."
         image={images.palacePillars}
         imageAlt="Illustrative image: carved pillars and thatched eaves of a palace courtyard"
-        note={photoNote}
       />
 
       <section className="bg-ivory py-16 md:py-20">

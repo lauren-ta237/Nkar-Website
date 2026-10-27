@@ -1,7 +1,6 @@
 import { Image } from '@/components/ui/image';
 import ContentNotice from '@/components/ContentNotice';
 import Reveal from '@/components/Reveal';
-import { photoNote } from '@/data/images';
 import type { AboutSection } from '@/data/culture';
 
 interface AboutSectionProps {
@@ -49,9 +48,6 @@ export default function AboutSection({ section, index }: AboutSectionProps) {
                   quality={80}
                 />
               </div>
-              <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {photoNote}
-              </p>
             </>
           ) : (
             <div className="flex min-h-[220px] items-center justify-center border border-gold-500/30 bg-cream/70 p-8 pattern-toghu text-center">

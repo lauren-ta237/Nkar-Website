@@ -3,8 +3,9 @@ import { ArrowRight } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import SearchBar from '@/components/SearchBar';
 import Reveal from '@/components/Reveal';
-import { images, photoNote } from '@/data/images';
+import { images } from '@/data/images';
 import { site } from '@/data/site';
+import logo from '@/assets/images/logo.jpg';
 
 export default function HeroSection() {
   return (
@@ -23,7 +24,7 @@ export default function HeroSection() {
       <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-6 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-28">
         <Reveal>
           <p className="text-[11px] font-semibold uppercase tracking-[0.42em] text-gold-300">
-            Nkar village · Northwest Region, Cameroon
+            Nkar Clan · Northwest Region, Cameroon
           </p>
 
           <h1 className="mt-6 font-display text-5xl leading-[1.03] md:text-6xl lg:text-7xl">
@@ -54,22 +55,20 @@ export default function HeroSection() {
           <div className="mt-10 max-w-xl">
             <SearchBar />
           </div>
-          <p className="mt-4 text-[10px] uppercase tracking-[0.2em] text-ivory/45">{photoNote}</p>
         </Reveal>
 
         <Reveal delay={0.15} className="hidden lg:block">
-          <div className="relative ml-auto h-[480px] w-full max-w-sm border border-gold-500/30">
-            <Image
-              src={images.ceremonialCloth}
-              alt="Illustrative image: hand-embroidered ceremonial cloth in gold and black"
-              className="absolute inset-0 h-full w-full"
-              fittingType="fill"
-              quality={85}
-            />
+          <div className="relative ml-auto flex h-120 w-full max-w-sm items-center justify-center overflow-hidden border_border-gold-500/30_bg-forest-950/60 p-4 shadow-2xl backdrop-blur-xs">
+          {/* <div className="relative ml-auto flex h-120 w-full max-w-sm items-center justify-center overflow-hidden border border-gold-500/30 bg-forest-950/60 p-8 shadow-2xl backdrop-blur-xs"> */}
+            {/* <div className="absolute inset-0 pattern-toghu-light opacity-15" aria-hidden="true" /> */}
+            <div className="relative aspect-square w-full max-w-70 overflow-hidden rounded-full border-2 border-gold-300 shadow-2xl shadow-forest-950/80">
+              <img
+                src={logo}
+                alt={`${site.name} official emblem`}
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
-          <p className="mt-4 max-w-sm text-right text-[10px] uppercase leading-relaxed tracking-[0.2em] text-ivory/45">
-            Ceremonial cloth — {photoNote}
-          </p>
         </Reveal>
       </div>
     </section>

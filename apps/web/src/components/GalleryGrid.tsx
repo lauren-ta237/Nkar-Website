@@ -1,5 +1,4 @@
 import { Image } from '@/components/ui/image';
-import { photoNote } from '@/data/images';
 import SampleBadge from './SampleBadge';
 import type { GalleryItem } from '@/data/gallery';
 
@@ -25,7 +24,7 @@ export default function GalleryGrid({ items, onOpen }: GalleryGridProps) {
         >
           <Image
             src={item.image}
-            alt={`${item.title} — ${photoNote}`}
+            alt={`${item.title}`}
             className="absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-[1.04]"
             fittingType="fill"
             quality={80}
