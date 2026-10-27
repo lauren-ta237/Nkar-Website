@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import FacebookIcon from './FacebookIcon';
+import logo from '@/assets/images/logo.jpg';
 import { navLinks, site } from '@/data/site';
 import Ornament from './Ornament';
 import HeritageBorder from './HeritageBorder';
@@ -23,7 +24,12 @@ export default function SiteFooter() {
       <div className="relative mx-auto w-full max-w-6xl px-6 py-16">
         <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr]">
           <div>
-            <p className="font-display text-3xl text-gold-300">{site.name}</p>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gold-300 shadow-inner">
+                <img src={logo} alt={`${site.name} logo`} className="h-full w-full object-cover" />
+              </span>
+              <p className="font-display text-3xl text-gold-300">{site.name}</p>
+            </div>
             <p className="mt-3 font-display text-lg italic text-ivory/80">{site.tagline}</p>
             <Ornament className="mt-6 justify-start" />
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-ivory/60">
@@ -120,7 +126,7 @@ export default function SiteFooter() {
                     rel="noreferrer"
                     className="hover:text-gold-300"
                   >
-                    Nkar Woo Land on Facebook
+                    NKAR WOO LAN on Facebook
                   </a>
                   <span className="mt-1 block text-[11px] text-ivory/40">
                     {site.contact.facebookNote}

@@ -7,7 +7,7 @@ import ContentNotice from '@/components/ContentNotice';
 import BookCard from '@/components/BookCard';
 import LoadingState from '@/components/LoadingState';
 import { booksIntro, booksNote, publicationsPolicy } from '@/data/books';
-import { images, photoNote } from '@/data/images';
+import { images } from '@/data/images';
 import { useBooks } from '@/hooks/useContent';
 
 export default function Books() {
@@ -45,9 +45,6 @@ export default function Books() {
                   quality={80}
                 />
               </div>
-              <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {photoNote}
-              </p>
             </div>
           </div>
         </div>

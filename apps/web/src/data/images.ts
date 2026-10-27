@@ -1,7 +1,7 @@
 // images.ts
 //
 // Every photograph used on this site is listed here, in one place, so the
-// Nkar Woo Land custodians can replace the illustrative images with authentic
+// NKAR WOO LAN custodians can replace the illustrative images with authentic
 // Nkar photography without touching the pages.
 //
 // IMPORTANT: none of these images claim to be Nkar. Each one is labelled in the
@@ -33,6 +33,3 @@ export const images: Record<string, string> = {
   granary: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/21f1aaff2_generated_503d9932.png",
   calabash: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/553ec8193_generated_3a7a0318.png",
 };
-
-export const photoNote =
-  "Illustrative image — not a photograph of Nkar. To be replaced with authentic Nkar photography.";

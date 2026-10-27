@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import SectionHeading from '@/components/SectionHeading';
 import Reveal from '@/components/Reveal';
-import { images, photoNote } from '@/data/images';
+import { images } from '@/data/images';
 import { aboutLead } from '@/data/culture';
 
 export default function IntroSection() {
@@ -20,9 +20,6 @@ export default function IntroSection() {
               quality={80}
             />
           </div>
-          <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            {photoNote}
-          </p>
         </Reveal>
 
         <Reveal delay={0.1}>

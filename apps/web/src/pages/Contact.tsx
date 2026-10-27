@@ -80,7 +80,7 @@ export default function Contact() {
                     rel="noreferrer"
                     className="mt-2 inline-block text-sm text-forest-800 transition-colors hover:text-gold-600"
                   >
-                    Nkar Woo Land on Facebook
+                    NKAR WOO LAN on Facebook
                   </a>
                   <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
                     {contact.facebookNote}

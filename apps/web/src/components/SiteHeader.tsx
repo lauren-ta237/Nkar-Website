@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, Search, X } from 'lucide-react';
 import FacebookIcon from './FacebookIcon';
+import logo from '@/assets/images/logo.jpg';
 import { navLinks, site } from '@/data/site';
 import SearchBar from './SearchBar';
 import HeritageBorder from './HeritageBorder';
@@ -59,18 +60,12 @@ export default function SiteHeader() {
       <div className="bg-forest-800">
         <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4 lg:gap-6 lg:px-6 justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold-300 text-gold-300">
-              <svg
-                viewBox="0 0 24 24"
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.25"
-                aria-hidden="true"
-              >
-                <path d="M12 2 L22 12 L12 22 L2 12 Z" />
-                <path d="M12 7 L17 12 L12 17 L7 12 Z" />
-              </svg>
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gold-300 shadow-inner">
+              <img
+                src={logo}
+                alt={`${site.name} logo`}
+                className="h-full w-full object-cover"
+              />
             </span>
             <span className="leading-none">
               <span className="block font-display text-xl sm:text-2xl text-ivory">
@@ -108,7 +103,7 @@ export default function SiteHeader() {
             <button
               type="button"
               onClick={() => setSearchOpen((s) => !s)}
-              aria-label="Search Nkar Woo Land"
+              aria-label={`Search ${site.name}`}
               aria-expanded={searchOpen}
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold-300 text-gold-300 transition-colors hover:bg-gold-300 hover:text-forest-800"
             >
@@ -222,7 +217,7 @@ export default function SiteHeader() {
                     className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-ivory/70"
                   >
                     <FacebookIcon className="h-4 w-4" aria-hidden="true" />
-                    Nkar Woo Land on Facebook
+                    NKAR WOO LAN on Facebook
                   </a>
                 </div>
               </div>

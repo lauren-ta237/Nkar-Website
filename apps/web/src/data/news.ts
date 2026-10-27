@@ -149,7 +149,7 @@ export const eventsUpcoming: EventItem[] = [
     title: 'Nkar cultural festival',
     date: '2027-01-09',
     time: '11:00',
-    venue: 'Nkar village',
+    venue: 'Nkar Clan',
     organiser: 'Cultural festival committee',
     description:
       'A day of dance and drumming, ceremonial cloth, highland food, carving, beadwork and raffia craft, held for Nkar and its guests.',
@@ -176,7 +176,7 @@ export const eventsPast: EventItem[] = [
     title: 'Youth sports and cultural day',
     date: '2026-07-11',
     time: '08:00',
-    venue: 'Nkar village field',
+    venue: 'Nkar Clan field',
     organiser: 'Nkar youth association',
     description:
       'Athletics, football and cultural performances by the young people of Nkar and neighbouring villages.',
@@ -188,7 +188,7 @@ export const eventsPast: EventItem[] = [
     title: 'Harvest thanksgiving',
     date: '2026-05-10',
     time: '09:00',
-    venue: 'Nkar village',
+    venue: 'Nkar Clan',
     organiser: 'Quarters and family heads',
     description:
       'The community brings the first fruits of the season, with drumming, dance and shared food across the quarters.',
