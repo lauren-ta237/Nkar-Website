@@ -1,0 +1,136 @@
+import express from 'express';
+import { PrismaClient, Role, Status } from '@prisma/client';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+import crypto from 'node:crypto';
+import { z } from 'zod';
+export const prisma = new PrismaClient();
+const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET ?? 'development-secret-change-me';
+const REFRESH_SECRET = process.env.REFRESH_SECRET ?? 'development-refresh-change-me';
+const login = z.object({ email: z.string().email(), password: z.string().min(12) });
+const content = z.object({ type: z.enum(['news', 'events', 'heritage', 'leadership', 'gallery', 'publications', 'projects']), slug: z.string().min(2).max(160).regex(/^[a-z0-9-]+$/), title: z.string().min(1).max(240), summary: z.string().max(1000).optional(), body: z.string().min(1), data: z.record(z.string(), z.any()).optional(), status: z.nativeEnum(Status).optional() });
+const contact = z.object({ name: z.string().min(2).max(120), email: z.string().email(), topic: z.string().min(2).max(120), message: z.string().min(10).max(5000), consent: z.literal(true) });
+const auth = (roles) => async (req, res, next) => { try {
+    const h = req.headers.authorization;
+    if (!h?.startsWith('Bearer '))
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Authentication required' } });
+    const p = jwt.verify(h.slice(7), JWT_SECRET);
+    const u = await prisma.user.findUnique({ where: { id: p.sub } });
+    if (!u?.isActive)
+        return res.status(401).json({ success: false, error: { code: 'ACCOUNT_SUSPENDED', message: 'Account unavailable' } });
+    if (roles && !roles.includes(u.role))
+        return res.status(403).json({ success: false, error: { code: 'FORBIDDEN', message: 'Insufficient permissions' } });
+    req.user = u;
+    next();
+}
+catch {
+    res.status(401).json({ success: false, error: { code: 'INVALID_TOKEN', message: 'Invalid or expired token' } });
+} };
+const sign = (u) => jwt.sign({ sub: u.id, role: u.role }, JWT_SECRET, { expiresIn: '15m' });
+const audit = async (actorId, action, entityType, entityId, after) => prisma.auditLog.create({ data: { actorId, action, entityType, entityId, after } });
+router.post('/auth/login', async (req, res, next) => { try {
+    const input = login.parse(req.body);
+    const u = await prisma.user.findUnique({ where: { email: input.email.toLowerCase() } });
+    if (!u || !u.isActive || !(await argon2.verify(u.passwordHash, input.password)))
+        return res.status(401).json({ success: false, error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } });
+    const raw = crypto.randomBytes(48).toString('hex');
+    await prisma.refreshToken.create({ data: { tokenHash: await argon2.hash(raw), userId: u.id, expiresAt: new Date(Date.now() + 30 * 864e5) } });
+    await prisma.user.update({ where: { id: u.id }, data: { lastLoginAt: new Date() } });
+    await audit(u.id, 'LOGIN', 'User', u.id);
+    res.json({ success: true, data: { accessToken: sign(u), refreshToken: raw, user: { id: u.id, email: u.email, name: u.name, role: u.role } } });
+}
+catch (e) {
+    next(e);
+} });
+router.post('/auth/refresh', async (req, res, next) => { try {
+    const raw = z.string().min(20).parse(req.body?.refreshToken);
+    const tokens = await prisma.refreshToken.findMany({ where: { revokedAt: null, expiresAt: { gt: new Date() } } });
+    const t = await Promise.any(tokens.map(async (x) => (await argon2.verify(x.tokenHash, raw)) ? x : Promise.reject()));
+    const u = await prisma.user.findUniqueOrThrow({ where: { id: t.userId } });
+    await prisma.refreshToken.update({ where: { id: t.id }, data: { revokedAt: new Date() } });
+    res.json({ success: true, data: { accessToken: sign(u) } });
+}
+catch (e) {
+    res.status(401).json({ success: false, error: { code: 'INVALID_REFRESH_TOKEN', message: 'Refresh token invalid' } });
+} });
+router.post('/auth/logout', auth(), async (req, res, next) => { try {
+    await prisma.refreshToken.updateMany({ where: { userId: req.user.id, revokedAt: null }, data: { revokedAt: new Date() } });
+    res.json({ success: true, data: null });
+}
+catch (e) {
+    next(e);
+} });
+router.get('/auth/me', auth(), (req, res) => res.json({ success: true, data: { id: req.user.id, email: req.user.email, name: req.user.name, role: req.user.role } }));
+const types = ['news', 'events', 'heritage', 'leadership', 'gallery', 'publications', 'projects'];
+for (const type of types) {
+    router.get(`/${type}`, async (req, res, next) => { try {
+        const rows = await prisma.content.findMany({ where: { type, status: 'PUBLISHED', publishedAt: { not: null } }, orderBy: { publishedAt: 'desc' }, take: Math.min(Number(req.query.limit) || 20, 100) });
+        res.json({ success: true, data: rows });
+    }
+    catch (e) {
+        next(e);
+    } });
+    router.get(`/${type}/:slug`, async (req, res, next) => { try {
+        const row = await prisma.content.findFirst({ where: { type, slug: req.params.slug, status: 'PUBLISHED' } });
+        if (!row)
+            return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'Content not found' } });
+        res.json({ success: true, data: row });
+    }
+    catch (e) {
+        next(e);
+    } });
+    router.post(`/${type}`, auth([Role.SUPER_ADMIN, Role.CONTENT_EDITOR]), async (req, res, next) => { try {
+        const input = content.parse({ ...req.body, type });
+        const row = await prisma.content.create({ data: { ...input, body: input.body, data: input.data ?? {}, authorId: req.user.id } });
+        await audit(req.user.id, 'CREATE', 'Content', row.id, row);
+        res.status(201).json({ success: true, data: row });
+    }
+    catch (e) {
+        next(e);
+    } });
+    router.patch(`/${type}/:id`, auth([Role.SUPER_ADMIN, Role.CONTENT_EDITOR]), async (req, res, next) => { try {
+        const input = content.partial().omit({ type: true }).parse(req.body);
+        const row = await prisma.content.update({ where: { id: req.params.id }, data: input });
+        await audit(req.user.id, 'UPDATE', 'Content', row.id, row);
+        res.json({ success: true, data: row });
+    }
+    catch (e) {
+        next(e);
+    } });
+    router.post(`/${type}/:id/publish`, auth([Role.SUPER_ADMIN, Role.CONTENT_REVIEWER]), async (req, res, next) => { try {
+        const row = await prisma.content.update({ where: { id: req.params.id }, data: { status: 'PUBLISHED', publishedAt: new Date(), reviewerId: req.user.id } });
+        await audit(req.user.id, 'PUBLISH', 'Content', row.id, row);
+        res.json({ success: true, data: row });
+    }
+    catch (e) {
+        next(e);
+    } });
+}
+router.get('/admins', auth([Role.SUPER_ADMIN]), async (_req, res, next) => { try {
+    res.json({ success: true, data: await prisma.user.findMany({ select: { id: true, email: true, name: true, role: true, isActive: true, createdAt: true } }) });
+}
+catch (e) {
+    next(e);
+} });
+router.post('/contact-submissions', async (req, res, next) => { try {
+    const input = contact.parse(req.body);
+    const row = await prisma.contactSubmission.create({ data: input });
+    res.status(201).json({ success: true, data: { id: row.id } });
+}
+catch (e) {
+    next(e);
+} });
+router.get('/contact-submissions', auth([Role.SUPER_ADMIN, Role.CONTENT_REVIEWER]), async (req, res, next) => { try {
+    res.json({ success: true, data: await prisma.contactSubmission.findMany({ orderBy: { createdAt: 'desc' }, take: 100 }) });
+}
+catch (e) {
+    next(e);
+} });
+router.get('/audit-logs', auth([Role.SUPER_ADMIN]), async (_req, res, next) => { try {
+    res.json({ success: true, data: await prisma.auditLog.findMany({ orderBy: { createdAt: 'desc' }, take: 100 }) });
+}
+catch (e) {
+    next(e);
+} });
+export const apiRouter = router;

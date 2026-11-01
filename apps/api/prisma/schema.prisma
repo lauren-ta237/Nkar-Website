@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  CONTENT_EDITOR
+  CONTENT_REVIEWER
+}
+
+enum Status {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ContactStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  SPAM
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  role          Role           @default(CONTENT_EDITOR)
+  isActive      Boolean        @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  refreshTokens RefreshToken[]
+  auditLogs     AuditLog[]
+  authored      Content[]      @relation("author")
+  reviewed      Content[]      @relation("reviewer")
+  mediaAssets   MediaAsset[]
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  tokenHash  String   @unique
+  userId     String
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expiresAt])
+}
+
+model Content {
+  id           String    @id @default(uuid())
+  type         String
+  slug         String
+  title        String
+  summary      String?
+  body         String
+  data         Json?
+  status       Status    @default(DRAFT)
+  authorId     String
+  reviewerId   String?
+  publishedAt  DateTime?
+  reviewNote   String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  author       User      @relation("author", fields: [authorId], references: [id])
+  reviewer     User?     @relation("reviewer", fields: [reviewerId], references: [id])
+  @@unique([type, slug])
+  @@index([type, status, publishedAt])
+}
+
+model MediaAsset {
+  id         String   @id @default(uuid())
+  key        String   @unique
+  url        String
+  mimeType   String
+  size       Int
+  provider   String
+  uploaderId String
+  createdAt  DateTime @default(now())
+  uploader   User     @relation(fields: [uploaderId], references: [id])
+  @@index([uploaderId])
+}
+
+model ContactSubmission {
+  id           String        @id @default(uuid())
+  name         String
+  email        String
+  topic        String
+  message      String
+  consent      Boolean
+  status       ContactStatus  @default(NEW)
+  handledById  String?
+  handledAt    DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  @@index([status, createdAt])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String?
+  before     Json?
+  after      Json?
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  actor      User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  @@index([actorId, createdAt])
+  @@index([entityType, entityId])
+}
