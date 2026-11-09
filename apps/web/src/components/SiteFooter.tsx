@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import FacebookIcon from './FacebookIcon';
-import logo from '@/assets/images/logo.jpg';
+import logo from '@/assets/images/logo.jpeg';
 import { navLinks, site } from '@/data/site';
 import Ornament from './Ornament';
 import HeritageBorder from './HeritageBorder';
@@ -109,9 +109,17 @@ export default function SiteFooter() {
               <li className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" aria-hidden="true" />
                 <span className="text-ivory/70">
-                  <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} className="hover:text-gold-300">
-                    {site.contact.phone}
-                  </a>
+                  <span className="flex flex-col gap-1">
+                    {(site.contact.phones || [site.contact.phone]).map((ph) => (
+                      <a
+                        key={ph}
+                        href={`tel:${ph.replace(/\s/g, '')}`}
+                        className="hover:text-gold-300 transition-colors"
+                      >
+                        {ph}
+                      </a>
+                    ))}
+                  </span>
                   <span className="mt-1 block text-[11px] text-ivory/40">
                     {site.contact.phoneNote}
                   </span>
@@ -126,7 +134,7 @@ export default function SiteFooter() {
                     rel="noreferrer"
                     className="hover:text-gold-300"
                   >
-                    NKAR WOO LAN on Facebook
+                    NKAR WOO LÀN on Facebook
                   </a>
                   <span className="mt-1 block text-[11px] text-ivory/40">
                     {site.contact.facebookNote}

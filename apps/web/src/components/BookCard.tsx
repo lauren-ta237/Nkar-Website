@@ -29,7 +29,7 @@ export default function BookCard({ book }: BookCardProps) {
       >
         {book.sample && <SampleBadge label="Sample title" className="absolute right-4 top-4 bg-ivory" />}
         <p className="text-[10px] uppercase tracking-[0.3em] opacity-70">
-          Nkar Woo Land shelf
+          NKAR WOO LÀN shelf
         </p>
         <h3 className="mt-3 font-display text-2xl leading-snug">{book.title}</h3>
       </div>

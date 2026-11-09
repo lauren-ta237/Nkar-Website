@@ -27,7 +27,7 @@ export default function LeadershipRecord({ record, index }: LeadershipRecordProp
         </div>
 
         <h3 className="mt-3 font-display text-2xl text-forest-700">
-          Reign record — {record.era}
+          Reign record: {record.era}
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{record.summary}</p>
 

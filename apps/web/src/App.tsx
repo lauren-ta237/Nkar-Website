@@ -37,7 +37,7 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Nkar Woo Land is a fully public site: no authentication routes are wired. */}
+      {/* NKAR WOO LÀN is a fully public site: no authentication routes are wired. */}
       <Route element={<SiteLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

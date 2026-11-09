@@ -57,7 +57,7 @@ export const aboutSections: AboutSection[] = [
       'This section will carry the verified account: the founding of the village, the first families, the growth of the quarters, and the moment the fondom took its place among its neighbours.',
       'Until the custodians have confirmed it, no names, dates or events are published here. Nkar’s history belongs to Nkar, and it will be told properly.'
     ],
-    pending: 'Draft section — the verified history of Nkar will be published here once confirmed by the palace and the traditional council.'
+    pending: 'The verified history of Nkar will be published here once confirmed by the palace and the traditional council.'
   },
   {
     id: 'people',
@@ -89,7 +89,7 @@ export const aboutSections: AboutSection[] = [
     image: images.granary,
     imageAlt: 'Illustrative image: a traditional grassfields granary beside a compound',
     paragraphs: [
-      'Life in Nkar follows the farming year — maize, beans, huckleberry and the raffia groves — and the rhythm of the market, the school, the health post and the communal work that keeps paths, water points and the palace standing.',
+      'Life in Nkar follows the farming year, including maize, beans, huckleberry, and the raffia groves, shaped by the rhythm of the market, the school, the health post, and the communal work that keeps paths, water points, and the palace standing.',
       'Community meetings bring families, village institutions and the diaspora together to decide what Nkar builds next.',
       'This section will record the working life of the village: the seasons, the trades, the institutions and the people who serve them.'
     ]
@@ -109,7 +109,7 @@ export const traditions: Tradition[] = [
   },
   {
     title: 'Carving, beading & raffia',
-    text: 'Hand-worked stools, masks, staffs, beadwork and raffia — objects made to be used, kept and handed on.',
+    text: 'Hand-worked stools, masks, staffs, beadwork, and raffia: objects made to be used, preserved, and handed on to future generations.',
     icon: 'hammer'
   },
   {
@@ -119,7 +119,7 @@ export const traditions: Tradition[] = [
   },
   {
     title: 'Food & hospitality',
-    text: 'Kola nut, palm wine and the food of the highlands — served to a visitor before anything is discussed, as a sign of welcome and good faith.',
+    text: 'Kola nut, palm wine, and the food of the highlands, served to a visitor before anything is discussed as an enduring sign of welcome and good faith.',
     icon: 'utensils'
   },
   {
@@ -133,7 +133,7 @@ export const timeline: TimelineEntry[] = [
   {
     period: 'To be verified',
     title: 'The founding of Nkar',
-    text: 'The founding account — the first family, the founding site and the origin of the name — to be recorded with the elders.'
+    text: 'The founding account, including the first family, the founding site, and the origin of the name, recorded in collaboration with the elders.'
   },
   {
     period: 'To be verified',
@@ -159,7 +159,7 @@ export const timeline: TimelineEntry[] = [
 
 export const leadershipLead: string[] = [
   'The fondom is the heart of Nkar. The Fon holds the land, the palace and the customs of the village; the traditional council advises and upholds them; the quarter and family heads carry custom into every household.',
-  'Nkar Woo Land records the institution with the dignity it deserves. Names, reign dates, portraits and biographies of the Fons are published here only after verification with the palace and the traditional council — never from unconfirmed sources.'
+  'NKAR WOO LÀN records the institution with the dignity it deserves. Names, reign dates, portraits, and biographies of the Fons are published here only after formal verification with the palace and the traditional council, avoiding unconfirmed sources.'
 ];
 
 export const leadershipRoles: LeadershipRole[] = [
@@ -180,7 +180,7 @@ export const leadershipRoles: LeadershipRole[] = [
   },
   {
     title: 'The palace',
-    text: 'Those who keep the palace, the regalia, the drums and the ceremonies — a trust passed from one generation to the next.',
+    text: 'Custodians who preserve the palace, regalia, drums, and ceremonies, upholding a sacred trust passed from one generation to the next.',
     icon: 'scroll'
   },
   {
@@ -193,7 +193,7 @@ export const leadershipRoles: LeadershipRole[] = [
 export const ceremonialYear: CeremonialYearEntry[] = [
   {
     title: 'Ceremonies of the farming year',
-    text: 'The rites that open and close the seasons — planting, first fruits and harvest — held with the Fon and the quarter heads.'
+    text: 'The seasonal rites that mark planting, first fruits, and harvest, observed alongside the Fon and the quarter heads.'
   },
   {
     title: 'Ceremonies of the palace',
@@ -205,7 +205,7 @@ export const ceremonialYear: CeremonialYearEntry[] = [
   },
   {
     title: 'Community gatherings',
-    text: 'General assemblies, communal work and meetings with the diaspora — not rites, but the working life of the village.'
+    text: 'General assemblies, communal work, and consultative gatherings with the diaspora that constitute the active civic life of the village.'
   }
 ];
 

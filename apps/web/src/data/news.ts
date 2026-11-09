@@ -25,12 +25,12 @@ export const news: NewsItem[] = [
     id: 'heritage-archive-opens',
     category: 'Announcement',
     date: '2026-10-14',
-    title: 'Nkar Woo Land opens its digital heritage archive',
+    title: 'NKAR WOO LÀN opens its digital heritage archive',
     excerpt:
-      'The first collections — photographs, oral accounts and village records — are being gathered into one place for Nkar sons and daughters wherever they live.',
+      'The initial archives, comprising photographs, oral accounts, and village records, are being gathered into one place for Nkar sons and daughters wherever they live.',
     body: [
       'This website is the beginning of a long piece of work: bringing Nkar’s history, culture, traditional leadership and development into one record that anyone from the village can read, and that the next generation will still have.',
-      'The first phase collects what already exists — family photographs, palace records, accounts told by elders, and the reports of community meetings and projects. Every entry is reviewed with the palace and the traditional council before it is published.',
+      'The first phase brings together existing family photographs, palace records, accounts told by elders, and reports from community initiatives. Every entry is reviewed with the palace and the traditional council before publication.',
       'Nkar sons and daughters at home and abroad are invited to send what they hold: a photograph, a name, a date, a story in their own words.'
     ],
     sample: true
@@ -55,7 +55,7 @@ export const news: NewsItem[] = [
     date: '2026-09-28',
     title: 'Preparations begin for the Nkar cultural festival',
     excerpt:
-      'Dance groups, craft holders and families are preparing for a celebration of Nkar culture — cloth, drums, food and the crafts of the highlands.',
+      'Dance groups, craft holders, and families are preparing for a celebration of Nkar culture, featuring traditional cloth, drums, culinary heritage, and highland crafts.',
     body: [
       'The cultural festival is intended as a day when Nkar shows itself: dance and drumming, ceremonial cloth, food from the highlands, carving, beadwork and raffia craft.',
       'Groups wishing to take part are asked to register with the organising committee so that the programme, the space and the sound can be arranged properly.',
@@ -71,7 +71,7 @@ export const news: NewsItem[] = [
     excerpt:
       'The education fund is preparing exercise books, uniforms and fees support for pupils and students from Nkar for the coming school year.',
     body: [
-      'The Nkar education fund supports families who need help with the costs of schooling — books, uniforms, and fees for pupils and students at secondary and tertiary level.',
+      'The Nkar education fund supports families with schooling costs, assisting pupils and students with books, uniforms, and fees at secondary and tertiary levels.',
       'Applications are reviewed by the committee together with the quarter heads, so that support reaches the households that need it most.',
       'Amounts, deadlines and award numbers shown anywhere on this site are samples pending confirmation by the committee.'
     ],
@@ -85,7 +85,7 @@ export const news: NewsItem[] = [
     excerpt:
       'A screening and awareness day is being organised with health workers for families in Nkar and the surrounding settlements.',
     body: [
-      'The outreach is planned as a day of screening, advice and referral — with attention to mothers and young children, and to conditions that are easier to treat when they are found early.',
+      'The outreach is organized as a community day of screening, consultation, and healthcare referral, prioritizing mothers, young children, and preventative wellness.',
       'Health workers from the area and volunteers from the diaspora are being invited to take part.',
       'The programme, the venue and the date published here are samples until they are confirmed.'
     ],
@@ -125,7 +125,7 @@ export const eventsUpcoming: EventItem[] = [
     title: 'Nkar diaspora dialogue (online)',
     date: '2026-11-21',
     time: '18:00',
-    venue: 'Online — link to be published here',
+    venue: 'Online (access link to be announced)',
     organiser: 'Nkar associations abroad',
     description:
       'An online gathering for Nkar sons and daughters living outside the village: heritage archive progress, project reports and how each association can help.',

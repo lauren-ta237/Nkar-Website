@@ -23,9 +23,9 @@ export default function Leadership() {
       <PageHero
         eyebrow="Traditional leadership"
         title="The Nkar fondom"
-        description="The Fon, the traditional council, the quarter and family heads — and the customs that hold Nkar together across the generations."
+        description="The Fon, the traditional council, the quarter and family heads, and the customs that unite Nkar across generations."
         image={images.palacePillars}
-        imageAlt="Illustrative image: carved pillars and thatched eaves of a palace courtyard"
+        imageAlt="The royal palace throne of the Fon of Nkar"
       />
 
       <section className="bg-ivory py-16 md:py-20">
@@ -78,7 +78,7 @@ export default function Leadership() {
         <div className="mx-auto w-full max-w-6xl px-6">
           <SectionHeading
             eyebrow="Register of reigns"
-            title="The Fons of Nkar — a register awaiting verification"
+            title="The Fons of Nkar: Register of Traditional Leadership"
             description="This register is opened and left deliberately incomplete. Each reign has its place; the verified name, dates, portrait and account are published only when the palace confirms them."
           />
 

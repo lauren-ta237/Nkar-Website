@@ -9,6 +9,7 @@ export interface ContactInfo {
   email: string;
   emailNote: string;
   phone: string;
+  phones: string[];
   phoneNote: string;
   address: string;
   addressNote: string;
@@ -63,28 +64,30 @@ export interface SiteConfig {
 }
 
 export const site: SiteConfig = {
-  name: "NKAR WOO LAN",
+  name: "NKAR WOO LÀN",
   tagline: "Our Heritage, Our Identity, Our Future.",
   promise:
-    "A digital home for Nkar Clan — its history, its culture, its traditional leadership and its shared development — kept by Nkar sons and daughters at home and abroad.",
+    "A digital home for Nkar Clan, dedicated to preserving its history, culture, traditional leadership, and shared development, maintained by Nkar sons and daughters at home and abroad.",
   location: "Nkar Clan, Northwest Region, Cameroon",
   setting: "Grassfields highlands, Cameroon",
   contentPolicy:
-    "NKAR WOO LAN is the digital home for Nkar sons and daughters at home and across the diaspora. Dedicated to preserving our heritage, celebrating our culture, and supporting community development, this platform connects generations and keeps our traditions alive. Community contributions, family histories, and verified records are welcomed with respect.",
+    "NKAR WOO LÀN is the digital home for Nkar sons and daughters at home and across the diaspora. Dedicated to preserving our heritage, celebrating our culture, and supporting community development, this platform connects generations and keeps our traditions alive. Community contributions, family histories, and verified records are welcomed with respect.",
   contact: {
-    email: "hello@nkarwooland.org",
-    emailNote: "Placeholder address — replace with the official NKAR WOO LAN inbox.",
-    phone: "+237 000 000 000",
-    phoneNote: "Placeholder number — replace with the official contact line.",
+    email: "info@nkarwoolan.org",
+    emailNote: "Official contact email for NKAR WOO LÀN.",
+    phone: "+237 679 632 780",
+    phones: ["+237 679 632 780", "+237 678 496 051"],
+    phoneNote: "Official contact lines & WhatsApp.",
     address: "Nkar Clan, Northwest Region, Cameroon",
-    addressNote: "Detailed address (palace and market square) to be confirmed.",
+    addressNote: "Nkar Palace and traditional council grounds.",
     facebookUrl: "https://www.facebook.com/share/1EmYJ8CtVK/",
     facebookNote:
-      "Official NKAR WOO LAN Facebook community page.",
+      "Official NKAR WOO LÀN Facebook community page.",
   },
   navLinks: [
     { label: "Home", to: "/" },
     { label: "About Nkar", to: "/about" },
+    { label: "Gallery", to: "/gallery" },
     { label: "Leadership", to: "/leadership" },
     { label: "Projects", to: "/projects" },
     { label: "News", to: "/news" },
@@ -113,7 +116,7 @@ export const site: SiteConfig = {
     {
       icon: "landmark",
       title: "History & origins",
-      text: "The founding account, the quarters of the village, and the generations that shaped Nkar — recorded with the elders and the palace.",
+      text: "The founding account, the quarters of the village, and the generations that shaped Nkar, recorded in collaboration with the elders and the palace.",
       to: "/about",
       cta: "Read the history",
     },
@@ -148,7 +151,7 @@ export const site: SiteConfig = {
     },
     {
       title: "Send photographs",
-      text: "Old and new photographs of Nkar — the palace, the market, ceremonies, farms and family gatherings.",
+      text: "Old and new photographs of Nkar, including the palace, the market, ceremonies, farms, and family gatherings.",
       cta: "Send photographs",
       to: "/contact",
     },
@@ -160,7 +163,7 @@ export const site: SiteConfig = {
     },
     {
       title: "Support a project",
-      text: "Stand with water, roads, palace conservation and education projects — at home or from abroad.",
+      text: "Support water, roads, palace conservation, and education initiatives, whether contributing from home or from abroad.",
       cta: "See the projects",
       to: "/projects",
     },

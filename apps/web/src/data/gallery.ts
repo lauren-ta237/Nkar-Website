@@ -2,6 +2,8 @@
 //
 // Photographs of Nkar, its people, its crafts and its cultural activities.
 
+import { fonSit, fonPopeAudience, fonPope } from './images';
+
 export type GalleryAspect = "wide" | "square";
 
 export interface GalleryItem {
@@ -16,13 +18,43 @@ export interface GalleryItem {
 
 export const galleryCategories: string[] = [
   "All",
-  "Landscape",
-  "Craft & artifact",
   "Ceremony",
+  "Craft & artifact",
+  "Landscape",
   "Village life",
 ];
 
 export const galleryItems: GalleryItem[] = [
+  {
+    id: "fon-throne",
+    title: "The Royal Throne of the Fon",
+    category: "Craft & artifact",
+    image: fonSit,
+    aspect: "wide",
+    caption:
+      "The traditional throne and royal seats of the Fon of Nkar at the palace.",
+    sample: false,
+  },
+  {
+    id: "fon-pope-audience",
+    title: "Audience with Pope Francis",
+    category: "Ceremony",
+    image: fonPopeAudience,
+    aspect: "wide",
+    caption:
+      "The Fon of Nkar in full traditional Tohgu regalia during a royal audience with Pope Francis at the Vatican.",
+    sample: false,
+  },
+  {
+    id: "fon-pope-blessing",
+    title: "Palace Homage & Papal Blessing",
+    category: "Ceremony",
+    image: fonPope,
+    aspect: "wide",
+    caption:
+      "Traditional homage and exchange of blessings during the papal audience.",
+    sample: false,
+  },
   {
     id: "drums",
     title: "Drums beside the palace wall",
@@ -30,7 +62,7 @@ export const galleryItems: GalleryItem[] = [
     image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/62163d17d_generated_2fd849ea.png",
     aspect: "wide",
     caption:
-      "Carved drums with hide skins and peg tension — the instruments that call families together for ceremony and communal work.",
+      "Carved drums with hide skins and peg tension, the traditional instruments that call families together for ceremonies and communal work.",
     sample: true,
   },
   {
@@ -50,7 +82,7 @@ export const galleryItems: GalleryItem[] = [
     image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/8b1c8afd3_generated_3f665c33.png",
     aspect: "wide",
     caption:
-      "Folded cloth, woven baskets and calabashes on a market table — the colours and crafts that pass through the village market.",
+      "Folded cloth, woven baskets, and calabashes on a market table, showcasing the vibrant crafts of the village market.",
     sample: true,
   },
   {
@@ -70,7 +102,7 @@ export const galleryItems: GalleryItem[] = [
     image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/25a028e3b_generated_c8837439.png",
     aspect: "square",
     caption:
-      "Glass beads worked in geometric patterns beside coiled raffia fibre — crafts kept by hand and handed on.",
+      "Glass beads worked in geometric patterns beside coiled raffia fibre, representing craft traditions preserved by hand and passed on across generations.",
     sample: true,
   },
   {
@@ -80,7 +112,7 @@ export const galleryItems: GalleryItem[] = [
     image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/21f1aaff2_generated_503d9932.png",
     aspect: "wide",
     caption:
-      "A raised storehouse with a conical thatched roof, maize and calabashes at its foot — the store of a farming household.",
+      "A raised storehouse with a conical thatched roof, with maize and calabashes stored at its foot in the tradition of a highland household.",
     sample: true,
   },
   {
@@ -90,7 +122,7 @@ export const galleryItems: GalleryItem[] = [
     image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/553ec8193_generated_3a7a0318.png",
     aspect: "square",
     caption:
-      "Burnished calabash bowls, carved cups and a raffia gourd set out for a visitor — the objects of hospitality.",
+      "Burnished calabash bowls, carved cups, and a raffia gourd set out for a visitor as traditional symbols of Grassfields hospitality.",
     sample: true,
   },
 ];

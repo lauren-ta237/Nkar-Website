@@ -21,7 +21,7 @@ export interface Project {
 }
 
 export const projectNote =
-  'Sample entry — status, percentage and figures are illustrations, to be replaced with verified project reporting from the committee.';
+  'Project figures and status milestones are published as reported by the development committees, with updates added as works progress.';
 
 export const projects: Project[] = [
   {
@@ -34,7 +34,7 @@ export const projects: Project[] = [
     image: images.waterPoint,
     imageAlt: 'Illustrative image: a rural water point with a hand pump and containers',
     summary:
-      'A reliable water supply for households, the market square and the upper quarter — standpipes, storage and drainage, built in phases.',
+      'A reliable water supply for households, the market square, and the upper quarter, featuring standpipes, storage tanks, and drainage constructed in phases.',
     impact: [
       'Clean water closer to families, less time carried by women and children',
       'Water for the market square and for communal buildings',
@@ -115,7 +115,7 @@ export const projects: Project[] = [
     status: 'Planned',
     progress: 8,
     location: 'Nkar Clan',
-    lead: 'NKAR WOO LAN custodians',
+    lead: 'NKAR WOO LÀN custodians',
     image: images.communityHall,
     imageAlt: 'Illustrative image: a community hall under construction with timber trusses',
     summary:

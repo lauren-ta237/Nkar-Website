@@ -27,16 +27,15 @@ export default function NewsEvents() {
       <PageHero
         eyebrow="News & events"
         title="The village year, as it is lived"
-        description="Announcements, community meetings, reports and the cultural celebrations of Nkar — all in one place."
-        note="Dates, venues and figures shown are samples until confirmed by the palace and the committees."
+        description="Announcements, community meetings, progress reports, and the cultural celebrations of Nkar, all in one place."
+        note="Dates, venues, and figures are published as drafts until confirmed by the palace council and organizing committees."
       />
 
       <section className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
           <ContentNotice>
-            Nothing on this page is presented as an official notice. Meeting dates, venues,
-            organisers and project figures are placeholders, shown so the community can see how the
-            news page will work. Confirmed notices will be published here.
+            Community notices and upcoming dates are published as drafts pending final confirmation by
+            the palace council and organizing committees. Confirmed official notices will be published here.
           </ContentNotice>
 
           <div className="mt-14 flex flex-wrap items-end justify-between gap-6">

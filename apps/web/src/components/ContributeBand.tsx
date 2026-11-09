@@ -26,7 +26,7 @@ export default function ContributeBand() {
             Nkar sons and daughters, at home and abroad
           </p>
           <h2 className="mt-5 max-w-3xl font-display text-3xl leading-tight md:text-5xl">
-            This heritage is kept by all of us — or it is not kept at all.
+            This heritage is preserved by all of us, together as one community.
           </h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-ivory/75">
             A photograph in a drawer, an account an elder has never written
