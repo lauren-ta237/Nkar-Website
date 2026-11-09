@@ -19,10 +19,10 @@ export default function Contact() {
     },
     {
       icon: Phone,
-      label: 'Telephone',
+      label: 'Telephone & WhatsApp',
       value: contact.phone,
+      phones: contact.phones || [contact.phone],
       note: contact.phoneNote,
-      href: `tel:${contact.phone.replace(/\s/g, '')}`
     }
   ];
 
@@ -30,9 +30,9 @@ export default function Contact() {
     <>
       <PageHero
         eyebrow="Contact"
-        title="Write to Nkar Woo Land"
-        description="Records, photographs, publications, projects and corrections — the custodians read everything that reaches them."
-        note="Contact details shown are placeholders until the official ones are confirmed."
+        title="Write to NKAR WOO LÀN"
+        description="Records, photographs, publications, projects, and corrections: the custodians review every communication received."
+        note="Official contact lines for the NKAR WOO LÀN custodians."
       />
 
       <section className="bg-ivory py-16 md:py-20">
@@ -50,15 +50,27 @@ export default function Contact() {
                     <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold-600">
                       {item.label}
                     </p>
-                    <p className="mt-2 text-sm text-forest-800">
-                      {item.href ? (
+                    <div className="mt-2 text-sm text-forest-800">
+                      {item.phones ? (
+                        <span className="flex flex-col gap-1">
+                          {item.phones.map((p: string) => (
+                            <a
+                              key={p}
+                              href={`tel:${p.replace(/\s/g, '')}`}
+                              className="transition-colors hover:text-gold-600"
+                            >
+                              {p}
+                            </a>
+                          ))}
+                        </span>
+                      ) : item.href ? (
                         <a href={item.href} className="transition-colors hover:text-gold-600">
                           {item.value}
                         </a>
                       ) : (
                         item.value
                       )}
-                    </p>
+                    </div>
                     <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
                       {item.note}
                     </p>
@@ -80,7 +92,7 @@ export default function Contact() {
                     rel="noreferrer"
                     className="mt-2 inline-block text-sm text-forest-800 transition-colors hover:text-gold-600"
                   >
-                    NKAR WOO LAN on Facebook
+                    NKAR WOO LÀN on Facebook
                   </a>
                   <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
                     {contact.facebookNote}

@@ -5,7 +5,7 @@ import SearchBar from '@/components/SearchBar';
 import Reveal from '@/components/Reveal';
 import { images } from '@/data/images';
 import { site } from '@/data/site';
-import logo from '@/assets/images/logo.jpg';
+import logo from '@/assets/images/logo.jpeg';
 
 export default function HeroSection() {
   return (
@@ -13,7 +13,7 @@ export default function HeroSection() {
       <div className="absolute inset-0" aria-hidden="true">
         <Image
           src={images.highlands}
-          alt="Illustrative image: highland hills of the Cameroon Grassfields"
+          alt="Authentic landscape of Nkar Clan in the Cameroon Grassfields"
           className="h-full w-full"
           fittingType="fill"
           quality={85}
@@ -57,17 +57,13 @@ export default function HeroSection() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.15} className="hidden lg:block">
-          <div className="relative ml-auto flex h-120 w-full max-w-sm items-center justify-center overflow-hidden border_border-gold-500/30_bg-forest-950/60 p-4 shadow-2xl backdrop-blur-xs">
-          {/* <div className="relative ml-auto flex h-120 w-full max-w-sm items-center justify-center overflow-hidden border border-gold-500/30 bg-forest-950/60 p-8 shadow-2xl backdrop-blur-xs"> */}
-            {/* <div className="absolute inset-0 pattern-toghu-light opacity-15" aria-hidden="true" /> */}
-            <div className="relative aspect-square w-full max-w-70 overflow-hidden rounded-full border-2 border-gold-300 shadow-2xl shadow-forest-950/80">
-              <img
-                src={logo}
-                alt={`${site.name} official emblem`}
-                className="h-full w-full object-cover"
-              />
-            </div>
+        <Reveal delay={0.15} className="hidden lg:flex lg:justify-end">
+          <div className="relative aspect-square w-full max-w-[420px] overflow-hidden rounded-full border-2 border-gold-300/80 shadow-2xl shadow-forest-950/90 transition-transform duration-500 hover:scale-[1.02]">
+            <img
+              src={logo}
+              alt={`${site.name} official emblem`}
+              className="h-full w-full object-cover"
+            />
           </div>
         </Reveal>
       </div>

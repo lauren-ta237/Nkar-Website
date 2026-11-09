@@ -12,7 +12,7 @@ interface SearchBarProps {
 export default function SearchBar({
   initialValue = '',
   size = 'large',
-  placeholder = 'Search the archive — history, people, projects, books…'
+  placeholder = 'Search history, leadership, projects, culture…'
 }: SearchBarProps) {
   const [value, setValue] = useState(initialValue);
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function SearchBar({
   return (
     <form onSubmit={submit} className="w-full" role="search">
       <label htmlFor={`site-search-${size}`} className="sr-only">
-        Search Nkar Woo Land
+        Search NKAR WOO LÀN
       </label>
       <div className="flex items-center gap-3 rounded-full border border-gold-500/40 bg-ivory/95 px-4 py-1.5 shadow-sm backdrop-blur">
         <Search className="h-4 w-4 shrink-0 text-gold-600" aria-hidden="true" />

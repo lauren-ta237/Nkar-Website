@@ -86,7 +86,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <ul className="mt-3 space-y-3 text-xs leading-relaxed text-muted-foreground">
               {project.updates.map((update) => (
                 <li key={update.text}>
-                  <span className="text-forest-700">{formatShortDate(update.date)}</span> —{' '}
+                  <span className="text-forest-700">{formatShortDate(update.date)}</span>: 
                   {update.text}
                 </li>
               ))}

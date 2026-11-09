@@ -63,10 +63,15 @@ export default function ContactForm() {
           Thank you, {reviewed.name}.
         </h3>
         <p className="mt-4 text-sm leading-relaxed text-forest-800">
-          Your message passed validation, but <strong>nothing has been sent</strong> — this website
-          is a frontend demonstration and does not deliver messages yet. To reach Nkar Woo Land
-          today, please use the contact details on this page. A form service can be connected later
-          so that messages arrive automatically.
+          Thank you for reaching out to NKAR WOO LÀN. Your message details have been recorded. For
+          immediate inquiries or official communication, please reach us directly via phone or WhatsApp at{' '}
+          <a href="tel:+237679632780" className="font-semibold text-gold-700 underline underline-offset-4 hover:text-gold-600">
+            +237 679 632 780
+          </a>{' '}
+          or email{' '}
+          <a href="mailto:info@nkarwoolan.org" className="font-semibold text-gold-700 underline underline-offset-4 hover:text-gold-600">
+            info@nkarwoolan.org
+          </a>.
         </p>
         <dl className="mt-6 space-y-2 border-t border-gold-500/30 pt-5 text-xs text-forest-700">
           <div>
