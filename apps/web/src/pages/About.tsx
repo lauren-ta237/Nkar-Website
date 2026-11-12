@@ -9,6 +9,7 @@ import LoadingState from '@/components/LoadingState';
 import AboutSection from '@/components/about/AboutSection';
 import TraditionsGrid from '@/components/about/TraditionsGrid';
 import { site } from '@/data/site';
+import { images } from '@/data/images';
 import { aboutLead } from '@/data/culture';
 import { useAboutContent } from '@/hooks/useContent';
 
@@ -31,7 +32,9 @@ export default function About() {
         eyebrow="About Nkar"
         title="A village, its people and its customs"
         description="The history, origins, culture and traditions of Nkar, gathered by the community that holds them."
-        note="Draft content is labelled — verified history is published only after confirmation."
+        image={images.highlands}
+        imageAlt="Nkar Clan landscape in the Cameroon Grassfields"
+        note="Draft sections are clearly indicated, with verified history published after formal review."
       />
 
       <section className="bg-ivory py-16 md:py-20">
@@ -98,14 +101,14 @@ export default function About() {
           <SectionHeading
             eyebrow="Culture & traditions"
             title="What a Nkar life is made of"
-            description="The customs kept across the Grassfields — cloth and ceremony, drums and dance, craft and hospitality — written here in general terms."
+            description="The shared customs of the Grassfields, including traditional cloth, ceremony, drums, dance, and highland hospitality."
           />
           {isLoading ? <LoadingState /> : <TraditionsGrid traditions={traditions} />}
 
           <ContentNotice className="mt-10" tone="cream" title="To be confirmed for Nkar">
-            Each custom is described in general terms. The Nkar-specific detail — names, songs,
-            dates, dress, prohibitions and the families who hold them — will be added with the
-            elders, the palace and the traditional council.
+            Each custom is described in general terms. Specific Nkar traditions, songs,
+            regalia, and family observances will be added in collaboration with the elders,
+            palace, and traditional council.
           </ContentNotice>
         </div>
       </section>
@@ -125,8 +128,8 @@ export default function About() {
           <div className="mt-12 border border-gold-500/40 bg-gold-50/70 p-8">
             <p className="font-display text-2xl text-forest-700">Do you hold a piece of it?</p>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-forest-800">
-              A photograph, a place name, a date, an account your elders told you — send it and the
-              custodians will record it properly, with the family’s permission.
+              Whether a photograph, a place name, or an account your elders shared, every contribution helps
+              the custodians record and preserve our history with family permission.
             </p>
             <Link
               to="/contact"

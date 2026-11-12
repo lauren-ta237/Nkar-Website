@@ -48,13 +48,12 @@ export default function Search() {
             Find anything published about Nkar
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-ivory/75">
-            News, events, projects, publications, photographs and the pages of this site — search
-            them all at once, or filter by what you are looking for.
+            Search across news, events, development projects, publications, photographs, and the pages of this community archive.
           </p>
 
           <form onSubmit={submit} role="search" className="mt-9">
             <label htmlFor="archive-search" className="sr-only">
-              Search Nkar Woo Land
+              Search NKAR WOO LÀN
             </label>
             <div className="flex items-center gap-3 border border-gold-500/40 bg-ivory p-2 pl-5">
               <SearchIcon className="h-4 w-4 shrink-0 text-gold-600" aria-hidden="true" />
@@ -100,7 +99,7 @@ export default function Search() {
                 Nothing found for “{term.trim()}”.
               </p>
               <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-forest-800">
-                Try another word — a quarter, a family name, a project or a ceremony. If what you
+                Try another search term, such as a quarter, a family name, a development project, or a traditional ceremony. If what you
                 are looking for is not here yet, it may not have been published: write to the
                 custodians and they will help you find it.
               </p>

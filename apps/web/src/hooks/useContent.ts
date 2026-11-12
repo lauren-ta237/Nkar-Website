@@ -1,6 +1,6 @@
 // useContent.ts
 //
-// Every content section of Nkar Woo Land is delivered through TanStack Query.
+// Every content section of NKAR WOO LÀN is delivered through TanStack Query.
 // The data ships with the project and is delivered with an artificial delay
 // so every section has real loading states. When a backend is wired, only
 // this file and the data imports need to change.
@@ -111,7 +111,7 @@ const pages = [
   {
     id: "page-home",
     type: "Page" as const,
-    title: "Nkar Woo Land — Home",
+    title: "NKAR WOO LÀN — Home",
     summary: site.promise,
     to: "/",
   },
@@ -163,7 +163,7 @@ const pages = [
     id: "page-contact",
     type: "Page" as const,
     title: "Contact",
-    summary: "Contact Nkar Woo Land about records, photographs, publications and projects.",
+    summary: "Contact NKAR WOO LÀN about records, photographs, publications and projects.",
     to: "/contact",
   },
 ];

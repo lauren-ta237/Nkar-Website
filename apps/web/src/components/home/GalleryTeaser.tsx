@@ -17,7 +17,7 @@ export default function GalleryTeaser() {
           <SectionHeading
             eyebrow="Gallery"
             title="Featured photographs"
-            description="A first look at the gallery — landscapes, crafts, ceremonies and village life, each image labelled while the archive is assembled."
+            description="A curated preview of the gallery: authentic landscapes, royal regalia, crafts, and ceremonies from across Nkar Clan."
           />
           <Link
             to="/gallery"
@@ -62,8 +62,8 @@ export default function GalleryTeaser() {
         )}
 
         <p className="mt-6 max-w-3xl text-xs leading-relaxed text-muted-foreground">
-          Recorded film — ceremonies, elders’ accounts and village events — will be published in the
-          gallery as it is filmed and approved by the palace and the families involved.
+          Recorded film, including ceremonies, elders' oral accounts, and community celebrations, will be published in the
+          gallery as it is documented and confirmed with the palace and families involved.
         </p>
       </div>
     </section>

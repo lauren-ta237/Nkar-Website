@@ -30,7 +30,7 @@ export default function AboutSection({ section, index }: AboutSectionProps) {
             ))}
           </div>
           {section.pending && (
-            <ContentNotice className="mt-8" tone="cream" title="Draft — pending verification">
+            <ContentNotice className="mt-8" tone="cream" title="Draft: Pending Verification">
               {section.pending}
             </ContentNotice>
           )}

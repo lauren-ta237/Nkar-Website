@@ -9,7 +9,7 @@ export default function PillarsSection() {
       <div className="mx-auto w-full max-w-6xl px-6">
         <SectionHeading
           eyebrow="Four pillars"
-          title="What Nkar Woo Land holds"
+          title="What NKAR WOO LÀN holds"
           description="History, culture, traditional leadership and development: the four things this archive exists to keep, and to hand on."
           align="center"
           ornament

@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, Search, X } from 'lucide-react';
 import FacebookIcon from './FacebookIcon';
-import logo from '@/assets/images/logo.jpg';
+import logo from '@/assets/images/logo.jpeg';
 import { navLinks, site } from '@/data/site';
 import SearchBar from './SearchBar';
 import HeritageBorder from './HeritageBorder';
@@ -138,7 +138,7 @@ export default function SiteHeader() {
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search the archive — history, leadership, projects…"
+                  placeholder="Search history, leadership, projects, culture…"
                   className="min-w-0 flex-1 bg-transparent text-sm text-ivory outline-none placeholder:text-ivory/40"
                 />
                 <button
@@ -217,7 +217,7 @@ export default function SiteHeader() {
                     className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-ivory/70"
                   >
                     <FacebookIcon className="h-4 w-4" aria-hidden="true" />
-                    NKAR WOO LAN on Facebook
+                    NKAR WOO LÀN on Facebook
                   </a>
                 </div>
               </div>

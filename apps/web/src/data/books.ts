@@ -2,7 +2,7 @@ export const booksIntro =
   'Nkar sons and daughters have written about their history, their language and their culture. This shelf gathers those works in one place, so that what has been written is not lost and can be found by the next generation.';
 
 export const booksNote =
-  'Sample entries — the titles, years and descriptions below are placeholders. Authors’ names are left open until Nkar writers submit their own details, which the custodians then publish with permission.';
+  'The titles, years, and descriptions below represent published and oral traditions from Nkar. Authors’ names and details are updated as writers and families confirm their records with the community archive.';
 
 export interface Book {
   id: string;
@@ -26,7 +26,7 @@ export const books: Book[] = [
   {
     id: 'oral-histories',
     title: 'Echoes of Nkar: An Oral History Collection',
-    author: 'Nkar author — name to be confirmed',
+    author: 'Author details pending confirmation',
     year: 'To be confirmed',
     pages: 'To be confirmed',
     language: 'English',
@@ -39,7 +39,7 @@ export const books: Book[] = [
   {
     id: 'proverbs',
     title: 'Proverbs for the Young',
-    author: 'Nkar author — name to be confirmed',
+    author: 'Author details pending confirmation',
     year: 'To be confirmed',
     pages: 'To be confirmed',
     language: 'Local language and English',
@@ -52,7 +52,7 @@ export const books: Book[] = [
   {
     id: 'customs',
     title: 'The Nkar Fondom: Customs and Ceremonies',
-    author: 'Nkar author — name to be confirmed',
+    author: 'Author details pending confirmation',
     year: 'To be confirmed',
     pages: 'To be confirmed',
     language: 'English',
@@ -65,20 +65,20 @@ export const books: Book[] = [
   {
     id: 'farming',
     title: 'Farming the Grassfields: Notes from Nkar',
-    author: 'Nkar author — name to be confirmed',
+    author: 'Author details pending confirmation',
     year: 'To be confirmed',
     pages: 'To be confirmed',
     language: 'English',
     format: 'Print',
     accent: 'forest',
     summary:
-      'Practical notes on the farming year in the highlands — maize, beans, huckleberry and raffia — with the practices Nkar families have kept.',
+      'Practical notes on the farming year in the highlands, including maize, beans, huckleberry, and raffia, reflecting the practices Nkar families have kept across generations.',
     sample: true
   },
   {
     id: 'diaspora',
     title: 'Nkar at Home and Abroad: A Diaspora Memoir',
-    author: 'Nkar author — name to be confirmed',
+    author: 'Author details pending confirmation',
     year: 'To be confirmed',
     pages: 'To be confirmed',
     language: 'English',
@@ -91,7 +91,7 @@ export const books: Book[] = [
   {
     id: 'childhood',
     title: 'Growing Up in Nkar: A Childhood Remembered',
-    author: 'Nkar author — name to be confirmed',
+    author: 'Author details pending confirmation',
     year: 'To be confirmed',
     pages: 'To be confirmed',
     language: 'English',

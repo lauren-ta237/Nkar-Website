@@ -19,7 +19,7 @@ export default function Projects() {
       <PageHero
         eyebrow="Development projects"
         title="What Nkar is building together"
-        description="Ongoing, planned and completed initiatives — water, roads, education and the palace — carried by the village and its sons and daughters abroad."
+        description="Ongoing, planned, and completed initiatives in water, roads, education, and the palace, carried forward by the village and its sons and daughters abroad."
         note={projectNote}
       />
 
