@@ -2,7 +2,21 @@
 //
 // Photographs of Nkar, its people, its crafts and its cultural activities.
 
-import { fonSit, fonPopeAudience, fonPope } from './images';
+import {
+  fonSit,
+  fonPopeAudience,
+  fonPope,
+  gallery,
+  gallery1,
+  gallery2,
+  gallery3,
+  gallery4,
+  gallery5,
+  gallery6,
+  gallery7,
+  gallery8,
+  gallery11,
+} from './images';
 
 export type GalleryAspect = "wide" | "square";
 
@@ -56,73 +70,103 @@ export const galleryItems: GalleryItem[] = [
     sample: false,
   },
   {
-    id: "drums",
-    title: "Drums beside the palace wall",
-    category: "Craft & artifact",
-    image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/62163d17d_generated_2fd849ea.png",
-    aspect: "wide",
-    caption:
-      "Carved drums with hide skins and peg tension, the traditional instruments that call families together for ceremonies and communal work.",
-    sample: false,
-  },
-  {
-    id: "dawn-hills",
-    title: "The highlands at dawn",
-    category: "Landscape",
-    image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/4543445c9_generated_499de304.png",
-    aspect: "wide",
-    caption:
-      "Mist in the valley and the ridgelines emerging above it: the country Nkar farms and the horizon families look out on.",
-    sample: false,
-  },
-  {
-    id: "market-cloth",
-    title: "Cloth and baskets at the market",
+    id: "nkar-gallery-0",
+    title: "Nkar Palace & Community Grounds",
     category: "Village life",
-    image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/8b1c8afd3_generated_3f665c33.png",
+    image: gallery,
     aspect: "wide",
     caption:
-      "Folded cloth, woven baskets, and calabashes on a market table, showcasing the vibrant crafts of the village market.",
+      "Life and architectural heritage within the Nkar Fondom community.",
     sample: false,
   },
   {
-    id: "dance",
-    title: "Dance and dust at a celebration",
+    id: "nkar-gallery-1",
+    title: "Royal Compound & Cultural Heritage",
     category: "Ceremony",
-    image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/a61cd856f_generated_20d90f12.png",
+    image: gallery1,
     aspect: "wide",
     caption:
-      "Dancers in patterned wraps moving in a circle at an afternoon celebration, with onlookers at the edge of the ground.",
+      "Traditional gathering spaces and royal heritage within Nkar.",
     sample: false,
   },
   {
-    id: "beadwork",
-    title: "Beadwork and raffia craft",
+    id: "nkar-gallery-2",
+    title: "Traditional Palace Architecture",
     category: "Craft & artifact",
-    image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/25a028e3b_generated_c8837439.png",
-    aspect: "square",
+    image: gallery2,
+    aspect: "wide",
     caption:
-      "Glass beads worked in geometric patterns beside coiled raffia fibre, representing craft traditions preserved by hand and passed on across generations.",
+      "Distinctive Grassfields structural design and craftsmanship in Nkar.",
     sample: false,
   },
   {
-    id: "granary",
-    title: "A granary in the compound",
+    id: "nkar-gallery-3",
+    title: "Community Buildings & Courtyard",
     category: "Village life",
-    image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/21f1aaff2_generated_503d9932.png",
+    image: gallery3,
     aspect: "wide",
     caption:
-      "A raised storehouse with a conical thatched roof, with maize and calabashes stored at its foot in the tradition of a highland household.",
+      "Buildings and open grounds serving the Nkar community.",
     sample: false,
   },
   {
-    id: "calabash",
-    title: "Calabashes, cups and the wine gourd",
+    id: "nkar-gallery-4",
+    title: "Traditional Thatched & Raffia Shrine House",
     category: "Craft & artifact",
-    image: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/553ec8193_generated_3a7a0318.png",
-    aspect: "square",
+    image: gallery4,
+    aspect: "wide",
     caption:
-      "Burnished calabash bowls, carved cups, and a raffia gourd set out for a visitor as traditional symbols of Grassfields hospitality.",
+      "Ancestral Grassfields architecture constructed with woven raffia, bamboo poles, and thick thatched roofing.",
+    sample: false,
+  },
+  {
+    id: "nkar-gallery-5",
+    title: "Heritage Raffia & Bamboo Lodge",
+    category: "Craft & artifact",
+    image: gallery5,
+    aspect: "wide",
+    caption:
+      "Preserved traditional building methods using natural raffia palm, earth, and thatch in Nkar.",
+    sample: false,
+  },
+  {
+    id: "nkar-gallery-6",
+    title: "Village Compound & Stone Foundation",
+    category: "Village life",
+    image: gallery6,
+    aspect: "wide",
+    caption:
+      "Local masonry and courtyard life across the quarters of Nkar.",
+    sample: false,
+  },
+  {
+    id: "nkar-gallery-7",
+    title: "Nkar Community School & Assembly Ground",
+    category: "Village life",
+    image: gallery7,
+    aspect: "wide",
+    caption:
+      "Open assembly grounds and educational facilities supporting youth in Nkar.",
+    sample: false,
+  },
+  {
+    id: "nkar-gallery-8",
+    title: "The Nkar Palace Courtyard",
+    category: "Ceremony",
+    image: gallery8,
+    aspect: "wide",
+    caption:
+      "The paved central courtyard of the Nkar Royal Palace framed by traditional yellow and terracotta halls.",
+    sample: false,
+  },
+  {
+    id: "nkar-gallery-11",
+    title: "Sacred Hill & Highland Road of Nkar",
+    category: "Landscape",
+    image: gallery11,
+    aspect: "wide",
+    caption:
+      "The iconic green conical hill rising above the red earth road and highland farms of Nkar at dusk.",
     sample: false,
   },
 ];
