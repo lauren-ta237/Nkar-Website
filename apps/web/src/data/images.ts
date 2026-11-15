@@ -15,6 +15,17 @@ import fonTumeNtani2 from '@/assets/images/fon_tume_ntani_2.jpeg';
 import nkarHillFarms from '@/assets/images/nkar_hill_farms.png';
 import palaceGathering from '@/assets/images/palace_gathering.jpeg';
 
+import gallery from '@/assets/images/gallery.jpeg';
+import gallery1 from '@/assets/images/gallery1.jpeg';
+import gallery2 from '@/assets/images/gallery2.jpeg';
+import gallery3 from '@/assets/images/gallery3.jpeg';
+import gallery4 from '@/assets/images/gallery4.jpeg';
+import gallery5 from '@/assets/images/gallery5.jpeg';
+import gallery6 from '@/assets/images/gallery6.jpeg';
+import gallery7 from '@/assets/images/gallery7.jpeg';
+import gallery8 from '@/assets/images/gallery8.jpeg';
+import gallery11 from '@/assets/images/gallery11.jpeg';
+
 export {
   heroLandscape,
   fonSit,
@@ -25,7 +36,17 @@ export {
   fonNtani1,
   fonTumeNtani2,
   nkarHillFarms,
-  palaceGathering
+  palaceGathering,
+  gallery,
+  gallery1,
+  gallery2,
+  gallery3,
+  gallery4,
+  gallery5,
+  gallery6,
+  gallery7,
+  gallery8,
+  gallery11,
 };
 
 export const images: Record<string, string> = {
@@ -47,7 +68,7 @@ export const images: Record<string, string> = {
   fonMolo2: fonMolo2,
   fonNtani1: fonNtani1,
   fonTumeNtani2: fonTumeNtani2,
-  regalia: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/f916e16cc_generated_1fb043b3.png",
+  regalia: gallery4,
 
   // About
   carvedStool: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/90226bc3a_generated_fc17d9c2.png",
@@ -60,11 +81,21 @@ export const images: Record<string, string> = {
   communityHall: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/a2387e901_generated_ea4d84da.png",
 
   // Gallery
-  drums: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/62163d17d_generated_2fd849ea.png",
-  marketCloth: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/8b1c8afd3_generated_3f665c33.png",
-  beadwork: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/25a028e3b_generated_c8837439.png",
-  dawnHills: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/4543445c9_generated_499de304.png",
+  gallery,
+  gallery1,
+  gallery2,
+  gallery3,
+  gallery4,
+  gallery5,
+  gallery6,
+  gallery7,
+  gallery8,
+  gallery11,
+  drums: gallery4,
+  marketCloth: gallery6,
+  beadwork: gallery5,
+  dawnHills: gallery11,
   dance: palaceGathering,
-  granary: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/21f1aaff2_generated_503d9932.png",
-  calabash: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/553ec8193_generated_3a7a0318.png",
+  granary: gallery3,
+  calabash: gallery2,
 };
