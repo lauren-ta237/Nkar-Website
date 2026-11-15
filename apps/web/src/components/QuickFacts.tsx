@@ -10,7 +10,7 @@ export default function QuickFacts() {
             {fact.label}
           </dt>
           <dd className="mt-3 text-sm leading-relaxed text-forest-800">{fact.value}</dd>
-          {fact.draft && <SampleBadge className="mt-4" label="To be verified" />}
+          
         </div>
       ))}
     </dl>

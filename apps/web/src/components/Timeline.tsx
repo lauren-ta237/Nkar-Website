@@ -1,4 +1,3 @@
-import SampleBadge from './SampleBadge';
 import type { TimelineEntry } from '@/data/culture';
 
 interface TimelineProps {
@@ -21,9 +20,6 @@ export default function Timeline({ items }: TimelineProps) {
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {item.text}
           </p>
-          {String(item.period).toLowerCase().includes('verify') && (
-            <SampleBadge className="mt-4" label="Awaiting verification" />
-          )}
         </li>
       ))}
     </ol>

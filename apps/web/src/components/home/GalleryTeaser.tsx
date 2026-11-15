@@ -17,7 +17,7 @@ export default function GalleryTeaser() {
           <SectionHeading
             eyebrow="Gallery"
             title="Featured photographs"
-            description="A curated preview of the gallery: authentic landscapes, royal regalia, crafts, and ceremonies from across Nkar Clan."
+            description="A curated preview of the gallery: authentic landscapes, royal regalia, crafts, and ceremonies from across the Nkar Fondom."
           />
           <Link
             to="/gallery"
@@ -55,7 +55,7 @@ export default function GalleryTeaser() {
                   </span>
                   <span className="mt-2 block font-display text-lg text-ivory">{item.title}</span>
                 </span>
-                {item.sample && <SampleBadge className="absolute right-3 top-3 bg-ivory" />}
+                
               </Link>
             ))}
           </div>
