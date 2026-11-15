@@ -5,7 +5,7 @@ from app.api.dependencies import require_admin
 from app.database.session import get_db
 from app.modules.audit.schemas import AuditLogResponse
 from app.modules.audit.service import list_audit_logs
-from app.shared.enums import UserRole
+from app.shared.enums import AuditSeverity, UserRole
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/audit", tags=["audit"])
@@ -15,7 +15,8 @@ router = APIRouter(prefix="/audit", tags=["audit"])
 async def get_audit_logs(
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=100),
-    entity_type: str | None = Query(None, max_length=100),
+    resource_type: str | None = Query(None, max_length=100),
+    severity: AuditSeverity | None = Query(None),
     actor: dict = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
@@ -25,7 +26,7 @@ async def get_audit_logs(
             detail={"code": "FORBIDDEN", "message": "Only Super Admins can view audit logs"},
         )
 
-    rows, total = await list_audit_logs(db, skip=skip, limit=limit, entity_type=entity_type)
+    rows, total = await list_audit_logs(db, skip=skip, limit=limit, resource_type=resource_type, severity=severity)
     return {
         "success": True,
         "data": rows,

@@ -14,7 +14,8 @@ from app.modules.gallery.service import (
     list_published_gallery,
     update_gallery,
 )
-from app.shared.enums import ContentStatus, MediaType, UserRole
+from app.shared.enums import AuditSeverity, ContentStatus, MediaType, UserRole
+from app.shared.pagination import PageMeta, PageParams
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/gallery", tags=["gallery"])
@@ -24,14 +25,20 @@ router = APIRouter(prefix="/gallery", tags=["gallery"])
 
 @router.get("", response_model=Envelope[list[GalleryResponse]])
 async def get_published_media(
-    album: str | None = Query(None),
-    media_type: MediaType | None = Query(None),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(24, ge=1, le=100),
+    category: str | None = Query(None, description="Filter by media category"),
+    media_type: MediaType | None = Query(None, description="Filter by media type (image, video)"),
+    page_params: PageParams = Depends(),
     db: AsyncSession = Depends(get_db),
 ):
-    rows, total = await list_published_gallery(db, album=album, media_type=media_type, skip=skip, limit=limit)
-    return {"success": True, "data": rows, "meta": {"total": total, "skip": skip, "limit": limit}}
+    rows, total = await list_published_gallery(
+        db,
+        category=category,
+        media_type=media_type,
+        skip=page_params.offset,
+        limit=page_params.limit,
+    )
+    meta = PageMeta.create(page=page_params.page, page_size=page_params.page_size, total_items=total)
+    return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
 @router.get("/{item_id}", response_model=Envelope[GalleryResponse])
@@ -53,13 +60,13 @@ async def get_media_detail(
 @router.get("/admin/items", response_model=Envelope[list[GalleryResponse]])
 async def admin_get_all_media(
     status_filter: ContentStatus | None = Query(None, alias="status"),
-    album: str | None = Query(None),
+    category: str | None = Query(None),
     skip: int = Query(0, ge=0),
     limit: int = Query(24, ge=1, le=100),
     actor: dict = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    rows, total = await list_all_gallery(db, status_filter=status_filter, album=album, skip=skip, limit=limit)
+    rows, total = await list_all_gallery(db, status_filter=status_filter, category=category, skip=skip, limit=limit)
     return {"success": True, "data": rows, "meta": {"total": total, "skip": skip, "limit": limit}}
 
 
@@ -76,10 +83,11 @@ async def admin_create_media(
     await record_audit(
         db,
         action="CREATE_GALLERY",
-        entity_type="gallery",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"title": item.title, "album": item.album_category},
+        resource_type="gallery",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Uploaded gallery item: {item.title}",
     )
     await db.commit()
     return {"success": True, "data": item}
@@ -107,10 +115,12 @@ async def admin_update_media(
     await record_audit(
         db,
         action="UPDATE_GALLERY",
-        entity_type="gallery",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"updated_fields": list(payload.model_dump(exclude_unset=True).keys())},
+        resource_type="gallery",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Updated gallery item: {item.title}",
+        changes=payload.model_dump(exclude_unset=True),
     )
     await db.commit()
     return {"success": True, "data": updated_item}
@@ -137,9 +147,10 @@ async def admin_delete_media(
     await record_audit(
         db,
         action="DELETE_GALLERY",
-        entity_type="gallery",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"title": item.title},
+        resource_type="gallery",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.WARNING,
+        details=f"Deleted gallery item: {item.title}",
     )
     await delete_gallery(db, item)

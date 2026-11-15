@@ -13,7 +13,7 @@ from app.modules.users.service import (
     list_users,
     update_user,
 )
-from app.shared.enums import UserRole, UserStatus
+from app.shared.enums import AuditSeverity, UserRole, UserStatus
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -65,10 +65,11 @@ async def create_new_user(
     await record_audit(
         db,
         action="CREATE_USER",
-        entity_type="users",
-        entity_id=user.id,
-        performed_by_id=actor["user_id"],
-        details={"name": user.name, "email": user.email, "role": user.role.value},
+        resource_type="users",
+        resource_id=user.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Created administrator: {user.name} ({user.email})",
     )
     await db.commit()
     return {"success": True, "data": user}
@@ -112,10 +113,12 @@ async def update_existing_user(
     await record_audit(
         db,
         action="UPDATE_USER",
-        entity_type="users",
-        entity_id=user.id,
-        performed_by_id=actor["user_id"],
-        details={"updated_fields": list(payload.model_dump(exclude_unset=True).keys())},
+        resource_type="users",
+        resource_id=user.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Updated user account: {user.name}",
+        changes=payload.model_dump(exclude_unset=True),
     )
     await db.commit()
     return {"success": True, "data": updated_user}
@@ -148,9 +151,10 @@ async def delete_existing_user(
     await record_audit(
         db,
         action="DELETE_USER",
-        entity_type="users",
-        entity_id=user.id,
-        performed_by_id=actor["user_id"],
-        details={"email": user.email, "name": user.name},
+        resource_type="users",
+        resource_id=user.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.WARNING,
+        details=f"Deleted user account: {user.name} ({user.email})",
     )
     await delete_user(db, user)

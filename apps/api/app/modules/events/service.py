@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime, timezone
 from uuid import UUID
 from fastapi import HTTPException, status
 from sqlalchemy import func, or_, select
@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.events.models import Event
 from app.modules.events.schemas import EventCreate, EventUpdate
-from app.shared.enums import ContentStatus
+from app.shared.enums import EventStatus
 
 
 async def list_published_events(
@@ -17,17 +17,23 @@ async def list_published_events(
     skip: int = 0,
     limit: int = 20,
 ):
-    conditions = [Event.status == ContentStatus.PUBLISHED]
+    conditions = [Event.status == EventStatus.PUBLISHED]
     if upcoming_only:
-        conditions.append(Event.event_date >= date.today())
+        conditions.append(Event.start_datetime >= datetime.now(timezone.utc))
     if q:
-        conditions.append(or_(Event.title.ilike(f"%{q}%"), Event.description.ilike(f"%{q}%"), Event.location.ilike(f"%{q}%")))
+        conditions.append(
+            or_(
+                Event.title.ilike(f"%{q}%"),
+                Event.content.ilike(f"%{q}%"),
+                Event.location.ilike(f"%{q}%"),
+            )
+        )
 
     total = await db.scalar(select(func.count()).select_from(Event).where(*conditions)) or 0
     query = (
         select(Event)
         .where(*conditions)
-        .order_by(Event.event_date.asc() if upcoming_only else Event.event_date.desc())
+        .order_by(Event.start_datetime.asc() if upcoming_only else Event.start_datetime.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -37,7 +43,7 @@ async def list_published_events(
 
 async def list_all_events(
     db: AsyncSession,
-    status_filter: ContentStatus | None = None,
+    status_filter: EventStatus | None = None,
     skip: int = 0,
     limit: int = 20,
 ):
@@ -49,7 +55,7 @@ async def list_all_events(
     query = (
         select(Event)
         .where(*conditions)
-        .order_by(Event.event_date.desc())
+        .order_by(Event.start_datetime.desc())
         .offset(skip)
         .limit(limit)
     )

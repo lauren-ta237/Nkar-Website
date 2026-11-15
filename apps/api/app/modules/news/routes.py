@@ -15,7 +15,8 @@ from app.modules.news.service import (
     list_published_news,
     update_news,
 )
-from app.shared.enums import ContentStatus, NewsCategory, UserRole
+from app.shared.enums import AuditSeverity, ContentStatus, NewsCategory, UserRole
+from app.shared.pagination import PageMeta, PageParams
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/news", tags=["news"])
@@ -25,14 +26,20 @@ router = APIRouter(prefix="/news", tags=["news"])
 
 @router.get("", response_model=Envelope[list[NewsResponse]])
 async def get_published_news(
-    q: str | None = Query(None, max_length=100),
-    category: NewsCategory | None = Query(None),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    q: str | None = Query(None, max_length=100, description="Search keyword"),
+    category: NewsCategory | None = Query(None, description="Filter by news category"),
+    page_params: PageParams = Depends(),
     db: AsyncSession = Depends(get_db),
 ):
-    rows, total = await list_published_news(db, q=q, category=category, skip=skip, limit=limit)
-    return {"success": True, "data": rows, "meta": {"total": total, "skip": skip, "limit": limit}}
+    rows, total = await list_published_news(
+        db,
+        q=q,
+        category=category,
+        skip=page_params.offset,
+        limit=page_params.limit,
+    )
+    meta = PageMeta.create(page=page_params.page, page_size=page_params.page_size, total_items=total)
+    return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
 @router.get("/{news_id}", response_model=Envelope[NewsResponse])
@@ -71,7 +78,6 @@ async def admin_create_news(
     actor: dict = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    # Editors cannot publish directly
     if actor["role"] == UserRole.CONTENT_EDITOR and payload.status in {ContentStatus.PUBLISHED, ContentStatus.APPROVED}:
         payload.status = ContentStatus.SUBMITTED
 
@@ -79,10 +85,11 @@ async def admin_create_news(
     await record_audit(
         db,
         action="CREATE_NEWS",
-        entity_type="news",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"title": item.title, "status": item.status.value},
+        resource_type="news",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Created news article: {item.title}",
     )
     await db.commit()
     return {"success": True, "data": item}
@@ -116,10 +123,12 @@ async def admin_update_news(
     await record_audit(
         db,
         action="UPDATE_NEWS",
-        entity_type="news",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"updated_fields": list(payload.model_dump(exclude_unset=True).keys())},
+        resource_type="news",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Updated news article: {item.title}",
+        changes=payload.model_dump(exclude_unset=True),
     )
     await db.commit()
     return {"success": True, "data": updated_item}
@@ -146,9 +155,10 @@ async def admin_delete_news(
     await record_audit(
         db,
         action="DELETE_NEWS",
-        entity_type="news",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"title": item.title},
+        resource_type="news",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.WARNING,
+        details=f"Deleted news article: {item.title}",
     )
     await delete_news(db, item)

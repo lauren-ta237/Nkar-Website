@@ -23,12 +23,12 @@ class ModuleModel(BaseModel):
 
 class Metadata(ModuleModel):
     id: UUID
-    created_date: datetime
-    updated_date: datetime
+    created_at: datetime
+    updated_at: datetime
     created_by_id: UUID | None = None
 
 
 class ContentBase(ModuleModel):
     title: str = Field(min_length=3, max_length=200)
     slug: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=220)
-    featured: bool = False
+    is_featured: bool = False

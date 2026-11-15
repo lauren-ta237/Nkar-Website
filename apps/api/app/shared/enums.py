@@ -21,9 +21,13 @@ class ContentStatus(StrEnum):
     ARCHIVED = "archived"
 
 
-# Backwards-compatible aliases
-PublicationStatus = ContentStatus
-SimpleStatus = ContentStatus
+class EventStatus(StrEnum):
+    DRAFT = "draft"
+    SUBMITTED = "submitted"
+    PUBLISHED = "published"
+    CANCELLED = "cancelled"
+    COMPLETED = "completed"
+    ARCHIVED = "archived"
 
 
 class NewsCategory(StrEnum):
@@ -38,6 +42,9 @@ class NewsCategory(StrEnum):
 
 class HeritageCategory(StrEnum):
     HISTORY = "history"
+    ORIGINS = "origins"
+    CULTURE = "culture"
+    TRADITIONS = "traditions"
     CUSTOMS = "customs"
     LANGUAGE = "language"
     ROYAL_LINEAGE = "royal_lineage"
@@ -59,3 +66,9 @@ class ContactStatus(StrEnum):
     UNREAD = "unread"
     IN_PROGRESS = "in_progress"
     RESOLVED = "resolved"
+
+
+class AuditSeverity(StrEnum):
+    INFO = "info"
+    WARNING = "warning"
+    CRITICAL = "critical"

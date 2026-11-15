@@ -31,7 +31,7 @@ async def list_contact_submissions(
     query = (
         select(ContactSubmission)
         .where(*conditions)
-        .order_by(ContactSubmission.created_date.desc())
+        .order_by(ContactSubmission.created_at.desc())
         .offset(skip)
         .limit(limit)
     )

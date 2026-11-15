@@ -26,7 +26,7 @@ async def list_published_heritage(
     query = (
         select(Heritage)
         .where(*conditions)
-        .order_by(Heritage.created_date.desc())
+        .order_by(Heritage.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -51,7 +51,7 @@ async def list_all_heritage(
     query = (
         select(Heritage)
         .where(*conditions)
-        .order_by(Heritage.created_date.desc())
+        .order_by(Heritage.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -65,7 +65,11 @@ async def get_heritage_by_id(db: AsyncSession, item_id: UUID) -> Heritage | None
 
 async def create_heritage(db: AsyncSession, payload: HeritageCreate, author_id: UUID) -> Heritage:
     data = payload.model_dump(exclude_unset=True)
-    item = Heritage(**data, created_by_id=author_id)
+    item = Heritage(
+        **data,
+        author_id=author_id,
+        created_by_id=author_id,
+    )
     db.add(item)
     try:
         await db.commit()

@@ -21,13 +21,13 @@ async def list_published_news(
     if category:
         conditions.append(News.category == category)
     if q:
-        conditions.append(or_(News.title.ilike(f"%{q}%"), News.summary.ilike(f"%{q}%")))
+        conditions.append(or_(News.title.ilike(f"%{q}%"), News.summary.ilike(f"%{q}%"), News.content.ilike(f"%{q}%")))
 
     total = await db.scalar(select(func.count()).select_from(News).where(*conditions)) or 0
     query = (
         select(News)
         .where(*conditions)
-        .order_by(News.created_date.desc())
+        .order_by(News.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -52,7 +52,7 @@ async def list_all_news(
     query = (
         select(News)
         .where(*conditions)
-        .order_by(News.created_date.desc())
+        .order_by(News.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -64,16 +64,16 @@ async def get_news_by_id(db: AsyncSession, news_id: UUID) -> News | None:
     return await db.get(News, news_id)
 
 
-async def get_news_by_slug(db: AsyncSession, slug: str) -> News | None:
-    return await db.scalar(select(News).where(News.slug == slug))
-
-
 async def create_news(db: AsyncSession, payload: NewsCreate, author_id: UUID) -> News:
     data = payload.model_dump(exclude_unset=True)
     if data.get("status") == ContentStatus.PUBLISHED:
         data["published_at"] = datetime.now(timezone.utc)
 
-    news_item = News(**data, created_by_id=author_id)
+    news_item = News(
+        **data,
+        author_id=author_id,
+        created_by_id=author_id,
+    )
     db.add(news_item)
     try:
         await db.commit()

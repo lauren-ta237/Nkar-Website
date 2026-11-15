@@ -14,7 +14,8 @@ from app.modules.leadership.service import (
     list_published_leadership,
     update_leader,
 )
-from app.shared.enums import ContentStatus, UserRole
+from app.shared.enums import AuditSeverity, ContentStatus, UserRole
+from app.shared.pagination import PageMeta, PageParams
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/leadership", tags=["leadership"])
@@ -24,13 +25,13 @@ router = APIRouter(prefix="/leadership", tags=["leadership"])
 
 @router.get("", response_model=Envelope[list[LeadershipResponse]])
 async def get_published_leaders(
-    q: str | None = Query(None, max_length=100),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(50, ge=1, le=100),
+    q: str | None = Query(None, max_length=100, description="Search keyword"),
+    page_params: PageParams = Depends(),
     db: AsyncSession = Depends(get_db),
 ):
-    rows, total = await list_published_leadership(db, q=q, skip=skip, limit=limit)
-    return {"success": True, "data": rows, "meta": {"total": total, "skip": skip, "limit": limit}}
+    rows, total = await list_published_leadership(db, q=q, skip=page_params.offset, limit=page_params.limit)
+    meta = PageMeta.create(page=page_params.page, page_size=page_params.page_size, total_items=total)
+    return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
 @router.get("/{leader_id}", response_model=Envelope[LeadershipResponse])
@@ -74,10 +75,11 @@ async def admin_create_leader(
     await record_audit(
         db,
         action="CREATE_LEADERSHIP",
-        entity_type="leadership",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"name": item.name, "title_role": item.title_role},
+        resource_type="leadership",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Created leadership entry: {item.name}",
     )
     await db.commit()
     return {"success": True, "data": item}
@@ -105,10 +107,12 @@ async def admin_update_leader(
     await record_audit(
         db,
         action="UPDATE_LEADERSHIP",
-        entity_type="leadership",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"updated_fields": list(payload.model_dump(exclude_unset=True).keys())},
+        resource_type="leadership",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Updated leadership entry: {item.name}",
+        changes=payload.model_dump(exclude_unset=True),
     )
     await db.commit()
     return {"success": True, "data": updated_item}
@@ -135,9 +139,10 @@ async def admin_delete_leader(
     await record_audit(
         db,
         action="DELETE_LEADERSHIP",
-        entity_type="leadership",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"name": item.name},
+        resource_type="leadership",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.WARNING,
+        details=f"Deleted leadership entry: {item.name}",
     )
     await delete_leader(db, item)

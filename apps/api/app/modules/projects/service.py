@@ -20,7 +20,7 @@ async def list_projects(
     if q:
         conditions.append(
             or_(
-                DevelopmentProject.project_name.ilike(f"%{q}%"),
+                DevelopmentProject.title.ilike(f"%{q}%"),
                 DevelopmentProject.description.ilike(f"%{q}%"),
                 DevelopmentProject.location.ilike(f"%{q}%"),
             )
@@ -30,7 +30,7 @@ async def list_projects(
     query = (
         select(DevelopmentProject)
         .where(*conditions)
-        .order_by(DevelopmentProject.created_date.desc())
+        .order_by(DevelopmentProject.created_at.desc())
         .offset(skip)
         .limit(limit)
     )

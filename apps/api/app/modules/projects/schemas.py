@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Any
 
 from pydantic import Field, model_validator
 
@@ -7,15 +8,16 @@ from app.shared.enums import ProjectStatus
 
 
 class DevelopmentProjectCreate(ModuleModel):
-    project_name: str = Field(min_length=1, max_length=200)
+    title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)
-    location: str | None = Field(default=None, max_length=255)
+    location: str = Field(min_length=1, max_length=255)
     status: ProjectStatus = ProjectStatus.PROPOSED
     budget_cfa: int | None = Field(default=None, gt=0)
     progress_percentage: int = Field(default=0, ge=0, le=100)
-    cover_image: HttpUrlStr | None = None
+    cover_image_url: HttpUrlStr | None = None
     start_date: date | None = None
     completion_date: date | None = None
+    milestones: list[dict[str, Any]] | None = None
 
     @model_validator(mode="after")
     def validate_dates(self):
@@ -25,15 +27,16 @@ class DevelopmentProjectCreate(ModuleModel):
 
 
 class DevelopmentProjectUpdate(ModuleModel):
-    project_name: str | None = Field(default=None, min_length=1, max_length=200)
+    title: str | None = Field(default=None, min_length=1, max_length=200)
     description: str | None = Field(default=None, min_length=1)
     location: str | None = Field(default=None, max_length=255)
     status: ProjectStatus | None = None
     budget_cfa: int | None = Field(default=None, gt=0)
     progress_percentage: int | None = Field(default=None, ge=0, le=100)
-    cover_image: HttpUrlStr | None = None
+    cover_image_url: HttpUrlStr | None = None
     start_date: date | None = None
     completion_date: date | None = None
+    milestones: list[dict[str, Any]] | None = None
 
     @model_validator(mode="after")
     def validate_dates(self):

@@ -1,1 +1,5 @@
 .env
+.venv/
+.pgdata/
+.pytest_cache/
+__pycache__/

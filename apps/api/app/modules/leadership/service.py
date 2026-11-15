@@ -15,13 +15,13 @@ async def list_published_leadership(
 ):
     conditions = [Leadership.status == ContentStatus.PUBLISHED]
     if q:
-        conditions.append(or_(Leadership.name.ilike(f"%{q}%"), Leadership.title_role.ilike(f"%{q}%")))
+        conditions.append(or_(Leadership.name.ilike(f"%{q}%"), Leadership.traditional_title.ilike(f"%{q}%")))
 
     total = await db.scalar(select(func.count()).select_from(Leadership).where(*conditions)) or 0
     query = (
         select(Leadership)
         .where(*conditions)
-        .order_by(Leadership.order_index.asc(), Leadership.created_date.desc())
+        .order_by(Leadership.order_index.asc(), Leadership.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -43,7 +43,7 @@ async def list_all_leadership(
     query = (
         select(Leadership)
         .where(*conditions)
-        .order_by(Leadership.order_index.asc(), Leadership.created_date.desc())
+        .order_by(Leadership.order_index.asc(), Leadership.created_at.desc())
         .offset(skip)
         .limit(limit)
     )

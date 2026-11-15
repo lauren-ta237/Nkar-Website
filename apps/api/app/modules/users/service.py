@@ -7,12 +7,11 @@ from fastapi import HTTPException, status
 from app.modules.auth.service import hash_password
 from app.modules.users.models import User
 from app.modules.users.schemas import UserCreate, UserUpdate
-from app.shared.enums import UserRole, UserStatus
 
 
 async def list_users(db: AsyncSession, skip: int = 0, limit: int = 50):
     total = await db.scalar(select(func.count()).select_from(User)) or 0
-    query = select(User).order_by(User.created_date.desc()).offset(skip).limit(limit)
+    query = select(User).order_by(User.created_at.desc()).offset(skip).limit(limit)
     rows = (await db.scalars(query)).all()
     return list(rows), total
 

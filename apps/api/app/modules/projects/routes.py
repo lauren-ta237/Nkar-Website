@@ -17,7 +17,8 @@ from app.modules.projects.service import (
     list_projects,
     update_project,
 )
-from app.shared.enums import ProjectStatus, UserRole
+from app.shared.enums import AuditSeverity, ProjectStatus, UserRole
+from app.shared.pagination import PageMeta, PageParams
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -27,14 +28,20 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 
 @router.get("", response_model=Envelope[list[DevelopmentProjectResponse]])
 async def get_public_projects(
-    status_filter: ProjectStatus | None = Query(None, alias="status"),
-    q: str | None = Query(None, max_length=100),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    status_filter: ProjectStatus | None = Query(None, alias="status", description="Filter by status (proposed, ongoing, completed)"),
+    q: str | None = Query(None, max_length=100, description="Search keyword"),
+    page_params: PageParams = Depends(),
     db: AsyncSession = Depends(get_db),
 ):
-    rows, total = await list_projects(db, status_filter=status_filter, q=q, skip=skip, limit=limit)
-    return {"success": True, "data": rows, "meta": {"total": total, "skip": skip, "limit": limit}}
+    rows, total = await list_projects(
+        db,
+        status_filter=status_filter,
+        q=q,
+        skip=page_params.offset,
+        limit=page_params.limit,
+    )
+    meta = PageMeta.create(page=page_params.page, page_size=page_params.page_size, total_items=total)
+    return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
 @router.get("/{project_id}", response_model=Envelope[DevelopmentProjectResponse])
@@ -76,10 +83,11 @@ async def admin_create_project(
     await record_audit(
         db,
         action="CREATE_PROJECT",
-        entity_type="projects",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"project_name": item.project_name, "status": item.status.value},
+        resource_type="projects",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Created development project: {item.title}",
     )
     await db.commit()
     return {"success": True, "data": item}
@@ -104,10 +112,12 @@ async def admin_update_project(
     await record_audit(
         db,
         action="UPDATE_PROJECT",
-        entity_type="projects",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"updated_fields": list(payload.model_dump(exclude_unset=True).keys())},
+        resource_type="projects",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Updated development project: {item.title}",
+        changes=payload.model_dump(exclude_unset=True),
     )
     await db.commit()
     return {"success": True, "data": updated_item}
@@ -134,9 +144,10 @@ async def admin_delete_project(
     await record_audit(
         db,
         action="DELETE_PROJECT",
-        entity_type="projects",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"project_name": item.project_name},
+        resource_type="projects",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.WARNING,
+        details=f"Deleted project: {item.title}",
     )
     await delete_project(db, item)

@@ -13,12 +13,12 @@ class Base(DeclarativeBase):
 
 class TimestampMixin:
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
-    created_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     created_by_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
 
 
-# Import models after Base exists so Alembic metadata and ENTITY_MODELS share one source of truth.
+# Import models after Base exists
 from app.modules.audit.models import AuditLog  # noqa: E402
 from app.modules.contacts.models import ContactSubmission  # noqa: E402
 from app.modules.events.models import Event  # noqa: E402

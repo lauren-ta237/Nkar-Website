@@ -14,7 +14,8 @@ from app.modules.events.service import (
     list_published_events,
     update_event,
 )
-from app.shared.enums import ContentStatus, UserRole
+from app.shared.enums import AuditSeverity, EventStatus, UserRole
+from app.shared.pagination import PageMeta, PageParams
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/events", tags=["events"])
@@ -24,14 +25,20 @@ router = APIRouter(prefix="/events", tags=["events"])
 
 @router.get("", response_model=Envelope[list[EventResponse]])
 async def get_published_events(
-    q: str | None = Query(None, max_length=100),
+    q: str | None = Query(None, max_length=100, description="Search keyword"),
     upcoming: bool = Query(False, description="Filter for upcoming events only"),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    page_params: PageParams = Depends(),
     db: AsyncSession = Depends(get_db),
 ):
-    rows, total = await list_published_events(db, q=q, upcoming_only=upcoming, skip=skip, limit=limit)
-    return {"success": True, "data": rows, "meta": {"total": total, "skip": skip, "limit": limit}}
+    rows, total = await list_published_events(
+        db,
+        q=q,
+        upcoming_only=upcoming,
+        skip=page_params.offset,
+        limit=page_params.limit,
+    )
+    meta = PageMeta.create(page=page_params.page, page_size=page_params.page_size, total_items=total)
+    return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
 @router.get("/{event_id}", response_model=Envelope[EventResponse])
@@ -40,7 +47,7 @@ async def get_event_detail(
     db: AsyncSession = Depends(get_db),
 ):
     item = await get_event_by_id(db, event_id)
-    if not item or item.status != ContentStatus.PUBLISHED:
+    if not item or item.status != EventStatus.PUBLISHED:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={"code": "NOT_FOUND", "message": "Event not found"},
@@ -52,7 +59,7 @@ async def get_event_detail(
 
 @router.get("/admin/items", response_model=Envelope[list[EventResponse]])
 async def admin_get_all_events(
-    status_filter: ContentStatus | None = Query(None, alias="status"),
+    status_filter: EventStatus | None = Query(None, alias="status"),
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     actor: dict = Depends(require_admin),
@@ -68,17 +75,18 @@ async def admin_create_event(
     actor: dict = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    if actor["role"] == UserRole.CONTENT_EDITOR and payload.status in {ContentStatus.PUBLISHED, ContentStatus.APPROVED}:
-        payload.status = ContentStatus.SUBMITTED
+    if actor["role"] == UserRole.CONTENT_EDITOR and payload.status == EventStatus.PUBLISHED:
+        payload.status = EventStatus.SUBMITTED
 
     item = await create_event(db, payload, author_id=actor["user_id"])
     await record_audit(
         db,
         action="CREATE_EVENT",
-        entity_type="events",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"title": item.title, "event_date": str(item.event_date)},
+        resource_type="events",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Created event: {item.title}",
     )
     await db.commit()
     return {"success": True, "data": item}
@@ -105,17 +113,19 @@ async def admin_update_event(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail={"code": "FORBIDDEN", "message": "Content Editors can only edit their own events"},
             )
-        if payload.status in {ContentStatus.PUBLISHED, ContentStatus.APPROVED}:
-            payload.status = ContentStatus.SUBMITTED
+        if payload.status == EventStatus.PUBLISHED:
+            payload.status = EventStatus.SUBMITTED
 
     updated_item = await update_event(db, item, payload)
     await record_audit(
         db,
         action="UPDATE_EVENT",
-        entity_type="events",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"updated_fields": list(payload.model_dump(exclude_unset=True).keys())},
+        resource_type="events",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Updated event: {item.title}",
+        changes=payload.model_dump(exclude_unset=True),
     )
     await db.commit()
     return {"success": True, "data": updated_item}
@@ -142,9 +152,10 @@ async def admin_delete_event(
     await record_audit(
         db,
         action="DELETE_EVENT",
-        entity_type="events",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"title": item.title},
+        resource_type="events",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.WARNING,
+        details=f"Deleted event: {item.title}",
     )
     await delete_event(db, item)

@@ -14,6 +14,12 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = 30
     cors_origins: list[str] = ["http://localhost:5173", "http://localhost:3000"]
 
+    # Cloudinary Object Storage configuration
+    cloudinary_cloud_name: str | None = None
+    cloudinary_api_key: str | None = None
+    cloudinary_api_secret: str | None = None
+    cloudinary_folder: str = "nkar_woo_lan"
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @field_validator("database_url", mode="before")

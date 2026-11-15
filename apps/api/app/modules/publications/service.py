@@ -21,7 +21,7 @@ async def list_published_publications(
     query = (
         select(Publication)
         .where(*conditions)
-        .order_by(Publication.created_date.desc())
+        .order_by(Publication.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -43,7 +43,7 @@ async def list_all_publications(
     query = (
         select(Publication)
         .where(*conditions)
-        .order_by(Publication.created_date.desc())
+        .order_by(Publication.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -57,7 +57,11 @@ async def get_publication_by_id(db: AsyncSession, item_id: UUID) -> Publication 
 
 async def create_publication(db: AsyncSession, payload: PublicationCreate, author_id: UUID) -> Publication:
     data = payload.model_dump(exclude_unset=True)
-    item = Publication(**data, created_by_id=author_id)
+    item = Publication(
+        **data,
+        uploaded_by_id=author_id,
+        created_by_id=author_id,
+    )
     db.add(item)
     await db.commit()
     await db.refresh(item)

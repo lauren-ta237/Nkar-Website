@@ -1,5 +1,5 @@
 from uuid import UUID
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.gallery.models import Gallery
@@ -9,14 +9,14 @@ from app.shared.enums import ContentStatus, MediaType
 
 async def list_published_gallery(
     db: AsyncSession,
-    album: str | None = None,
+    category: str | None = None,
     media_type: MediaType | None = None,
     skip: int = 0,
     limit: int = 24,
 ):
     conditions = [Gallery.status == ContentStatus.PUBLISHED]
-    if album:
-        conditions.append(Gallery.album_category == album)
+    if category:
+        conditions.append(Gallery.category == category)
     if media_type:
         conditions.append(Gallery.media_type == media_type)
 
@@ -24,7 +24,7 @@ async def list_published_gallery(
     query = (
         select(Gallery)
         .where(*conditions)
-        .order_by(Gallery.created_date.desc())
+        .order_by(Gallery.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -35,21 +35,21 @@ async def list_published_gallery(
 async def list_all_gallery(
     db: AsyncSession,
     status_filter: ContentStatus | None = None,
-    album: str | None = None,
+    category: str | None = None,
     skip: int = 0,
     limit: int = 24,
 ):
     conditions = []
     if status_filter:
         conditions.append(Gallery.status == status_filter)
-    if album:
-        conditions.append(Gallery.album_category == album)
+    if category:
+        conditions.append(Gallery.category == category)
 
     total = await db.scalar(select(func.count()).select_from(Gallery).where(*conditions)) or 0
     query = (
         select(Gallery)
         .where(*conditions)
-        .order_by(Gallery.created_date.desc())
+        .order_by(Gallery.created_at.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -63,7 +63,11 @@ async def get_gallery_by_id(db: AsyncSession, item_id: UUID) -> Gallery | None:
 
 async def create_gallery(db: AsyncSession, payload: GalleryCreate, author_id: UUID) -> Gallery:
     data = payload.model_dump(exclude_unset=True)
-    item = Gallery(**data, created_by_id=author_id)
+    item = Gallery(
+        **data,
+        uploaded_by_id=author_id,
+        created_by_id=author_id,
+    )
     db.add(item)
     await db.commit()
     await db.refresh(item)

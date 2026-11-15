@@ -17,7 +17,7 @@ from app.modules.contacts.service import (
     list_contact_submissions,
     update_contact_submission,
 )
-from app.shared.enums import ContactStatus, UserRole
+from app.shared.enums import AuditSeverity, ContactStatus, UserRole
 from app.shared.responses import Envelope
 
 router = APIRouter(prefix="/contacts", tags=["contacts"])
@@ -83,10 +83,12 @@ async def admin_update_contact_status(
     await record_audit(
         db,
         action="UPDATE_CONTACT_STATUS",
-        entity_type="contacts",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"status": updated_item.status.value},
+        resource_type="contacts",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.INFO,
+        details=f"Updated contact inquiry from {item.sender_name}",
+        changes=payload.model_dump(exclude_unset=True),
     )
     await db.commit()
     return {"success": True, "data": updated_item}
@@ -113,9 +115,10 @@ async def admin_delete_contact(
     await record_audit(
         db,
         action="DELETE_CONTACT",
-        entity_type="contacts",
-        entity_id=item.id,
-        performed_by_id=actor["user_id"],
-        details={"sender_email": item.sender_email},
+        resource_type="contacts",
+        resource_id=item.id,
+        actor_id=actor["user_id"],
+        severity=AuditSeverity.WARNING,
+        details=f"Deleted contact submission from {item.sender_email}",
     )
     await delete_contact_submission(db, item)
