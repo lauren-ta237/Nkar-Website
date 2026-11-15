@@ -18,7 +18,34 @@ import heroLandscape from '@/assets/images/WhatsApp Image 2026-11-01 at 1.16.56 
 import fonSit from '@/assets/images/fon sit.jpeg';
 import fonPopeAudience from '@/assets/images/WhatsApp Image 2026-11-01 at 2.12.47 PM.jpeg';
 import fonPope from '@/assets/images/fon pope.jpeg';
-export { heroLandscape, fonSit, fonPopeAudience, fonPope };
+
+import gallery from '@/assets/images/gallery.jpeg';
+import gallery1 from '@/assets/images/gallery1.jpeg';
+import gallery2 from '@/assets/images/gallery2.jpeg';
+import gallery3 from '@/assets/images/gallery3.jpeg';
+import gallery4 from '@/assets/images/gallery4.jpeg';
+import gallery5 from '@/assets/images/gallery5.jpeg';
+import gallery6 from '@/assets/images/gallery6.jpeg';
+import gallery7 from '@/assets/images/gallery7.jpeg';
+import gallery8 from '@/assets/images/gallery8.jpeg';
+import gallery11 from '@/assets/images/gallery11.jpeg';
+
+export {
+  heroLandscape,
+  fonSit,
+  fonPopeAudience,
+  fonPope,
+  gallery,
+  gallery1,
+  gallery2,
+  gallery3,
+  gallery4,
+  gallery5,
+  gallery6,
+  gallery7,
+  gallery8,
+  gallery11
+};
 
 export const images: Record<string, string> = {
   // Home, About & Intro Authentic Landscape
@@ -48,6 +75,16 @@ export const images: Record<string, string> = {
   communityHall: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/a2387e901_generated_ea4d84da.png",
 
   // Gallery
+  gallery,
+  gallery1,
+  gallery2,
+  gallery3,
+  gallery4,
+  gallery5,
+  gallery6,
+  gallery7,
+  gallery8,
+  gallery11,
   drums: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/62163d17d_generated_2fd849ea.png",
   marketCloth: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/8b1c8afd3_generated_3f665c33.png",
   beadwork: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/25a028e3b_grade_c8837439.png",
