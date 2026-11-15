@@ -24,7 +24,7 @@ import {
   User as UserIcon,
 } from 'lucide-react';
 import { useAdminStore, AdminPage, INITIAL_USERS } from '../../store/useAdminStore';
-import { useDashboardStats } from '../../api/queries';
+import { useDashboardStats } from '@/lib/api/queries';
 import {
   Sheet,
   SheetContent,

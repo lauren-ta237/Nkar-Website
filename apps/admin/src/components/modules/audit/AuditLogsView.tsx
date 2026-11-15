@@ -9,7 +9,7 @@ import {
   ArrowRight,
   Lock,
 } from 'lucide-react';
-import { useAuditLogs } from '../../../api/queries';
+import { useAuditLogs } from '@/lib/api/queries';
 import { AuditAction, EntityType } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { EmptyState } from '../../common/EmptyState';

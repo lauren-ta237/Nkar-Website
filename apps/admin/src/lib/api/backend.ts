@@ -14,7 +14,7 @@ import {
   EntityType,
   AuditAction,
   ContentStatus,
-} from '../types';
+} from '@/types';
 
 import {
   INITIAL_NEWS,
@@ -26,8 +26,8 @@ import {
   INITIAL_PROJECTS,
   INITIAL_CONTACT_SUBMISSIONS,
   INITIAL_AUDIT_LOGS,
-} from '../db/initialData';
-import { INITIAL_USERS } from '../store/useAdminStore';
+} from '@/db/initialData';
+import { INITIAL_USERS } from '@/store/useAdminStore';
 
 const STORAGE_KEYS = {
   USERS: 'nkar_db_users_v1',

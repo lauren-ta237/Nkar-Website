@@ -14,7 +14,7 @@ import {
   Phone,
   AlertTriangle,
 } from 'lucide-react';
-import { useUsersList, useUsersMutations } from '../../../api/queries';
+import { useUsersList, useUsersMutations } from '@/lib/api/queries';
 import { User, Role } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

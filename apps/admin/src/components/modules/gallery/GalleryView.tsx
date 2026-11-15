@@ -10,7 +10,7 @@ import {
   Folder,
   Tag,
 } from 'lucide-react';
-import { useGalleryList, useGalleryMutations } from '../../../api/queries';
+import { useGalleryList, useGalleryMutations } from '@/lib/api/queries';
 import { Gallery } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

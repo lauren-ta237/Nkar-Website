@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { useNewsList, useNewsMutations } from '../../../api/queries';
+import { useNewsList, useNewsMutations } from '@/lib/api/queries';
 import { News, ContentStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

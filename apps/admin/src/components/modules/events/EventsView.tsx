@@ -13,7 +13,7 @@ import {
   LayoutGrid,
   List,
 } from 'lucide-react';
-import { useEventsList, useEventsMutations } from '../../../api/queries';
+import { useEventsList, useEventsMutations } from '@/lib/api/queries';
 import { EventItem } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

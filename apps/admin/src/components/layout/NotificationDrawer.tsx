@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, CheckCircle, Clock, AlertCircle, Mail, ArrowRight, Bell } from 'lucide-react';
 import { useAdminStore } from '../../store/useAdminStore';
-import { usePendingReviews, useContactsList } from '../../api/queries';
+import { usePendingReviews, useContactsList } from '@/lib/api/queries';
 import {
   Sheet,
   SheetContent,

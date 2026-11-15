@@ -10,7 +10,7 @@ import {
   FileText,
   Calendar,
 } from 'lucide-react';
-import { usePublicationsList, usePublicationsMutations } from '../../../api/queries';
+import { usePublicationsList, usePublicationsMutations } from '@/lib/api/queries';
 import { Publication } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

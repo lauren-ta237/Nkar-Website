@@ -11,7 +11,7 @@ import {
   Clock,
   ScrollText,
 } from 'lucide-react';
-import { useHeritageList, useHeritageMutations } from '../../../api/queries';
+import { useHeritageList, useHeritageMutations } from '@/lib/api/queries';
 import { Heritage, HeritageCategory } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

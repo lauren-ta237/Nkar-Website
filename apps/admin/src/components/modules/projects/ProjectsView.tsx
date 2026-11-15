@@ -11,7 +11,7 @@ import {
   TrendingUp,
   Clock,
 } from 'lucide-react';
-import { useProjectsList, useProjectsMutations } from '../../../api/queries';
+import { useProjectsList, useProjectsMutations } from '@/lib/api/queries';
 import { DevelopmentProject } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
