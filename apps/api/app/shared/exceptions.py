@@ -1,11 +1,13 @@
+"""Shared domain exceptions for Nkar API."""
+
+
 class DomainError(Exception):
-    def __init__(self, message: str, *, code: str = "domain_error", status_code: int = 400):
+    def __init__(self, message: str, code: str = "DOMAIN_ERROR"):
         self.message = message
         self.code = code
-        self.status_code = status_code
         super().__init__(message)
 
 
 class ResourceNotFound(DomainError):
-    def __init__(self, resource: str):
-        super().__init__(f"{resource} was not found", code="not_found", status_code=404)
+    def __init__(self, resource: str, identifier: str | int):
+        super().__init__(f"{resource} with identifier '{identifier}' not found", code="NOT_FOUND")

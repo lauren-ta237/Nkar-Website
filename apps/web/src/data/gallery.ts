@@ -63,7 +63,7 @@ export const galleryItems: GalleryItem[] = [
     aspect: "wide",
     caption:
       "Carved drums with hide skins and peg tension, the traditional instruments that call families together for ceremonies and communal work.",
-    sample: true,
+    sample: false,
   },
   {
     id: "dawn-hills",
@@ -73,7 +73,7 @@ export const galleryItems: GalleryItem[] = [
     aspect: "wide",
     caption:
       "Mist in the valley and the ridgelines emerging above it: the country Nkar farms and the horizon families look out on.",
-    sample: true,
+    sample: false,
   },
   {
     id: "market-cloth",
@@ -83,7 +83,7 @@ export const galleryItems: GalleryItem[] = [
     aspect: "wide",
     caption:
       "Folded cloth, woven baskets, and calabashes on a market table, showcasing the vibrant crafts of the village market.",
-    sample: true,
+    sample: false,
   },
   {
     id: "dance",
@@ -93,7 +93,7 @@ export const galleryItems: GalleryItem[] = [
     aspect: "wide",
     caption:
       "Dancers in patterned wraps moving in a circle at an afternoon celebration, with onlookers at the edge of the ground.",
-    sample: true,
+    sample: false,
   },
   {
     id: "beadwork",
@@ -103,7 +103,7 @@ export const galleryItems: GalleryItem[] = [
     aspect: "square",
     caption:
       "Glass beads worked in geometric patterns beside coiled raffia fibre, representing craft traditions preserved by hand and passed on across generations.",
-    sample: true,
+    sample: false,
   },
   {
     id: "granary",
@@ -113,7 +113,7 @@ export const galleryItems: GalleryItem[] = [
     aspect: "wide",
     caption:
       "A raised storehouse with a conical thatched roof, with maize and calabashes stored at its foot in the tradition of a highland household.",
-    sample: true,
+    sample: false,
   },
   {
     id: "calabash",
@@ -123,6 +123,6 @@ export const galleryItems: GalleryItem[] = [
     aspect: "square",
     caption:
       "Burnished calabash bowls, carved cups, and a raffia gourd set out for a visitor as traditional symbols of Grassfields hospitality.",
-    sample: true,
+    sample: false,
   },
 ];

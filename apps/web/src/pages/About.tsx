@@ -30,11 +30,11 @@ export default function About() {
     <>
       <PageHero
         eyebrow="About Nkar"
-        title="A village, its people and its customs"
-        description="The history, origins, culture and traditions of Nkar, gathered by the community that holds them."
+        title="The Nkar Indigenous Kingdom/Fondom"
+        description="The history, origins, royal leadership, and vibrant cultural traditions of the Nkar Fondom."
         image={images.highlands}
-        imageAlt="Nkar Clan landscape in the Cameroon Grassfields"
-        note="Draft sections are clearly indicated, with verified history published after formal review."
+        imageAlt="Nkar Kingdom/Fondom landscape in the Cameroon Grassfields"
+        
       />
 
       <section className="bg-ivory py-16 md:py-20">

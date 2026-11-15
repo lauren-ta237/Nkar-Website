@@ -32,7 +32,7 @@ export default function EventCard({ event, past = false }: EventCardProps) {
           <span>
             {formatWeekday(event.date)} · {event.time}
           </span>
-          {event.sample && <SampleBadge />}
+          
         </div>
 
         <h3 className="mt-3 font-display text-2xl leading-snug text-forest-700">

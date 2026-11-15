@@ -1,4 +1,4 @@
-"""Create Nkar Woo Lan entity schema.
+"""Create Nkar Woo Lan fresh entity schema.
 
 Revision ID: 0001_initial_schema
 """

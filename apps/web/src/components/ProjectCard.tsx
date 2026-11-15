@@ -45,7 +45,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           >
             {project.status}
           </span>
-          {project.sample && <SampleBadge />}
+          
         </div>
 
         <h3 className="mt-5 font-display text-3xl leading-tight text-forest-700">

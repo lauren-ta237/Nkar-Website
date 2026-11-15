@@ -19,7 +19,7 @@ app = FastAPI(
     summary="Digital community heritage and administration API",
     description=(
         "REST API for Nkar Clan news, events, heritage, leadership, gallery, "
-        "publications, projects, contacts, contributions, users, and audit history. "
+        "publications, projects, contacts, users, and audit history. "
         "Public read endpoints live under /api/v1/{entity}; protected admin CRUD "
         "endpoints live under /api/v1/admin/{entity}/items."
     ),
@@ -29,7 +29,7 @@ app = FastAPI(
     openapi_url="/openapi.json",
     openapi_tags=[
         {"name": "auth", "description": "Authentication and token lifecycle."},
-        {"name": "public", "description": "Public read and submission endpoints."},
+        {"name": "public", "description": "Public read and contact submission endpoints."},
         {"name": "admin", "description": "Role-protected administration endpoints."},
         {"name": "system", "description": "Service health and operational endpoints."},
     ],

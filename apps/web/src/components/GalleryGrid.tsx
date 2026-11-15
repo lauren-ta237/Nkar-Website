@@ -39,7 +39,7 @@ export default function GalleryGrid({ items, onOpen }: GalleryGridProps) {
             </span>
             <span className="mt-2 block font-display text-xl text-ivory">{item.title}</span>
           </span>
-          {item.sample && <SampleBadge className="absolute right-3 top-3 bg-ivory" />}
+          
         </button>
       ))}
     </div>

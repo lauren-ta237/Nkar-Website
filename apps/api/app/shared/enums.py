@@ -12,7 +12,7 @@ class UserStatus(StrEnum):
     SUSPENDED = "suspended"
 
 
-class PublicationStatus(StrEnum):
+class ContentStatus(StrEnum):
     DRAFT = "draft"
     SUBMITTED = "submitted"
     APPROVED = "approved"
@@ -21,10 +21,12 @@ class PublicationStatus(StrEnum):
     ARCHIVED = "archived"
 
 
-class SimpleStatus(StrEnum):
+class EventStatus(StrEnum):
     DRAFT = "draft"
     SUBMITTED = "submitted"
     PUBLISHED = "published"
+    CANCELLED = "cancelled"
+    COMPLETED = "completed"
     ARCHIVED = "archived"
 
 
@@ -40,6 +42,9 @@ class NewsCategory(StrEnum):
 
 class HeritageCategory(StrEnum):
     HISTORY = "history"
+    ORIGINS = "origins"
+    CULTURE = "culture"
+    TRADITIONS = "traditions"
     CUSTOMS = "customs"
     LANGUAGE = "language"
     ROYAL_LINEAGE = "royal_lineage"
@@ -61,3 +66,9 @@ class ContactStatus(StrEnum):
     UNREAD = "unread"
     IN_PROGRESS = "in_progress"
     RESOLVED = "resolved"
+
+
+class AuditSeverity(StrEnum):
+    INFO = "info"
+    WARNING = "warning"
+    CRITICAL = "critical"

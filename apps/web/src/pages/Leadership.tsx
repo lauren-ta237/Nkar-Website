@@ -22,8 +22,8 @@ export default function Leadership() {
     <>
       <PageHero
         eyebrow="Traditional leadership"
-        title="The Nkar fondom"
-        description="The Fon, the traditional council, the quarter and family heads, and the customs that unite Nkar across generations."
+        title="The Nkar Indigenous Kingdom/Fondom"
+        description="The Fon, the traditional council, the Lord of the Land, Nwerong, and the revered institutions that uphold sovereignty and harmony across generations."
         image={images.palacePillars}
         imageAlt="The royal palace throne of the Fon of Nkar"
       />
@@ -56,18 +56,18 @@ export default function Leadership() {
 
           <div className="mt-16">
             <SectionHeading
-              eyebrow="Who holds what"
-              title="The offices of the fondom"
-              description="Each office carries a duty to the village. The wording here describes the role; the names and titles will be published as the palace confirms them."
+              eyebrow="Traditional Governance"
+              title="The Traditional Institutions of Nkar"
+              description="The traditional administrative and governing bodies that maintain sovereignty, law, cultural continuity, and community harmony across the Fondom."
             />
             {isLoading ? <LoadingState /> : <RolesGrid roles={roles} />}
           </div>
 
           <div className="mt-16">
             <SectionHeading
-              eyebrow="The village year"
-              title="The ceremonial year"
-              description="The rites and gatherings that mark the year in Nkar, grouped by what they belong to."
+              eyebrow="Sacred Sites & Rites"
+              title="Nkar Sites and Traditional Sacrifices"
+              description="Hallowed ancestral sites, highland sanctuaries, and customary rites observed by the palace and lineage custodians to preserve peace, fertility, and divine blessing."
             />
             {isLoading ? <LoadingState /> : <CeremonialYear items={ceremonialYear} />}
           </div>
@@ -79,7 +79,7 @@ export default function Leadership() {
           <SectionHeading
             eyebrow="Register of reigns"
             title="The Fons of Nkar: Register of Traditional Leadership"
-            description="This register is opened and left deliberately incomplete. Each reign has its place; the verified name, dates, portrait and account are published only when the palace confirms them."
+            description="The revered succession of sovereign Fons of the Nkar Fondom, honoring their names, eras of rule, and royal stewardship."
           />
 
           {isLoading ? (

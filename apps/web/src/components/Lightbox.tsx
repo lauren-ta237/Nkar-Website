@@ -96,7 +96,7 @@ export default function Lightbox({ items, index, onClose, onPrev, onNext }: Ligh
       >
         <h2 className="font-display text-2xl text-gold-200">{item.title}</h2>
         <p className="mt-3 text-sm leading-relaxed text-ivory/75">{item.caption}</p>
-        {item.sample && <SampleBadge className="mt-4 bg-ivory" />}
+        
       </div>
     </div>
   );

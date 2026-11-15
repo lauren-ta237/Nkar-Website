@@ -1,5 +1,17 @@
 .code
 __pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+.pgdata/
+.env
+.env.local
+dist/
+node_modules/
+tasks/
 *.pyc
 *.pyo
 *.pyd

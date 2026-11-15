@@ -29,7 +29,7 @@ export const projects: Project[] = [
     title: 'Nkar community water supply',
     status: 'Ongoing',
     progress: 62,
-    location: 'Nkar Clan',
+    location: 'Nkar Fondom',
     lead: 'Nkar development committee',
     image: images.waterPoint,
     imageAlt: 'Illustrative image: a rural water point with a hand pump and containers',
@@ -44,7 +44,7 @@ export const projects: Project[] = [
       { date: '2026-09-20', text: 'Second phase trenching completed towards the upper quarter.' },
       { date: '2026-07-02', text: 'Storage tank installed and first standpipes tested with the community.' }
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'palace-conservation',
@@ -66,7 +66,7 @@ export const projects: Project[] = [
       { date: '2026-08-30', text: 'Inventory of regalia started with the palace keepers.' },
       { date: '2026-06-14', text: 'Survey of roofing and carved work completed with local craftsmen.' }
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'education-fund',
@@ -87,7 +87,7 @@ export const projects: Project[] = [
       { date: '2026-09-15', text: 'Applications opened for the coming school year.' },
       { date: '2026-04-18', text: 'Awards reported at the community meeting.' }
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'village-roads',
@@ -107,14 +107,14 @@ export const projects: Project[] = [
     updates: [
       { date: '2026-08-01', text: 'Survey of the worst stretches and cost estimate prepared.' }
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'heritage-centre',
     title: 'Nkar heritage and community centre',
     status: 'Planned',
     progress: 8,
-    location: 'Nkar Clan',
+    location: 'Nkar Fondom',
     lead: 'NKAR WOO LÀN custodians',
     image: images.communityHall,
     imageAlt: 'Illustrative image: a community hall under construction with timber trusses',
@@ -128,6 +128,6 @@ export const projects: Project[] = [
     updates: [
       { date: '2026-07-20', text: 'Site and design options discussed at the community meeting.' }
     ],
-    sample: true
+    sample: false
   }
 ];

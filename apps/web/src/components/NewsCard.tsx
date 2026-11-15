@@ -24,7 +24,7 @@ export default function NewsCard({ item, featured = false }: NewsCardProps) {
         <span className="text-gold-600">{item.category}</span>
         <span className="h-1 w-1 rotate-45 bg-gold-500/60" aria-hidden="true" />
         <time dateTime={item.date}>{formatDate(item.date)}</time>
-        {item.sample && <SampleBadge />}
+        
       </div>
 
       <h3

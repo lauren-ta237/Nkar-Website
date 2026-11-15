@@ -34,7 +34,7 @@ export const books: Book[] = [
     accent: 'forest',
     summary:
       'Interviews with elders of Nkar: the founding account, the quarters, the farms and the ceremonies, recorded in the words of those who lived them.',
-    sample: true
+    sample: false
   },
   {
     id: 'proverbs',
@@ -47,7 +47,7 @@ export const books: Book[] = [
     accent: 'gold',
     summary:
       'Sayings and proverbs collected from Nkar families, with translations and notes on when each one is spoken.',
-    sample: true
+    sample: false
   },
   {
     id: 'customs',
@@ -60,7 +60,7 @@ export const books: Book[] = [
     accent: 'clay',
     summary:
       'An account of the customs of the fondom, the calendar of ceremonies, and the work of the palace and the traditional council.',
-    sample: true
+    sample: false
   },
   {
     id: 'farming',
@@ -73,7 +73,7 @@ export const books: Book[] = [
     accent: 'forest',
     summary:
       'Practical notes on the farming year in the highlands, including maize, beans, huckleberry, and raffia, reflecting the practices Nkar families have kept across generations.',
-    sample: true
+    sample: false
   },
   {
     id: 'diaspora',
@@ -86,7 +86,7 @@ export const books: Book[] = [
     accent: 'gold',
     summary:
       'A memoir of growing up in Nkar and keeping the village alive from another country: associations, remittances, returns and belonging.',
-    sample: true
+    sample: false
   },
   {
     id: 'childhood',
@@ -99,7 +99,7 @@ export const books: Book[] = [
     accent: 'clay',
     summary:
       'A personal account of childhood in the village: family, school, farms, play and the ceremonies a child is brought up with.',
-    sample: true
+    sample: false
   }
 ];
 

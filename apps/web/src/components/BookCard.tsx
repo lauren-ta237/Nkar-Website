@@ -27,7 +27,7 @@ export default function BookCard({ book }: BookCardProps) {
           accents[book.accent] || accents.forest
         }`}
       >
-        {book.sample && <SampleBadge label="Sample title" className="absolute right-4 top-4 bg-ivory" />}
+        
         <p className="text-[10px] uppercase tracking-[0.3em] opacity-70">
           NKAR WOO LÀN shelf
         </p>

@@ -50,9 +50,10 @@ export default function AboutSection({ section, index }: AboutSectionProps) {
               </div>
             </>
           ) : (
-            <div className="flex min-h-[220px] items-center justify-center border border-gold-500/30 bg-cream/70 p-8 pattern-toghu text-center">
-              <p className="max-w-xs text-sm leading-relaxed text-forest-700">
-                Photographs of Nkar will be placed here once the community supplies them.
+            <div className="flex min-h-[260px] flex-col items-center justify-center border border-gold-500/30 bg-forest-900 p-8 text-center text-ivory pattern-toghu">
+              <span className="font-display text-2xl text-gold-300">NKAR WOO LÀN</span>
+              <p className="mt-2 text-xs uppercase tracking-[0.2em] text-ivory/70">
+                Indigenous Kingdom & Fondom
               </p>
             </div>
           )}

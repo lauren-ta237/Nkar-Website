@@ -14,7 +14,7 @@ export default function IntroSection() {
           <div className="relative aspect-[3/2] overflow-hidden border border-border">
             <Image
               src={images.villagePath}
-              alt="Authentic landscape: Nkar Clan village in the Cameroon Grassfields"
+              alt="Authentic landscape: Nkar Kingdom/Fondom in the Cameroon Grassfields"
               className="absolute inset-0 h-full w-full"
               fittingType="fill"
               quality={80}
@@ -25,8 +25,8 @@ export default function IntroSection() {
         <Reveal delay={0.1}>
           <SectionHeading
             eyebrow="Welcome to Nkar"
-            title="A village in the Grassfields, kept by its own people"
-            description="Nkar's heritage, culture, and leadership, recorded by the community that preserves them."
+            title="An indigenous Kingdom in the Grassfields, kept by its own people"
+            description="Nkar's heritage, culture, and traditional leadership, preserved by the community that upholds them."
             ornament
           />
           <div className="mt-6 space-y-5 text-base leading-relaxed text-forest-800/90">
