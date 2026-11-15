@@ -67,8 +67,8 @@ export const site: SiteConfig = {
   name: "NKAR WOO LÀN",
   tagline: "Our Heritage, Our Identity, Our Future.",
   promise:
-    "A digital home for Nkar Clan, dedicated to preserving its history, culture, traditional leadership, and shared development, maintained by Nkar sons and daughters at home and abroad.",
-  location: "Nkar Clan, Northwest Region, Cameroon",
+    "The Nkar Indigenous Kingdom/Fondom, dedicated to preserving its history, culture, traditional leadership, and shared development, maintained by Nkar sons and daughters at home and abroad.",
+  location: "Nkar Kingdom/Fondom, Northwest Region, Cameroon",
   setting: "Grassfields highlands, Cameroon",
   contentPolicy:
     "NKAR WOO LÀN is the digital home for Nkar sons and daughters at home and across the diaspora. Dedicated to preserving our heritage, celebrating our culture, and supporting community development, this platform connects generations and keeps our traditions alive. Community contributions, family histories, and verified records are welcomed with respect.",
@@ -78,7 +78,7 @@ export const site: SiteConfig = {
     phone: "+237 679 632 780",
     phones: ["+237 679 632 780", "+237 678 496 051"],
     phoneNote: "Official contact lines & WhatsApp.",
-    address: "Nkar Clan, Northwest Region, Cameroon",
+    address: "Nkar Kingdom/Fondom, Northwest Region, Cameroon",
     addressNote: "Nkar Palace and traditional council grounds.",
     facebookUrl: "https://www.facebook.com/share/1EmYJ8CtVK/",
     facebookNote:
@@ -97,10 +97,10 @@ export const site: SiteConfig = {
   quickFacts: [
     {
       label: "Where",
-      value: "Nkar Clan, Northwest Region, Cameroon",
-      draft: true,
+      value: "Nkar Kingdom/Fondom, Northwest Region, Cameroon",
+      draft: false,
     },
-    { label: "Landscape", value: "Rolling highland hills, farms and raffia groves", draft: true },
+    { label: "Landscape", value: "Rolling highland hills, farms and raffia groves", draft: false },
     {
       label: "Community",
       value: "Nkar sons and daughters at home and abroad",

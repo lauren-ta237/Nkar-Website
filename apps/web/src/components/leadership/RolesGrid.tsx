@@ -1,5 +1,4 @@
 import IconTile from '@/components/IconTile';
-import SampleBadge from '@/components/SampleBadge';
 import Reveal from '@/components/Reveal';
 import type { LeadershipRole } from '@/data/culture';
 
@@ -16,7 +15,6 @@ export default function RolesGrid({ roles }: RolesGridProps) {
             <IconTile name={role.icon} />
             <h3 className="mt-5 font-display text-2xl text-forest-700">{role.title}</h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{role.text}</p>
-            <SampleBadge className="mt-5 self-start" label="To be verified" />
           </article>
         </Reveal>
       ))}

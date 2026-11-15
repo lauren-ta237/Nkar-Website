@@ -24,7 +24,7 @@ export default function HeroSection() {
       <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-6 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-28">
         <Reveal>
           <p className="text-[11px] font-semibold uppercase tracking-[0.42em] text-gold-300">
-            Nkar Clan · Northwest Region, Cameroon
+            Nkar Kingdom/Fondom · Northwest Region, Cameroon
           </p>
 
           <h1 className="mt-6 font-display text-5xl leading-[1.03] md:text-6xl lg:text-7xl">

@@ -3,13 +3,11 @@ import { ArrowRight } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import PageHero from '@/components/PageHero';
 import SectionHeading from '@/components/SectionHeading';
-import ContentNotice from '@/components/ContentNotice';
 import LoadingState from '@/components/LoadingState';
 import LeadershipRecord from '@/components/LeadershipRecord';
 import RolesGrid from '@/components/leadership/RolesGrid';
 import CeremonialYear from '@/components/leadership/CeremonialYear';
-import { images } from '@/data/images';
-import { leadershipLead } from '@/data/culture';
+import { images, fonInKirmt } from '@/data/images';
 import { useLeadershipContent } from '@/hooks/useContent';
 
 export default function Leadership() {
@@ -30,23 +28,31 @@ export default function Leadership() {
 
       <section className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
-          <ContentNotice title="How records are published">
-            Names, reign dates, portraits and biographies of the Fons of Nkar are published here
-            only after verification with the palace and the traditional council. Nothing is
-            published from unconfirmed sources, and any record is corrected or withdrawn at the
-            family’s request.
-          </ContentNotice>
-
-          <div className="mt-12 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-            <div className="space-y-5 text-base leading-relaxed text-forest-800/90">
-              {leadershipLead.map((paragraph) => (
-                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-              ))}
+          <div className="mt-4 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+            <div className="space-y-4 text-base leading-relaxed text-forest-800/90">
+              <h3 className="font-display text-2xl text-forest-700">
+                The Fon on Church and Culture
+              </h3>
+              <blockquote className="space-y-4 border-l-2 border-gold-500 pl-4 italic text-forest-800/90">
+                <p>
+                  &ldquo;As for the Mass that is said in Nkar palace every Sunday, it is an indication that the church has to culture African values. I see and think that the church and the Nkar values have to cohabit.&rdquo;
+                </p>
+                <p>
+                  &ldquo;Before Christianity came to Nkar there already existed Nkar. We learn from scriptures that Christ did not cancel the laws of Moses, but rather strengthened them. The church in my mind too has not come to wipe off our customs and traditions. The church rather comes along with some light, that makes us to differentiate between good and evil, between the positive and negative values.&rdquo;
+                </p>
+                <p>
+                  &ldquo;I want my people to know that the church and our customs and traditions are one. Institutions like Nwerong, Ngiri, Manjong and others are the cultural identity of Nkar people. If you get to any tribe or Fondom worth it and do not see such institutions then you cannot know their identity. The church cannot therefore suppress such institutions. No, I as the Fon will not accept it.&rdquo;
+                </p>
+              </blockquote>
+              <p className="text-sm font-semibold tracking-wide text-gold-600 uppercase pt-2">
+                — HRM Fon Moolo II of Nkar
+              </p>
             </div>
+
             <div className="relative aspect-[4/3] overflow-hidden border border-border">
               <Image
-                src={images.regalia}
-                alt="Illustrative image: traditional regalia laid out on a woven mat"
+                src={fonInKirmt}
+                alt="The Fon of Nkar in traditional regalia"
                 className="absolute inset-0 h-full w-full"
                 fittingType="fill"
                 quality={80}
@@ -58,7 +64,7 @@ export default function Leadership() {
             <SectionHeading
               eyebrow="Who holds what"
               title="The offices of the fondom"
-              description="Each office carries a duty to the village. The wording here describes the role; the names and titles will be published as the palace confirms them."
+              description="Nkar has had 24 Fons since 1100, starting with Fon Gwarmbi. There are about eight dynasties in the Foem (Burial area for the Fons). The Fons are enthroned by Nwerong Nkar (a regulatory institution of the people), then taken to the Lavwong, to TaaKibuh, and then to the Fai Kishiyi, before other places."
             />
             {isLoading ? <LoadingState /> : <RolesGrid roles={roles} />}
           </div>
@@ -79,7 +85,7 @@ export default function Leadership() {
           <SectionHeading
             eyebrow="Register of reigns"
             title="The Fons of Nkar: Register of Traditional Leadership"
-            description="This register is opened and left deliberately incomplete. Each reign has its place; the verified name, dates, portrait and account are published only when the palace confirms them."
+            description="The complete chronological succession of the Fons who have ruled the Fondom of Nkar from its founding by Fon Gwarmbi the 1st in 1100 to the present reign of HRM Fon Mohlo II."
           />
 
           {isLoading ? (

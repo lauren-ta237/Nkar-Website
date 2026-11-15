@@ -33,7 +33,7 @@ export const news: NewsItem[] = [
       'The first phase brings together existing family photographs, palace records, accounts told by elders, and reports from community initiatives. Every entry is reviewed with the palace and the traditional council before publication.',
       'Nkar sons and daughters at home and abroad are invited to send what they hold: a photograph, a name, a date, a story in their own words.'
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'general-assembly-date',
@@ -47,7 +47,7 @@ export const news: NewsItem[] = [
       'The draft agenda covers the progress of the water and road projects, the school support fund, the heritage archive, and the accounts of the past year.',
       'The date, venue and full agenda will be posted here as soon as the palace and the committee confirm them. The date shown on this notice is a sample.'
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'cultural-festival-preparations',
@@ -61,7 +61,7 @@ export const news: NewsItem[] = [
       'Groups wishing to take part are asked to register with the organising committee so that the programme, the space and the sound can be arranged properly.',
       'Entries and programme details published here are samples until the committee confirms them.'
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'school-support',
@@ -75,7 +75,7 @@ export const news: NewsItem[] = [
       'Applications are reviewed by the committee together with the quarter heads, so that support reaches the households that need it most.',
       'Amounts, deadlines and award numbers shown anywhere on this site are samples pending confirmation by the committee.'
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'health-outreach',
@@ -89,7 +89,7 @@ export const news: NewsItem[] = [
       'Health workers from the area and volunteers from the diaspora are being invited to take part.',
       'The programme, the venue and the date published here are samples until they are confirmed.'
     ],
-    sample: true
+    sample: false
   },
   {
     id: 'water-project-phase-two',
@@ -103,7 +103,7 @@ export const news: NewsItem[] = [
       'The committee reports progress at every community meeting and keeps the accounts open to inspection by the village.',
       'Progress figures used on this site are illustrations until they are replaced with the committee’s verified reporting.'
     ],
-    sample: true
+    sample: false
   }
 ];
 
@@ -118,7 +118,7 @@ export const eventsUpcoming: EventItem[] = [
     description:
       'An open meeting on the water supply and the village roads: progress, costs, next steps and how families and the diaspora can take part.',
     tags: ['Development', 'Meeting'],
-    sample: true
+    sample: false
   },
   {
     id: 'diaspora-dialogue',
@@ -130,7 +130,7 @@ export const eventsUpcoming: EventItem[] = [
     description:
       'An online gathering for Nkar sons and daughters living outside the village: heritage archive progress, project reports and how each association can help.',
     tags: ['Diaspora', 'Online'],
-    sample: true
+    sample: false
   },
   {
     id: 'general-assembly',
@@ -142,19 +142,19 @@ export const eventsUpcoming: EventItem[] = [
     description:
       'The yearly assembly of the village: reports of the past year, the accounts, the projects ahead, and the decisions of the community.',
     tags: ['Assembly', 'Community'],
-    sample: true
+    sample: false
   },
   {
     id: 'cultural-festival',
     title: 'Nkar cultural festival',
     date: '2027-01-09',
     time: '11:00',
-    venue: 'Nkar Clan',
+    venue: 'Nkar Kingdom/Fondom',
     organiser: 'Cultural festival committee',
     description:
       'A day of dance and drumming, ceremonial cloth, highland food, carving, beadwork and raffia craft, held for Nkar and its guests.',
     tags: ['Culture', 'Festival'],
-    sample: true
+    sample: false
   }
 ];
 
@@ -169,30 +169,30 @@ export const eventsPast: EventItem[] = [
     description:
       'A thanksgiving gathering at the palace with the Fon, the council, the quarters and visiting sons and daughters of Nkar.',
     tags: ['Ceremony'],
-    sample: true
+    sample: false
   },
   {
     id: 'youth-sports-day',
     title: 'Youth sports and cultural day',
     date: '2026-07-11',
     time: '08:00',
-    venue: 'Nkar Clan field',
+    venue: 'Nkar Kingdom/Fondom field',
     organiser: 'Nkar youth association',
     description:
       'Athletics, football and cultural performances by the young people of Nkar and neighbouring villages.',
     tags: ['Youth', 'Culture'],
-    sample: true
+    sample: false
   },
   {
     id: 'harvest-thanksgiving',
     title: 'Harvest thanksgiving',
     date: '2026-05-10',
     time: '09:00',
-    venue: 'Nkar Clan',
+    venue: 'Nkar Kingdom/Fondom',
     organiser: 'Quarters and family heads',
     description:
       'The community brings the first fruits of the season, with drumming, dance and shared food across the quarters.',
     tags: ['Ceremony', 'Harvest'],
-    sample: true
+    sample: false
   }
 ];

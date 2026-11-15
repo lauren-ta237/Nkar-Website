@@ -3,12 +3,21 @@
 // Every photograph used on this site is listed here. Authentic photographs
 // are imported directly from assets, while remaining illustrative placeholders
 // are documented until replaced with verified Nkar photography.
+export { default as plplInPalc } from '../assets/images/plpl in palc.jpeg';
+export { default as kirument } from '../assets/images/kirument.jpeg';
+export { default as ntoh } from '../assets/images/ntoh.jpeg';
+export { default as fonInKirmt } from '../assets/images/fonInKirmt.jpeg';
+export { default as fonMolo2 } from '@/assets/images/fonMolo2.jpeg';
+export { default as fonTumiNtani2 } from '@/assets/images/Fon TUME ntani 2.jpeg';
+export { default as molo1 } from '@/assets/images/molo1.jpeg';
+export { default as ntani1 } from '@/assets/images/ntani1.jpeg';
 
+import fonMolo2Export from '@/assets/images/fonMolo2.jpeg';
+import fonTumiNtani2Export from '@/assets/images/Fon TUME ntani 2.jpeg';
 import heroLandscape from '@/assets/images/WhatsApp Image 2026-11-01 at 1.16.56 PM.jpeg';
 import fonSit from '@/assets/images/fon sit.jpeg';
 import fonPopeAudience from '@/assets/images/WhatsApp Image 2026-11-01 at 2.12.47 PM.jpeg';
 import fonPope from '@/assets/images/fon pope.jpeg';
-
 export { heroLandscape, fonSit, fonPopeAudience, fonPope };
 
 export const images: Record<string, string> = {
@@ -22,6 +31,8 @@ export const images: Record<string, string> = {
   // Traditional leadership
   palacePillars: fonSit,
   fonSit: fonSit,
+  fonMolo2: fonMolo2Export,
+  fonTumiNtani2: fonTumiNtani2Export,
   fonPopeAudience: fonPopeAudience,
   fonPope: fonPope,
   regalia: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/f916e16cc_generated_1fb043b3.png",
@@ -39,7 +50,7 @@ export const images: Record<string, string> = {
   // Gallery
   drums: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/62163d17d_generated_2fd849ea.png",
   marketCloth: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/8b1c8afd3_generated_3f665c33.png",
-  beadwork: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/25a028e3b_generated_c8837439.png",
+  beadwork: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/25a028e3b_grade_c8837439.png",
   dawnHills: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/4543445c9_generated_499de304.png",
   dance: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/a61cd856f_generated_20d90f12.png",
   granary: "https://media.base44.com/images/public/6ad757078130ab49a87e04d0/21f1aaff2_generated_503d9932.png",

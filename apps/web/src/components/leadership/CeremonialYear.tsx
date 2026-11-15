@@ -1,4 +1,3 @@
-import SampleBadge from '@/components/SampleBadge';
 import type { CeremonialYearEntry } from '@/data/culture';
 
 interface CeremonialYearProps {
@@ -16,7 +15,6 @@ export default function CeremonialYear({ items }: CeremonialYearProps) {
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <h3 className="font-display text-2xl text-forest-700">{item.title}</h3>
-              <SampleBadge label="Draft" />
             </div>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               {item.text}

@@ -16,7 +16,7 @@ export default function TraditionsGrid({ traditions }: TraditionsGridProps) {
             <IconTile name={tradition.icon} />
             <h3 className="mt-5 font-display text-2xl text-forest-700">{tradition.title}</h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{tradition.text}</p>
-            <SampleBadge className="mt-5 self-start" label="Regional context" />
+  
           </article>
         </Reveal>
       ))}

@@ -26,7 +26,7 @@ export default function IntroSection() {
           <SectionHeading
             eyebrow="Welcome to Nkar"
             title="A village in the Grassfields, kept by its own people"
-            description="Nkar's heritage, culture, and leadership, recorded by the community that preserves them."
+            description="The Nkar Kingdom is a traditional administrative and cultural institution comprising several villages, sub-villages, and multiple family lineages. It is governed by a traditional ruler known as the Fon, who oversees the affairs and leadership of the land alongside the Lord of the Land and Nwerong, the supreme traditional institution at the helm of governance. Together, these institutions uphold the kingdom's traditional values, customs, authority, and heritage."
             ornament
           />
           <div className="mt-6 space-y-5 text-base leading-relaxed text-forest-800/90">

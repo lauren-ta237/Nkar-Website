@@ -104,12 +104,6 @@ export default function About() {
             description="The shared customs of the Grassfields, including traditional cloth, ceremony, drums, dance, and highland hospitality."
           />
           {isLoading ? <LoadingState /> : <TraditionsGrid traditions={traditions} />}
-
-          <ContentNotice className="mt-10" tone="cream" title="To be confirmed for Nkar">
-            Each custom is described in general terms. Specific Nkar traditions, songs,
-            regalia, and family observances will be added in collaboration with the elders,
-            palace, and traditional council.
-          </ContentNotice>
         </div>
       </section>
 

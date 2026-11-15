@@ -17,7 +17,7 @@ export default function GalleryTeaser() {
           <SectionHeading
             eyebrow="Gallery"
             title="Featured photographs"
-            description="A curated preview of the gallery: authentic landscapes, royal regalia, crafts, and ceremonies from across Nkar Clan."
+            description="A curated preview of the gallery: authentic landscapes, royal regalia, crafts, and ceremonies from across Nkar Kingdom/Fondom."
           />
           <Link
             to="/gallery"
