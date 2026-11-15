@@ -13,7 +13,7 @@ import {
   Send,
   Filter,
 } from 'lucide-react';
-import { useContactsList, useContactsMutations } from '../../../api/queries';
+import { useContactsList, useContactsMutations } from '@/lib/api/queries';
 import { ContactSubmission, ContactStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

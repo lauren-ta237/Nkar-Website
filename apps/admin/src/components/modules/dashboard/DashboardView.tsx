@@ -27,7 +27,7 @@ import {
   useProjectsList,
   useAuditLogs,
   useNewsMutations,
-} from '../../../api/queries';
+} from '@/lib/api/queries';
 import { StatCard } from '../../common/StatCard';
 import { StatusBadge } from '../../common/StatusBadge';
 import { ReviewActionModal } from '../../common/ReviewActionModal';

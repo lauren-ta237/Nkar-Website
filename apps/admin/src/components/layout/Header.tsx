@@ -16,7 +16,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { useAdminStore, INITIAL_USERS, AdminPage } from '../../store/useAdminStore';
-import { useDashboardStats } from '../../api/queries';
+import { useDashboardStats } from '@/lib/api/queries';
 import { Role } from '../../types';
 import {
   DropdownMenu,

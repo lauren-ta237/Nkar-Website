@@ -9,7 +9,7 @@ import {
   Calendar,
   ArrowUpDown,
 } from 'lucide-react';
-import { useLeadershipList, useLeadershipMutations } from '../../../api/queries';
+import { useLeadershipList, useLeadershipMutations } from '@/lib/api/queries';
 import { Leadership } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';

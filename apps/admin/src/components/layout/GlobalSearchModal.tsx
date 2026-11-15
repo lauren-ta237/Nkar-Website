@@ -7,7 +7,7 @@ import {
   useHeritageList,
   useLeadershipList,
   useProjectsList,
-} from '../../api/queries';
+} from '@/lib/api/queries';
 import {
   Dialog,
   DialogContent,

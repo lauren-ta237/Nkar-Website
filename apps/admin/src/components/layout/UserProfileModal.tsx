@@ -15,7 +15,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useAdminStore } from '../../store/useAdminStore';
-import { useUsersMutations } from '../../api/queries';
+import { useUsersMutations } from '@/lib/api/queries';
 import { FileUpload } from '../common/FileUpload';
 import {
   Sheet,

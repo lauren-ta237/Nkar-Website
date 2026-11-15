@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { backendApi } from './backend';
-import { useAdminStore } from '../store/useAdminStore';
+import { useAdminStore } from '@/store/useAdminStore';
 import {
   News,
   EventItem,
@@ -10,7 +10,7 @@ import {
   Publication,
   DevelopmentProject,
   User,
-} from '../types';
+} from '@/types';
 
 export const QUERY_KEYS = {
   STATS: ['dashboard', 'stats'],

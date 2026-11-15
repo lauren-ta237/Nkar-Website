@@ -11,7 +11,7 @@ import {
   Download,
 } from 'lucide-react';
 import { useAdminStore } from '../../../store/useAdminStore';
-import { backendApi } from '../../../api/backend';
+import { backendApi } from '@/lib/api/backend';
 import { useQueryClient } from '@tanstack/react-query';
 import { ConfirmModal } from '../../common/ConfirmModal';
 
