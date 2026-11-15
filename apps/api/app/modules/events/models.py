@@ -1,8 +1,11 @@
 from datetime import date
-from sqlalchemy import Date, Enum, String, Text, Boolean
+
+from sqlalchemy import Boolean, Date, Enum, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
+
 from app.database.base import Base, TimestampMixin
-from app.shared.enums import SimpleStatus
+from app.shared.enums import ContentStatus
+
 
 class Event(Base, TimestampMixin):
     __tablename__ = "events"
@@ -15,5 +18,9 @@ class Event(Base, TimestampMixin):
     end_time: Mapped[str | None] = mapped_column(String(5))
     cover_image: Mapped[str | None] = mapped_column(String(2048))
     organizer_name: Mapped[str | None] = mapped_column(String(200))
-    status: Mapped[SimpleStatus] = mapped_column(Enum(SimpleStatus, name="simple_status"), default=SimpleStatus.DRAFT, nullable=False)
+    status: Mapped[ContentStatus] = mapped_column(
+        Enum(ContentStatus, name="content_status"),
+        default=ContentStatus.DRAFT,
+        nullable=False,
+    )
     featured: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)

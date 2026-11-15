@@ -18,20 +18,44 @@ class TimestampMixin:
     created_by_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
 
 
-# Import models after Base exists so Alembic metadata includes every module table.
-from app.modules.audit.models import AuditLog  # noqa: E402,F401
-from app.modules.contacts.models import ContactSubmission  # noqa: E402,F401
-from app.modules.contributions.models import Contribution  # noqa: E402,F401
-from app.modules.events.models import Event  # noqa: E402,F401
-from app.modules.gallery.models import Gallery  # noqa: E402,F401
-from app.modules.heritage.models import Heritage  # noqa: E402,F401
-from app.modules.leadership.models import Leadership  # noqa: E402,F401
-from app.modules.news.models import News  # noqa: E402,F401
-from app.modules.projects.models import DevelopmentProject  # noqa: E402,F401
-from app.modules.publications.models import Publication  # noqa: E402,F401
-from app.modules.users.models import User  # noqa: E402,F401
+# Import models after Base exists so Alembic metadata and ENTITY_MODELS share one source of truth.
+from app.modules.audit.models import AuditLog  # noqa: E402
+from app.modules.contacts.models import ContactSubmission  # noqa: E402
+from app.modules.events.models import Event  # noqa: E402
+from app.modules.gallery.models import Gallery  # noqa: E402
+from app.modules.heritage.models import Heritage  # noqa: E402
+from app.modules.leadership.models import Leadership  # noqa: E402
+from app.modules.news.models import News  # noqa: E402
+from app.modules.projects.models import DevelopmentProject  # noqa: E402
+from app.modules.publications.models import Publication  # noqa: E402
+from app.modules.users.models import User  # noqa: E402
+
+ENTITY_MODELS: dict[str, type[Base]] = {
+    "users": User,
+    "news": News,
+    "events": Event,
+    "heritage": Heritage,
+    "leadership": Leadership,
+    "gallery": Gallery,
+    "publications": Publication,
+    "projects": DevelopmentProject,
+    "contacts": ContactSubmission,
+    "audit_logs": AuditLog,
+}
 
 __all__ = [
-    "Any", "AuditLog", "Base", "ContactSubmission", "Contribution", "DevelopmentProject",
-    "Event", "Gallery", "Heritage", "Leadership", "News", "Publication", "TimestampMixin", "User",
+    "Any",
+    "AuditLog",
+    "Base",
+    "ContactSubmission",
+    "DevelopmentProject",
+    "ENTITY_MODELS",
+    "Event",
+    "Gallery",
+    "Heritage",
+    "Leadership",
+    "News",
+    "Publication",
+    "TimestampMixin",
+    "User",
 ]

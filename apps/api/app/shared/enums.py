@@ -12,7 +12,7 @@ class UserStatus(StrEnum):
     SUSPENDED = "suspended"
 
 
-class PublicationStatus(StrEnum):
+class ContentStatus(StrEnum):
     DRAFT = "draft"
     SUBMITTED = "submitted"
     APPROVED = "approved"
@@ -21,11 +21,9 @@ class PublicationStatus(StrEnum):
     ARCHIVED = "archived"
 
 
-class SimpleStatus(StrEnum):
-    DRAFT = "draft"
-    SUBMITTED = "submitted"
-    PUBLISHED = "published"
-    ARCHIVED = "archived"
+# Backwards-compatible aliases
+PublicationStatus = ContentStatus
+SimpleStatus = ContentStatus
 
 
 class NewsCategory(StrEnum):
