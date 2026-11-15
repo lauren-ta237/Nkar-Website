@@ -12,3 +12,6 @@ env/
 dist/
 node_modules/
 tasks/
+*.pyc
+*.pyo
+*.pyd
