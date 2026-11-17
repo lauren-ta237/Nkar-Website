@@ -46,12 +46,13 @@ export const AuditLogsView: React.FC = () => {
   const filtered = logs.filter((log) => {
     const matchesSearch =
       searchQuery === '' ||
-      log.details.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.adminName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (log.entityTitle && log.entityTitle.toLowerCase().includes(searchQuery.toLowerCase()));
+      (log.details || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      log.resource_type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      log.resource_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (log.actor_id || '').toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesAction = actionFilter === 'ALL' || log.action === actionFilter;
-    const matchesEntity = entityFilter === 'ALL' || log.entityType === entityFilter;
+    const matchesEntity = entityFilter === 'ALL' || log.resource_type === entityFilter;
 
     return matchesSearch && matchesAction && matchesEntity;
   });
@@ -168,35 +169,31 @@ export const AuditLogsView: React.FC = () => {
                     </td>
 
                     <td className="py-3.5 px-4 whitespace-nowrap font-semibold text-stone-700">
-                      {log.entityType}
+                      {log.resource_type}
                     </td>
 
                     <td className="py-3.5 px-4 max-w-xs">
                       <div className="truncate">
-                        <span className="font-medium text-stone-900 block truncate">
-                          {log.entityTitle || log.entityId}
-                        </span>
-                        <span className="text-[10px] text-stone-400 font-mono block">
-                          ID: {log.entityId}
+                        <span className="font-mono text-xs text-stone-800 block truncate">
+                          {log.resource_id}
                         </span>
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 text-stone-600 max-w-md">
-                      <p className="line-clamp-2 leading-relaxed">{log.details}</p>
+                      <p className="line-clamp-2 leading-relaxed">{log.details || '—'}</p>
                     </td>
 
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <div>
-                        <span className="font-semibold text-stone-900 block">{log.adminName}</span>
-                        <span className="text-[10px] text-stone-400 block font-mono">
-                          {log.adminRole.replace('_', ' ')}
+                        <span className="font-mono text-xs text-stone-700 block truncate max-w-[120px]">
+                          {log.actor_id || 'System'}
                         </span>
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 text-right whitespace-nowrap font-mono text-stone-500 text-[11px]">
-                      {new Date(log.timestamp).toLocaleString()}
+                      {new Date(log.created_at).toLocaleString()}
                     </td>
                   </tr>
                 ))}

@@ -49,10 +49,10 @@ export const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
 
         {/* Content body */}
         <div className="p-6 overflow-y-auto space-y-5">
-          {article.coverImage && (
+          {article.cover_image && (
             <div className="w-full h-52 rounded-xl overflow-hidden border border-[#E8E4DA] bg-stone-100">
               <img
-                src={article.coverImage}
+                src={article.cover_image}
                 alt={article.title}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
@@ -65,24 +65,24 @@ export const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
             <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500 mt-2">
               <span className="flex items-center gap-1">
                 <User className="w-3.5 h-3.5 text-stone-400" />
-                {article.authorName}
+                {article.author_id ? 'Editor' : 'Editorial Desk'}
               </span>
               <span>·</span>
               <span className="flex items-center gap-1 font-mono">
                 <Calendar className="w-3.5 h-3.5 text-stone-400" />
-                {new Date(article.createdAt).toLocaleDateString()}
+                {new Date(article.created_at).toLocaleDateString()}
               </span>
               <span>·</span>
               <span className="flex items-center gap-1 tabular-nums">
                 <Eye className="w-3.5 h-3.5 text-stone-400" />
-                {article.viewsCount} views
+                {article.views} views
               </span>
             </div>
           </div>
 
           <div className="p-3.5 bg-[#FAF8F5] rounded-xl border border-[#E8E4DA]">
             <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Executive Summary</p>
-            <p className="text-xs font-medium text-stone-800 leading-relaxed">{article.summary}</p>
+            <p className="text-xs font-medium text-stone-800 leading-relaxed">{article.summary || '—'}</p>
           </div>
 
           <div>
@@ -92,10 +92,10 @@ export const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
             </div>
           </div>
 
-          {article.reviewNotes && (
+          {article.review_notes && (
             <div className="p-3.5 bg-amber-50 rounded-xl border border-amber-200">
               <p className="text-xs font-bold text-amber-900 uppercase tracking-wider mb-0.5">Editorial Review Notes</p>
-              <p className="text-xs text-amber-800">{article.reviewNotes}</p>
+              <p className="text-xs text-amber-800">{article.review_notes}</p>
             </div>
           )}
 

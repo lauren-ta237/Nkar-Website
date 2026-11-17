@@ -184,7 +184,7 @@ export const Sidebar: React.FC = () => {
               >
                 <div className="relative shrink-0">
                   <img
-                    src={user.avatar}
+                    src={user.avatar_url || ''}
                     alt={user.name}
                     className="w-6 h-6 rounded-full object-cover"
                     referrerPolicy="no-referrer"
@@ -218,7 +218,7 @@ export const Sidebar: React.FC = () => {
             <DropdownMenuTrigger className="outline-none">
               <div className="relative cursor-pointer p-0.5 rounded-full hover:ring-2 hover:ring-[#D4AF37] transition-all">
                 <img
-                  src={currentUser.avatar}
+                  src={currentUser.avatar_url || ''}
                   alt={currentUser.name}
                   className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]"
                   referrerPolicy="no-referrer"
@@ -292,7 +292,7 @@ export const Sidebar: React.FC = () => {
             <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 hover:border-[#D4AF37] dark:hover:border-[#D4AF37] transition-all cursor-pointer shadow-2xs">
               <div className="relative shrink-0">
                 <img
-                  src={currentUser.avatar}
+                  src={currentUser.avatar_url || ''}
                   alt={currentUser.name}
                   className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]"
                   referrerPolicy="no-referrer"

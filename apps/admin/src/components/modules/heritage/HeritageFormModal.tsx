@@ -15,7 +15,7 @@ interface HeritageFormModalProps {
   isOpen: boolean;
   initialData?: Heritage | null;
   onClose: () => void;
-  onSubmit: (data: Omit<Heritage, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (data: Omit<Heritage, 'id' | 'created_at' | 'updated_at'>) => void;
   isLoading?: boolean;
 }
 
@@ -38,9 +38,7 @@ export const HeritageFormModal: React.FC<HeritageFormModalProps> = ({
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState<HeritageCategory>('VILLAGE_HISTORY');
-  const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
-  const [oralSource, setOralSource] = useState('');
   const [mediaUrls, setMediaUrls] = useState<string[]>(['']);
   const [status, setStatus] = useState<ContentStatus>('PUBLISHED');
   const [error, setError] = useState('');
@@ -49,17 +47,13 @@ export const HeritageFormModal: React.FC<HeritageFormModalProps> = ({
     if (initialData) {
       setTitle(initialData.title);
       setCategory(initialData.category);
-      setSummary(initialData.summary);
       setContent(initialData.content);
-      setOralSource(initialData.oralTraditionSource || '');
-      setMediaUrls(initialData.supportingMedia.length > 0 ? initialData.supportingMedia : ['']);
+      setMediaUrls(initialData.images && initialData.images.length > 0 ? initialData.images : ['']);
       setStatus(initialData.status);
     } else {
       setTitle('');
       setCategory('VILLAGE_HISTORY');
-      setSummary('');
       setContent('');
-      setOralSource('Traditional Council Elder & Custodian Archives');
       setMediaUrls(['https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80']);
       setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'SUBMITTED' : 'PUBLISHED');
     }
@@ -80,8 +74,8 @@ export const HeritageFormModal: React.FC<HeritageFormModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !summary.trim() || !content.trim()) {
-      setError('Title, summary, and content are required.');
+    if (!title.trim() || !content.trim()) {
+      setError('Title and content are required.');
       return;
     }
 
@@ -89,14 +83,12 @@ export const HeritageFormModal: React.FC<HeritageFormModalProps> = ({
 
     onSubmit({
       title: title.trim(),
+      slug: initialData?.slug || title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') || `heritage-${Date.now()}`,
       category,
-      summary: summary.trim(),
       content: content.trim(),
-      oralTraditionSource: oralSource.trim() || undefined,
-      supportingMedia: cleanMedia,
+      images: cleanMedia,
       status,
-      authorId: currentUser.id,
-      authorName: currentUser.name,
+      is_featured: initialData?.is_featured || false,
     });
   };
 
@@ -162,29 +154,6 @@ export const HeritageFormModal: React.FC<HeritageFormModalProps> = ({
                 <option value="ARCHIVED">Archived</option>
               </select>
             </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Oral Tradition Source / Custodian</label>
-            <input
-              type="text"
-              value={oralSource}
-              onChange={(e) => setOralSource(e.target.value)}
-              placeholder="e.g. Pa Shey Ndzefon & Council of Royal Elders (1994 tape transcription)"
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Short Summary *</label>
-            <textarea
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              placeholder="Brief introductory overview..."
-              rows={2}
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              required
-            />
           </div>
 
           <div>

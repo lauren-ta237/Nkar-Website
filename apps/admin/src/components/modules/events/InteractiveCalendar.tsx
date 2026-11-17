@@ -104,7 +104,7 @@ export const InteractiveCalendar: React.FC<InteractiveCalendarProps> = ({
   }
 
   const getEventCategory = (evt: EventItem) => {
-    const t = (evt.title + ' ' + evt.description + ' ' + evt.organizer).toLowerCase();
+    const t = (evt.title + ' ' + evt.content + ' ' + (evt.organizer_name || '')).toLowerCase();
     if (t.includes('festival') || t.includes('celebration') || t.includes('dance')) return 'Traditional Festival';
     if (t.includes('fon') || t.includes('royal') || t.includes('palace') || t.includes('coronation')) return 'Royal Ceremony';
     if (t.includes('meeting') || t.includes('council') || t.includes('assembly') || t.includes('elders')) return 'Council Meeting';
@@ -120,7 +120,7 @@ export const InteractiveCalendar: React.FC<InteractiveCalendarProps> = ({
 
   // Map events by dateStr
   const eventsByDate = filteredEvents.reduce<Record<string, EventItem[]>>((acc, evt) => {
-    const d = evt.eventDate ? evt.eventDate.split('T')[0] : '';
+    const d = evt.start_datetime ? evt.start_datetime.split('T')[0] : '';
     if (d) {
       if (!acc[d]) acc[d] = [];
       acc[d].push(evt);
@@ -130,7 +130,7 @@ export const InteractiveCalendar: React.FC<InteractiveCalendarProps> = ({
 
   // Selected date events
   const selectedDayEvents = events.filter(
-    (e) => (e.eventDate ? e.eventDate.split('T')[0] : '') === selectedDateStr
+    (e) => (e.start_datetime ? e.start_datetime.split('T')[0] : '') === selectedDateStr
   );
 
   // Category color mapping
@@ -375,7 +375,10 @@ export const InteractiveCalendar: React.FC<InteractiveCalendarProps> = ({
                       <div className="space-y-1 text-[11px] text-stone-500 dark:text-stone-400">
                         <div className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-[#153E2E] dark:text-emerald-400" />
-                          <span>{evt.eventDate} ({evt.startTime} - {evt.endTime})</span>
+                          <span>
+                            {new Date(evt.start_datetime).toLocaleDateString()} ({new Date(evt.start_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {evt.end_datetime ? ` - ${new Date(evt.end_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''})
+                          </span>
                         </div>
                         <div className="flex items-center gap-1.5">
                           <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />

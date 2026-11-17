@@ -38,11 +38,11 @@ export const GlobalSearchModal: React.FC = () => {
 
   const q = query.trim().toLowerCase();
 
-  const filteredNews = q ? news.filter((n) => n.title.toLowerCase().includes(q) || n.summary.toLowerCase().includes(q)) : [];
+  const filteredNews = q ? news.filter((n) => n.title.toLowerCase().includes(q) || (n.summary || '').toLowerCase().includes(q)) : [];
   const filteredEvents = q ? events.filter((e) => e.title.toLowerCase().includes(q) || e.location.toLowerCase().includes(q)) : [];
-  const filteredHeritage = q ? heritage.filter((h) => h.title.toLowerCase().includes(q) || h.summary.toLowerCase().includes(q)) : [];
-  const filteredLeadership = q ? leadership.filter((l) => l.name.toLowerCase().includes(q) || l.traditionalTitle.toLowerCase().includes(q)) : [];
-  const filteredProjects = q ? projects.filter((p) => p.projectName.toLowerCase().includes(q) || p.location.toLowerCase().includes(q)) : [];
+  const filteredHeritage = q ? heritage.filter((h) => h.title.toLowerCase().includes(q) || h.content.toLowerCase().includes(q)) : [];
+  const filteredLeadership = q ? leadership.filter((l) => l.name.toLowerCase().includes(q) || l.traditional_title.toLowerCase().includes(q)) : [];
+  const filteredProjects = q ? projects.filter((p) => p.title.toLowerCase().includes(q) || p.location.toLowerCase().includes(q)) : [];
 
   const totalResults =
     filteredNews.length +
@@ -144,7 +144,7 @@ export const GlobalSearchModal: React.FC = () => {
                           <Calendar className="w-4 h-4 text-[#D4AF37] shrink-0" />
                           <div className="truncate">
                             <span className="font-semibold text-stone-800 block truncate">{e.title}</span>
-                            <span className="text-[11px] text-stone-500 truncate block">{e.eventDate} · {e.location}</span>
+                            <span className="text-[11px] text-stone-500 truncate block">{new Date(e.start_datetime).toLocaleDateString()} · {e.location}</span>
                           </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-stone-300 group-hover:text-stone-600 shrink-0" />
@@ -196,7 +196,7 @@ export const GlobalSearchModal: React.FC = () => {
                           <Crown className="w-4 h-4 text-[#D4AF37] shrink-0" />
                           <div className="truncate">
                             <span className="font-semibold text-stone-800 block truncate">{l.name}</span>
-                            <span className="text-[11px] text-stone-500 truncate block">{l.traditionalTitle}</span>
+                            <span className="text-[11px] text-stone-500 truncate block">{l.traditional_title}</span>
                           </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-stone-300 group-hover:text-stone-600 shrink-0" />
@@ -221,8 +221,8 @@ export const GlobalSearchModal: React.FC = () => {
                         <div className="flex items-center gap-2.5 min-w-0">
                           <Briefcase className="w-4 h-4 text-stone-600 shrink-0" />
                           <div className="truncate">
-                            <span className="font-semibold text-stone-800 block truncate">{p.projectName}</span>
-                            <span className="text-[11px] text-stone-500 truncate block">{p.location} · {p.progressPercentage}% complete</span>
+                            <span className="font-semibold text-stone-800 block truncate">{p.title}</span>
+                            <span className="text-[11px] text-stone-500 truncate block">{p.location} · {p.progress_percentage}% complete</span>
                           </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-stone-300 group-hover:text-stone-600 shrink-0" />

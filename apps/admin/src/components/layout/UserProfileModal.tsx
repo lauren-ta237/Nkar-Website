@@ -32,8 +32,6 @@ export const UserProfileModal: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [title, setTitle] = useState('');
   const [avatar, setAvatar] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -42,9 +40,7 @@ export const UserProfileModal: React.FC = () => {
     if (currentUser) {
       setName(currentUser.name);
       setEmail(currentUser.email);
-      setPhone(currentUser.phone || '');
-      setTitle(currentUser.title || '');
-      setAvatar(currentUser.avatar || '');
+      setAvatar(currentUser.avatar_url || '');
       setError(null);
       setSuccessMsg(null);
       setIsEditing(false);
@@ -75,11 +71,12 @@ export const UserProfileModal: React.FC = () => {
 
     updateProfileMutation.mutate(
       {
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone.trim() || undefined,
-        title: title.trim() || undefined,
-        avatar: avatar.trim() || undefined,
+        id: currentUser.id,
+        data: {
+          name: name.trim(),
+          email: email.trim(),
+          avatar_url: avatar.trim() || null,
+        },
       },
       {
         onSuccess: () => {
@@ -160,7 +157,7 @@ export const UserProfileModal: React.FC = () => {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 min-w-0">
                   <img
-                    src={currentUser.avatar}
+                    src={currentUser.avatar_url || ''}
                     alt={currentUser.name}
                     className="w-16 h-16 rounded-2xl object-cover border-2 border-[#D4AF37] shadow-sm shrink-0"
                     referrerPolicy="no-referrer"
@@ -170,7 +167,7 @@ export const UserProfileModal: React.FC = () => {
                       {currentUser.name}
                     </h4>
                     <p className="text-xs text-[#153E2E] font-semibold mt-0.5 truncate">
-                      {currentUser.title || 'Administrative Officer'}
+                      Administrative Officer
                     </p>
 
                     <div className="flex items-center gap-2 mt-2">
@@ -200,15 +197,9 @@ export const UserProfileModal: React.FC = () => {
                   <Mail className="w-3.5 h-3.5 text-stone-400 shrink-0" />
                   <span className="truncate">{currentUser.email}</span>
                 </div>
-                {currentUser.phone && (
-                  <div className="flex items-center gap-2 text-stone-600">
-                    <Phone className="w-3.5 h-3.5 text-stone-400 shrink-0" />
-                    <span>{currentUser.phone}</span>
-                  </div>
-                )}
                 <div className="flex items-center gap-2 text-stone-600">
                   <Calendar className="w-3.5 h-3.5 text-stone-400 shrink-0" />
-                  <span>Registered: {new Date(currentUser.createdAt).toLocaleDateString()}</span>
+                  <span>Registered: {new Date(currentUser.created_at).toLocaleDateString()}</span>
                 </div>
               </div>
 
@@ -284,34 +275,6 @@ export const UserProfileModal: React.FC = () => {
                   className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-800"
                   required
                 />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    Telephone / WhatsApp
-                  </label>
-                  <input
-                    type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+237 6XX XX XX XX"
-                    className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    Traditional / Administrative Title
-                  </label>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Council Secretary"
-                    className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-                  />
-                </div>
               </div>
 
               {/* Read-Only Role Warning (Requirement 5) */}

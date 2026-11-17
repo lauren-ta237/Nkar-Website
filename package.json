@@ -1,0 +1,10 @@
+{
+	"name": "nkar-website-monorepo",
+	"private": true,
+	"scripts": {
+		"dev:api": "cd apps\\api && .venv\\Scripts\\python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
+		"start:api": "cd apps\\api && .venv\\Scripts\\python -m uvicorn app.main:app --host 0.0.0.0 --port 8000",
+		"dev:web": "npm --prefix apps/web run dev",
+		"build:web": "npm --prefix apps/web run build"
+	}
+}

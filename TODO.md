@@ -85,6 +85,61 @@
   - Rewrote Alembic migration `0001_initial_schema.py` to produce clean 10-table relational schema with appropriate indexes and foreign keys.
   - Verified 100% clean compilation across all modules (`python -B -m compileall -q apps/api/app apps/api/migrations`).
 
+---
+
+### Proposed Schema Enhancements (Based on UI Form Audit & Removed Fields)
+
+During the Phase 0 API client alignment for `apps/admin`, several rich domain fields previously used in UI forms were removed to strictly match existing backend Pydantic models. Below is a structured proposal to re-introduce these high-value fields into the backend schemas and database tables:
+
+#### 1. `users` Module (`apps/api/app/modules/users/`)
+* **`phone`** (`str | None`):
+  * **Pydantic**: `phone: str | None = Field(default=None, max_length=30)` (in `UserCreate`, `UserUpdate`, `UserResponse`)
+  * **SQLAlchemy**: `phone: Mapped[str | None] = mapped_column(String(30), nullable=True)`
+  * **Justification**: Vital for emergency coordination among council administrators, contact verification, and direct WhatsApp communication between editors, reviewers, and super admins.
+* **`title`** (`str | None`):
+  * **Pydantic**: `title: str | None = Field(default=None, max_length=150)`
+  * **SQLAlchemy**: `title: Mapped[str | None] = mapped_column(String(150), nullable=True)`
+  * **Justification**: Captures the official traditional or administrative working title (e.g., *"Heritage Council Secretary & Chief Reviewer"*, *"Community Content Officer & Field Writer"*) to properly display administrator identity across audit logs and profile headers.
+
+#### 2. `heritage` Module (`apps/api/app/modules/heritage/`)
+* **`summary`** (`str | None`):
+  * **Pydantic**: `summary: str | None = Field(default=None, max_length=500)`
+  * **SQLAlchemy**: `summary: Mapped[str | None] = mapped_column(String(500), nullable=True)`
+  * **Justification**: Essential for card summaries, search result snippets, and global search listings without loading massive multi-page historical narratives.
+* **`oral_tradition_source`** (`str | None`):
+  * **Pydantic**: `oral_tradition_source: str | None = Field(default=None, max_length=255)`
+  * **SQLAlchemy**: `oral_tradition_source: Mapped[str | None] = mapped_column(String(255), nullable=True)`
+  * **Justification**: Nkar heritage relies heavily on oral accounts. Recording custodial provenance (e.g., *"Pa Shey Ndzefon & Council of Royal Elders (1994 tape transcription)"*) is indispensable for historical authority and cultural provenance.
+
+#### 3. `projects` Module (`apps/api/app/modules/projects/`)
+* **`lead_coordinator`** (`str | None`):
+  * **Pydantic**: `lead_coordinator: str | None = Field(default=None, max_length=150)`
+  * **SQLAlchemy**: `lead_coordinator: Mapped[str | None] = mapped_column(String(150), nullable=True)`
+  * **Justification**: Village development projects (water gravity schemes, electrification, health centers) require public accountability and named operational leads (e.g., *"Eng. Francis Mbinkar"*).
+* **`funding_source`** (`str | None`):
+  * **Pydantic**: `funding_source: str | None = Field(default=None, max_length=255)`
+  * **SQLAlchemy**: `funding_source: Mapped[str | None] = mapped_column(String(255), nullable=True)`
+  * **Justification**: Tracks community grants, diaspora branches (e.g., *"NKACUDA North America"*, *"NKACUDA Yaounde Branch"*), or council funds.
+
+#### 4. `events` Module (`apps/api/app/modules/events/`)
+* **`category`** (`str | None` or `EventCategory` enum):
+  * **Pydantic**: `category: str | None = Field(default=None, max_length=100)`
+  * **SQLAlchemy**: `category: Mapped[str | None] = mapped_column(String(100), nullable=True)`
+  * **Justification**: Allows categorizing cultural gatherings (e.g., *"Traditional Festival"*, *"Royal Ceremony"*, *"Council Meeting"*, *"Youth & Culture"*, *"Community Assembly"*), enabling calendar and list view filtering matching the other content modules.
+
+#### 5. `publications` Module (`apps/api/app/modules/publications/`)
+* **`isbn`** (`str | None`):
+  * **Pydantic**: `isbn: str | None = Field(default=None, max_length=25)`
+  * **SQLAlchemy**: `isbn: Mapped[str | None] = mapped_column(String(25), nullable=True)`
+  * **Justification**: International standard identifier for published books and monographs cataloged in the Nkar library repository.
+
+#### Backend Implementation Checklist for New Fields:
+- [ ] Add columns to SQLAlchemy models in `apps/api/app/modules/<module>/models.py`
+- [ ] Add fields to Pydantic schemas in `apps/api/app/modules/<module>/schemas.py` (`Create`, `Update`, `Response`)
+- [ ] Generate Alembic migration: `alembic revision --autogenerate -m "add_operational_fields_to_users_heritage_projects"`
+- [ ] Run migration: `alembic upgrade head`
+- [ ] Update `apps/admin/src/types/index.ts` and re-enable form controls in `apps/admin`
+
 
 ---
 

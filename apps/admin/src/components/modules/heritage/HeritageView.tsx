@@ -52,8 +52,7 @@ export const HeritageView: React.FC = () => {
     const matchesSearch =
       searchQuery === '' ||
       h.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      h.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (h.oralTraditionSource && h.oralTraditionSource.toLowerCase().includes(searchQuery.toLowerCase()));
+      h.content.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesCat = selectedCategory === 'ALL' || h.category === selectedCategory;
     const matchesStatus = selectedStatus === 'ALL' || h.status === selectedStatus;
@@ -61,10 +60,10 @@ export const HeritageView: React.FC = () => {
     return matchesSearch && matchesCat && matchesStatus;
   });
 
-  const handleCreateOrUpdate = (data: Omit<Heritage, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateOrUpdate = (data: Omit<Heritage, 'id' | 'created_at' | 'updated_at'>) => {
     if (editingHeritage) {
       updateMutation.mutate(
-        { id: editingHeritage.id, updates: data },
+        { id: editingHeritage.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -176,7 +175,7 @@ export const HeritageView: React.FC = () => {
             const canEdit =
               currentUser.role === 'SUPER_ADMIN' ||
               currentUser.role === 'CONTENT_REVIEWER' ||
-              (currentUser.role === 'CONTENT_EDITOR' && item.authorId === currentUser.id);
+              (currentUser.role === 'CONTENT_EDITOR' && item.created_by_id === currentUser.id);
 
             const canDelete = currentUser.role === 'SUPER_ADMIN';
 
@@ -198,19 +197,12 @@ export const HeritageView: React.FC = () => {
                   </h3>
 
                   <p className="text-xs text-stone-600 mt-2 line-clamp-3 leading-relaxed">
-                    {item.summary}
+                    {item.content}
                   </p>
 
-                  {item.oralTraditionSource && (
-                    <div className="mt-3 p-2 bg-[#FAF8F5] rounded-lg border border-[#EAE6DD] text-[11px] text-stone-500 flex items-center gap-1.5">
-                      <ScrollText className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
-                      <span className="truncate">Source: {item.oralTraditionSource}</span>
-                    </div>
-                  )}
-
-                  {item.supportingMedia && item.supportingMedia.length > 0 && (
+                  {item.images && item.images.length > 0 && (
                     <div className="flex items-center gap-2 mt-3 overflow-hidden">
-                      {item.supportingMedia.slice(0, 3).map((url, i) => (
+                      {item.images.slice(0, 3).map((url: string, i: number) => (
                         <img
                           key={i}
                           src={url}
@@ -219,9 +211,9 @@ export const HeritageView: React.FC = () => {
                           referrerPolicy="no-referrer"
                         />
                       ))}
-                      {item.supportingMedia.length > 3 && (
+                      {item.images.length > 3 && (
                         <span className="text-[10px] text-stone-400 font-semibold">
-                          +{item.supportingMedia.length - 3} more
+                          +{item.images.length - 3} more
                         </span>
                       )}
                     </div>
@@ -230,7 +222,7 @@ export const HeritageView: React.FC = () => {
 
                 <div className="mt-4 pt-3 border-t border-[#F2EFE9] flex items-center justify-between">
                   <span className="text-[10px] text-stone-400 font-mono">
-                    Updated {new Date(item.updatedAt).toLocaleDateString()}
+                    Updated {new Date(item.updated_at).toLocaleDateString()}
                   </span>
 
                   <div className="flex items-center gap-1">
@@ -317,21 +309,15 @@ export const HeritageView: React.FC = () => {
 
               <div className="p-6 overflow-y-auto space-y-4 flex-1">
                 <h2 className="text-xl font-bold text-stone-900 leading-snug">{viewHeritage.title}</h2>
-                {viewHeritage.oralTraditionSource && (
-                  <p className="text-xs text-stone-500 italic">Custodial Source: {viewHeritage.oralTraditionSource}</p>
-                )}
-                <div className="p-3.5 bg-[#FAF8F5] rounded-xl border border-[#E8E4DA] text-xs font-medium text-stone-700 leading-relaxed">
-                  {viewHeritage.summary}
-                </div>
                 <div className="text-xs text-stone-700 leading-relaxed whitespace-pre-line bg-white p-4 rounded-xl border border-stone-100">
                   {viewHeritage.content}
                 </div>
 
-                {viewHeritage.supportingMedia.length > 0 && (
+                {viewHeritage.images && viewHeritage.images.length > 0 && (
                   <div>
                     <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Preserved Media</p>
                     <div className="grid grid-cols-2 gap-3">
-                      {viewHeritage.supportingMedia.map((url, i) => (
+                      {viewHeritage.images.map((url: string, i: number) => (
                         <img
                           key={i}
                           src={url}

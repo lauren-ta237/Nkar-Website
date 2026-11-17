@@ -15,11 +15,11 @@ interface GalleryFormModalProps {
   isOpen: boolean;
   initialData?: Gallery | null;
   onClose: () => void;
-  onSubmit: (data: Omit<Gallery, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (data: Omit<Gallery, 'id' | 'created_at' | 'updated_at'>) => void;
   isLoading?: boolean;
 }
 
-const ALBUMS = [
+const CATEGORIES = [
   'Royal Ceremonies & Palace Heritage',
   'Landscapes of Nkar',
   'Arts & Traditional Crafts',
@@ -38,9 +38,8 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
   const { currentUser } = useAdminStore();
 
   const [title, setTitle] = useState('');
-  const [mediaType, setMediaType] = useState<MediaType>('PHOTO');
-  const [album, setAlbum] = useState(ALBUMS[0]);
-  const [category, setCategory] = useState('Ceremonies');
+  const [mediaType, setMediaType] = useState<MediaType>('IMAGE');
+  const [category, setCategory] = useState(CATEGORIES[0]);
   const [mediaUrl, setMediaUrl] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [description, setDescription] = useState('');
@@ -51,19 +50,17 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title);
-      setMediaType(initialData.mediaType);
-      setAlbum(initialData.album);
+      setMediaType(initialData.media_type);
       setCategory(initialData.category);
-      setMediaUrl(initialData.mediaUrl);
-      setThumbnailUrl(initialData.thumbnailUrl || '');
-      setDescription(initialData.description);
+      setMediaUrl(initialData.media_url);
+      setThumbnailUrl(initialData.thumbnail_url || '');
+      setDescription(initialData.description || '');
       setTagsInput(initialData.tags.join(', '));
       setStatus(initialData.status);
     } else {
       setTitle('');
-      setMediaType('PHOTO');
-      setAlbum(ALBUMS[0]);
-      setCategory('Ceremonies');
+      setMediaType('IMAGE');
+      setCategory(CATEGORIES[0]);
       setMediaUrl('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&auto=format&fit=crop&q=80');
       setThumbnailUrl('');
       setDescription('');
@@ -89,15 +86,14 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
 
     onSubmit({
       title: title.trim(),
-      mediaType,
-      album,
+      media_type: mediaType,
       category: category.trim(),
-      mediaUrl: mediaUrl.trim(),
-      thumbnailUrl: thumbnailUrl.trim() || undefined,
-      description: description.trim(),
+      media_url: mediaUrl.trim(),
+      thumbnail_url: thumbnailUrl.trim() || null,
+      description: description.trim() || null,
+      alt_text: title.trim(),
       tags,
       status,
-      uploadedBy: currentUser.name,
     });
   };
 
@@ -161,33 +157,19 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Album</label>
-              <select
-                value={album}
-                onChange={(e) => setAlbum(e.target.value)}
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              >
-                {ALBUMS.map((alb) => (
-                  <option key={alb} value={alb}>
-                    {alb}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Category</label>
-              <input
-                type="text"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                placeholder="Ceremonies, Landscapes, Crafts..."
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-                required
-              />
-            </div>
+          <div>
+            <label className="block text-xs font-semibold text-stone-700 mb-1">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
           <FileUpload

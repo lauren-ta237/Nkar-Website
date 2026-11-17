@@ -221,9 +221,9 @@ export const PublicSitePreviewModal: React.FC = () => {
                       key={item.id}
                       className="bg-[#FAF8F5] border border-[#E8E4DA] rounded-xl overflow-hidden shadow-xs flex flex-col justify-between"
                     >
-                      {item.coverImage && (
+                      {item.cover_image && (
                         <img
-                          src={item.coverImage}
+                          src={item.cover_image}
                           alt={item.title}
                           className="w-full h-36 object-cover"
                         />
@@ -240,7 +240,7 @@ export const PublicSitePreviewModal: React.FC = () => {
                         </p>
                       </div>
                       <div className="p-4 pt-0 text-[10px] text-stone-400 font-mono">
-                        Published: {new Date(item.createdAt).toLocaleDateString()}
+                        Published: {new Date(item.created_at).toLocaleDateString()}
                       </div>
                     </div>
                   ))
@@ -269,11 +269,14 @@ export const PublicSitePreviewModal: React.FC = () => {
                     className="p-4 bg-white border border-[#E8E4DA] rounded-xl shadow-xs space-y-2"
                   >
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-[#153E2E]">{evt.eventDate}</span>
-                      <span className="text-[10px] text-stone-400 font-mono">{evt.startTime} - {evt.endTime}</span>
+                      <span className="font-bold text-[#153E2E]">{new Date(evt.start_datetime).toLocaleDateString()}</span>
+                      <span className="text-[10px] text-stone-400 font-mono">
+                        {new Date(evt.start_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {evt.end_datetime ? ` - ${new Date(evt.end_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+                      </span>
                     </div>
                     <h4 className="text-sm font-bold text-stone-900">{evt.title}</h4>
-                    <p className="text-xs text-stone-600 line-clamp-2">{evt.description}</p>
+                    <p className="text-xs text-stone-600 line-clamp-2">{evt.content}</p>
                     <div className="flex items-center gap-1 text-[11px] text-stone-500 pt-1">
                       <MapPin className="w-3.5 h-3.5 text-[#153E2E]" />
                       <span>{evt.location}</span>

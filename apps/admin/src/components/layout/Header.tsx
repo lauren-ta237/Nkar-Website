@@ -186,7 +186,7 @@ export const Header: React.FC = () => {
                 }`}
               >
                 <img
-                  src={user.avatar}
+                  src={user.avatar_url || ''}
                   alt={user.name}
                   className="w-7 h-7 rounded-full object-cover border border-[#D4AF37]/30 shrink-0"
                   referrerPolicy="no-referrer"
@@ -223,7 +223,7 @@ export const Header: React.FC = () => {
               title="Administrator Account"
             >
               <img
-                src={currentUser.avatar}
+                src={currentUser.avatar_url || ''}
                 alt={currentUser.name}
                 className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37] shrink-0"
                 referrerPolicy="no-referrer"
