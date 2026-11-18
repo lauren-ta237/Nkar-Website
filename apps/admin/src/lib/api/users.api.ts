@@ -6,11 +6,23 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './config/axios-client';
 import { ApiResponse, User } from '@/types';
+import { sanitizePayload } from './helpers';
 
 export const USERS_QUERY_KEYS = {
   ALL: ['admin', 'users'] as const,
   LIST: ['admin', 'users', 'list'] as const,
 };
+
+function cleanUserPayload(payload: any) {
+  const sanitized = sanitizePayload(payload);
+  if (sanitized.role) {
+    sanitized.role = String(sanitized.role).toLowerCase();
+  }
+  if (sanitized.status) {
+    sanitized.status = String(sanitized.status).toLowerCase();
+  }
+  return sanitized;
+}
 
 // ---- pure api routes -----------------------------------------------------
 
@@ -20,12 +32,14 @@ export async function fetchAdminUsersList(): Promise<User[]> {
 }
 
 export async function createAdminUser(payload: any): Promise<User> {
-  const { data } = await api.post<ApiResponse<User>>('/users', payload);
+  const sanitized = cleanUserPayload(payload);
+  const { data } = await api.post<ApiResponse<User>>('/users', sanitized);
   return data.data;
 }
 
 export async function updateAdminUser(id: string, payload: any): Promise<User> {
-  const { data } = await api.put<ApiResponse<User>>(`/users/${id}`, payload);
+  const sanitized = cleanUserPayload(payload);
+  const { data } = await api.put<ApiResponse<User>>(`/users/${id}`, sanitized);
   return data.data;
 }
 

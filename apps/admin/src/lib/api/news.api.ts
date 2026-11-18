@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './config/axios-client';
 import { ApiResponse, News } from '@/types';
+import { sanitizePayload } from './helpers';
 
 export const NEWS_QUERY_KEYS = {
   ALL: ['admin', 'news'] as const,
@@ -24,12 +25,14 @@ export async function fetchAdminNewsList(statusFilter?: string): Promise<News[]>
 }
 
 export async function createAdminNews(payload: any): Promise<News> {
-  const { data } = await api.post<ApiResponse<News>>('/news/admin/items', payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.post<ApiResponse<News>>('/news/admin/items', sanitized);
   return data.data;
 }
 
 export async function updateAdminNews(id: string, payload: any): Promise<News> {
-  const { data } = await api.put<ApiResponse<News>>(`/news/admin/items/${id}`, payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.put<ApiResponse<News>>(`/news/admin/items/${id}`, sanitized);
   return data.data;
 }
 

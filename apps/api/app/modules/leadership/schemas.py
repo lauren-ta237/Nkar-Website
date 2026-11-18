@@ -1,10 +1,10 @@
 from pydantic import Field
 
-from app.modules.base import HttpUrlStr, Metadata, ModuleModel
+from app.modules.base import HttpUrlStr, Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import ContentStatus
 
 
-class LeadershipCreate(ModuleModel):
+class LeadershipCreate(ModuleRequestModel):
     name: str = Field(min_length=2, max_length=200)
     traditional_title: str = Field(min_length=2, max_length=100)
     biography: str | None = None
@@ -17,7 +17,7 @@ class LeadershipCreate(ModuleModel):
     status: ContentStatus = ContentStatus.DRAFT
 
 
-class LeadershipUpdate(ModuleModel):
+class LeadershipUpdate(ModuleRequestModel):
     name: str | None = Field(default=None, min_length=2, max_length=200)
     traditional_title: str | None = Field(default=None, min_length=2, max_length=100)
     biography: str | None = None

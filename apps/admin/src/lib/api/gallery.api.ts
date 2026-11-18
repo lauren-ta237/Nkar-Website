@@ -6,11 +6,20 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './config/axios-client';
 import { ApiResponse, Gallery } from '@/types';
+import { sanitizePayload } from './helpers';
 
 export const GALLERY_QUERY_KEYS = {
   ALL: ['admin', 'gallery'] as const,
   LIST: ['admin', 'gallery', 'list'] as const,
 };
+
+function cleanGalleryPayload(payload: any) {
+  const sanitized = sanitizePayload(payload);
+  if (sanitized.media_type) {
+    sanitized.media_type = String(sanitized.media_type).toLowerCase();
+  }
+  return sanitized;
+}
 
 // ---- pure api routes -----------------------------------------------------
 
@@ -20,12 +29,14 @@ export async function fetchAdminGalleryList(): Promise<Gallery[]> {
 }
 
 export async function createAdminGallery(payload: any): Promise<Gallery> {
-  const { data } = await api.post<ApiResponse<Gallery>>('/gallery/admin/items', payload);
+  const sanitized = cleanGalleryPayload(payload);
+  const { data } = await api.post<ApiResponse<Gallery>>('/gallery/admin/items', sanitized);
   return data.data;
 }
 
 export async function updateAdminGallery(id: string, payload: any): Promise<Gallery> {
-  const { data } = await api.put<ApiResponse<Gallery>>(`/gallery/admin/items/${id}`, payload);
+  const sanitized = cleanGalleryPayload(payload);
+  const { data } = await api.put<ApiResponse<Gallery>>(`/gallery/admin/items/${id}`, sanitized);
   return data.data;
 }
 

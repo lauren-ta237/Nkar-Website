@@ -1,10 +1,21 @@
+import json
+from datetime import date, datetime
+from enum import Enum as PyEnum
 from typing import Any
 from uuid import UUID
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.audit.models import AuditLog
 from app.shared.enums import AuditSeverity
+
+
+def _serialize_audit_dict(data: dict[str, Any] | None) -> dict[str, Any] | None:
+    if data is None:
+        return None
+    # Use jsonable_encoder to recursively convert datetime, date, UUID, Enum, etc. to JSON-serializable types
+    return jsonable_encoder(data)
 
 
 async def record_audit(
@@ -25,8 +36,8 @@ async def record_audit(
         actor_id=actor_id,
         severity=severity,
         details=details,
-        changes=changes,
-        metadata_json=metadata_json,
+        changes=_serialize_audit_dict(changes),
+        metadata_json=_serialize_audit_dict(metadata_json),
     )
     db.add(entry)
     await db.flush()

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Image as ImageIcon, Tag, AlertCircle } from 'lucide-react';
-import { News, ContentStatus } from '../../../types';
+import { News, ContentStatus, NewsCategory } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { FileUpload } from '../../common/FileUpload';
 import {
@@ -19,14 +19,19 @@ interface NewsFormModalProps {
   isLoading?: boolean;
 }
 
-const CATEGORIES = [
-  'Royalty & Heritage',
-  'Development',
-  'Culture & Arts',
-  'Environment & Heritage',
-  'Announcements',
-  'Education',
-  'Youth & Sports',
+interface NewsCategoryOption {
+  value: NewsCategory;
+  label: string;
+}
+
+const CATEGORIES: NewsCategoryOption[] = [
+  { value: 'announcements', label: 'Announcements & Bulletins' },
+  { value: 'clan_news', label: 'Clan & Village News' },
+  { value: 'culture', label: 'Culture & Heritage' },
+  { value: 'celebrations', label: 'Celebrations & Festivals' },
+  { value: 'education', label: 'Education & Schools' },
+  { value: 'health', label: 'Health & Wellness' },
+  { value: 'obituaries', label: 'Obituaries & Remembrance' },
 ];
 
 export const NewsFormModal: React.FC<NewsFormModalProps> = ({
@@ -43,10 +48,10 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
   const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState<NewsCategory>(CATEGORIES[0].value);
   const [tagsInput, setTagsInput] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
-  const [status, setStatus] = useState<ContentStatus>('DRAFT');
+  const [status, setStatus] = useState<ContentStatus>('draft');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -56,20 +61,24 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
       setSummary(initialData.summary || '');
       setContent(initialData.content);
       setCoverImage(initialData.cover_image || '');
-      setCategory(initialData.category);
-      setTagsInput(initialData.tags.join(', '));
-      setIsFeatured(initialData.is_featured);
-      setStatus(initialData.status);
+      // Match existing category case-insensitively or default to announcements
+      const matched = CATEGORIES.find(
+        (c) => c.value.toLowerCase() === (initialData.category || '').toLowerCase()
+      );
+      setCategory(matched ? matched.value : 'announcements');
+      setTagsInput((initialData.tags || []).join(', '));
+      setIsFeatured(Boolean(initialData.is_featured));
+      setStatus((initialData.status?.toLowerCase() as ContentStatus) || 'draft');
     } else {
       setTitle('');
       setSlug('');
       setSummary('');
       setContent('');
       setCoverImage('');
-      setCategory(CATEGORIES[0]);
+      setCategory(CATEGORIES[0].value);
       setTagsInput('');
       setIsFeatured(false);
-      setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'DRAFT' : 'PUBLISHED');
+      setStatus(currentUser.role === 'CONTENT_EDITOR' || currentUser.role === 'content_editor' ? 'draft' : 'published');
     }
     setError('');
   }, [initialData, isOpen, currentUser.role]);
@@ -122,9 +131,8 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
       tags,
       is_featured: isFeatured,
       status,
-      author_id: initialData?.author_id || currentUser.id,
-      published_at: status === 'PUBLISHED' ? new Date().toISOString() : null,
-    });
+      published_at: status === 'published' || status === 'PUBLISHED' ? new Date().toISOString() : null,
+    } as any);
   };
 
   return (
@@ -178,12 +186,12 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
               <label className="block text-xs font-semibold text-stone-700 mb-1">Category</label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(e.target.value as NewsCategory)}
                 className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
               >
                 {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
                   </option>
                 ))}
               </select>
@@ -196,13 +204,13 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
                 onChange={(e) => setStatus(e.target.value as ContentStatus)}
                 className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
               >
-                <option value="DRAFT">Draft (Working version)</option>
-                <option value="SUBMITTED">Submit for Review</option>
-                {currentUser.role !== 'CONTENT_EDITOR' && (
+                <option value="draft">Draft (Working version)</option>
+                <option value="submitted">Submit for Review</option>
+                {currentUser.role !== 'CONTENT_EDITOR' && currentUser.role !== 'content_editor' && (
                   <>
-                    <option value="APPROVED">Approved</option>
-                    <option value="PUBLISHED">Published (Live)</option>
-                    <option value="ARCHIVED">Archived</option>
+                    <option value="approved">Approved</option>
+                    <option value="published">Published (Live)</option>
+                    <option value="archived">Archived</option>
                   </>
                 )}
               </select>

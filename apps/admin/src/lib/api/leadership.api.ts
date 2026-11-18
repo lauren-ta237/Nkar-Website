@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './config/axios-client';
 import { ApiResponse, Leadership } from '@/types';
+import { sanitizePayload } from './helpers';
 
 export const LEADERSHIP_QUERY_KEYS = {
   ALL: ['admin', 'leadership'] as const,
@@ -20,12 +21,14 @@ export async function fetchAdminLeadershipList(): Promise<Leadership[]> {
 }
 
 export async function createAdminLeadership(payload: any): Promise<Leadership> {
-  const { data } = await api.post<ApiResponse<Leadership>>('/leadership/admin/items', payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.post<ApiResponse<Leadership>>('/leadership/admin/items', sanitized);
   return data.data;
 }
 
 export async function updateAdminLeadership(id: string, payload: any): Promise<Leadership> {
-  const { data } = await api.put<ApiResponse<Leadership>>(`/leadership/admin/items/${id}`, payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.put<ApiResponse<Leadership>>(`/leadership/admin/items/${id}`, sanitized);
   return data.data;
 }
 

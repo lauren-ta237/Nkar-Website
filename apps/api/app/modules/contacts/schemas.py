@@ -2,11 +2,11 @@ from uuid import UUID
 
 from pydantic import EmailStr, Field
 
-from app.modules.base import Metadata, ModuleModel
+from app.modules.base import Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import ContactStatus
 
 
-class ContactSubmissionCreate(ModuleModel):
+class ContactSubmissionCreate(ModuleRequestModel):
     sender_name: str = Field(min_length=2, max_length=100)
     sender_email: EmailStr
     phone: str | None = Field(default=None, max_length=30)
@@ -14,7 +14,7 @@ class ContactSubmissionCreate(ModuleModel):
     message: str = Field(min_length=10)
 
 
-class ContactSubmissionUpdate(ModuleModel):
+class ContactSubmissionUpdate(ModuleRequestModel):
     status: ContactStatus | None = None
     assigned_to_id: UUID | None = None
     internal_notes: str | None = None

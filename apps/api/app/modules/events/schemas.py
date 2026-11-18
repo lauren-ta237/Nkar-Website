@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import Field, model_validator
 
-from app.modules.base import ContentBase, HttpUrlStr, Metadata, ModuleModel
+from app.modules.base import ContentBase, HttpUrlStr, Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import EventStatus
 
 
@@ -23,7 +23,7 @@ class EventCreate(ContentBase):
         return self
 
 
-class EventUpdate(ModuleModel):
+class EventUpdate(ModuleRequestModel):
     title: str | None = Field(default=None, min_length=3, max_length=200)
     slug: str | None = Field(default=None, pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=220)
     location: str | None = Field(default=None, min_length=1, max_length=255)

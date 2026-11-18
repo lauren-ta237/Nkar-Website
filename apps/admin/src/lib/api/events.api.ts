@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './config/axios-client';
 import { ApiResponse, EventItem } from '@/types';
+import { sanitizePayload } from './helpers';
 
 export const EVENTS_QUERY_KEYS = {
   ALL: ['admin', 'events'] as const,
@@ -23,12 +24,14 @@ export async function fetchAdminEventsList(statusFilter?: string): Promise<Event
 }
 
 export async function createAdminEvent(payload: any): Promise<EventItem> {
-  const { data } = await api.post<ApiResponse<EventItem>>('/events/admin/items', payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.post<ApiResponse<EventItem>>('/events/admin/items', sanitized);
   return data.data;
 }
 
 export async function updateAdminEvent(id: string, payload: any): Promise<EventItem> {
-  const { data } = await api.put<ApiResponse<EventItem>>(`/events/admin/items/${id}`, payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.put<ApiResponse<EventItem>>(`/events/admin/items/${id}`, sanitized);
   return data.data;
 }
 
