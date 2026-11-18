@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './config/axios-client';
 import { ApiResponse, Publication } from '@/types';
+import { sanitizePayload } from './helpers';
 
 export const PUBLICATIONS_QUERY_KEYS = {
   ALL: ['admin', 'publications'] as const,
@@ -20,12 +21,14 @@ export async function fetchAdminPublicationsList(): Promise<Publication[]> {
 }
 
 export async function createAdminPublication(payload: any): Promise<Publication> {
-  const { data } = await api.post<ApiResponse<Publication>>('/publications/admin/items', payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.post<ApiResponse<Publication>>('/publications/admin/items', sanitized);
   return data.data;
 }
 
 export async function updateAdminPublication(id: string, payload: any): Promise<Publication> {
-  const { data } = await api.put<ApiResponse<Publication>>(`/publications/admin/items/${id}`, payload);
+  const sanitized = sanitizePayload(payload);
+  const { data } = await api.put<ApiResponse<Publication>>(`/publications/admin/items/${id}`, sanitized);
   return data.data;
 }
 

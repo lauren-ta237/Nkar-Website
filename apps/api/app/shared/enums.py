@@ -1,18 +1,32 @@
 from enum import StrEnum
 
 
-class UserRole(StrEnum):
+from enum import StrEnum
+
+
+class CaseInsensitiveStrEnum(StrEnum):
+    @classmethod
+    def _missing_(cls, value: object):
+        if isinstance(value, str):
+            clean_val = value.strip().lower()
+            for member in cls:
+                if member.value == clean_val or member.name.lower() == clean_val:
+                    return member
+        return None
+
+
+class UserRole(CaseInsensitiveStrEnum):
     SUPER_ADMIN = "super_admin"
     CONTENT_EDITOR = "content_editor"
     CONTENT_REVIEWER = "content_reviewer"
 
 
-class UserStatus(StrEnum):
+class UserStatus(CaseInsensitiveStrEnum):
     ACTIVE = "active"
     SUSPENDED = "suspended"
 
 
-class ContentStatus(StrEnum):
+class ContentStatus(CaseInsensitiveStrEnum):
     DRAFT = "draft"
     SUBMITTED = "submitted"
     APPROVED = "approved"
@@ -21,7 +35,7 @@ class ContentStatus(StrEnum):
     ARCHIVED = "archived"
 
 
-class EventStatus(StrEnum):
+class EventStatus(CaseInsensitiveStrEnum):
     DRAFT = "draft"
     SUBMITTED = "submitted"
     PUBLISHED = "published"
@@ -30,7 +44,7 @@ class EventStatus(StrEnum):
     ARCHIVED = "archived"
 
 
-class NewsCategory(StrEnum):
+class NewsCategory(CaseInsensitiveStrEnum):
     ANNOUNCEMENTS = "announcements"
     CLAN_NEWS = "clan_news"
     OBITUARIES = "obituaries"
@@ -40,7 +54,7 @@ class NewsCategory(StrEnum):
     CULTURE = "culture"
 
 
-class HeritageCategory(StrEnum):
+class HeritageCategory(CaseInsensitiveStrEnum):
     HISTORY = "history"
     ORIGINS = "origins"
     CULTURE = "culture"
@@ -51,24 +65,24 @@ class HeritageCategory(StrEnum):
     ARTIFACTS = "artifacts"
 
 
-class MediaType(StrEnum):
+class MediaType(CaseInsensitiveStrEnum):
     IMAGE = "image"
     VIDEO = "video"
 
 
-class ProjectStatus(StrEnum):
+class ProjectStatus(CaseInsensitiveStrEnum):
     PROPOSED = "proposed"
     ONGOING = "ongoing"
     COMPLETED = "completed"
 
 
-class ContactStatus(StrEnum):
+class ContactStatus(CaseInsensitiveStrEnum):
     UNREAD = "unread"
     IN_PROGRESS = "in_progress"
     RESOLVED = "resolved"
 
 
-class AuditSeverity(StrEnum):
+class AuditSeverity(CaseInsensitiveStrEnum):
     INFO = "info"
     WARNING = "warning"
     CRITICAL = "critical"

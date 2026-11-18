@@ -2,11 +2,11 @@ from uuid import UUID
 
 from pydantic import Field
 
-from app.modules.base import HttpUrlStr, Metadata, ModuleModel
+from app.modules.base import HttpUrlStr, Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import ContentStatus, MediaType
 
 
-class GalleryCreate(ModuleModel):
+class GalleryCreate(ModuleRequestModel):
     title: str = Field(min_length=1, max_length=200)
     alt_text: str | None = Field(default=None, max_length=255)
     description: str | None = None
@@ -18,7 +18,7 @@ class GalleryCreate(ModuleModel):
     status: ContentStatus = ContentStatus.DRAFT
 
 
-class GalleryUpdate(ModuleModel):
+class GalleryUpdate(ModuleRequestModel):
     title: str | None = Field(default=None, min_length=1, max_length=200)
     alt_text: str | None = Field(default=None, max_length=255)
     description: str | None = None

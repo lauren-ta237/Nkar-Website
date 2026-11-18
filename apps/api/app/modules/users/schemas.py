@@ -1,10 +1,10 @@
 from pydantic import EmailStr, Field
 
-from app.modules.base import HttpUrlStr, Metadata, ModuleModel
+from app.modules.base import HttpUrlStr, Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import UserRole, UserStatus
 
 
-class UserCreate(ModuleModel):
+class UserCreate(ModuleRequestModel):
     name: str = Field(min_length=2, max_length=100)
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
@@ -13,7 +13,7 @@ class UserCreate(ModuleModel):
     avatar_url: HttpUrlStr | None = None
 
 
-class UserUpdate(ModuleModel):
+class UserUpdate(ModuleRequestModel):
     name: str | None = Field(default=None, min_length=2, max_length=100)
     email: EmailStr | None = None
     password: str | None = Field(default=None, min_length=8, max_length=128)

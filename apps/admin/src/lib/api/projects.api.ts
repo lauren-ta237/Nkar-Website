@@ -6,11 +6,20 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from './config/axios-client';
 import { ApiResponse, DevelopmentProject } from '@/types';
+import { sanitizePayload } from './helpers';
 
 export const PROJECTS_QUERY_KEYS = {
   ALL: ['admin', 'projects'] as const,
   LIST: ['admin', 'projects', 'list'] as const,
 };
+
+function cleanProjectPayload(payload: any) {
+  const sanitized = sanitizePayload(payload);
+  if (sanitized.budget_cfa !== undefined && (sanitized.budget_cfa === null || Number(sanitized.budget_cfa) <= 0)) {
+    sanitized.budget_cfa = null;
+  }
+  return sanitized;
+}
 
 // ---- pure api routes -----------------------------------------------------
 
@@ -20,12 +29,14 @@ export async function fetchAdminProjectsList(): Promise<DevelopmentProject[]> {
 }
 
 export async function createAdminProject(payload: any): Promise<DevelopmentProject> {
-  const { data } = await api.post<ApiResponse<DevelopmentProject>>('/projects/admin/items', payload);
+  const sanitized = cleanProjectPayload(payload);
+  const { data } = await api.post<ApiResponse<DevelopmentProject>>('/projects/admin/items', sanitized);
   return data.data;
 }
 
 export async function updateAdminProject(id: string, payload: any): Promise<DevelopmentProject> {
-  const { data } = await api.put<ApiResponse<DevelopmentProject>>(`/projects/admin/items/${id}`, payload);
+  const sanitized = cleanProjectPayload(payload);
+  const { data } = await api.put<ApiResponse<DevelopmentProject>>(`/projects/admin/items/${id}`, sanitized);
   return data.data;
 }
 

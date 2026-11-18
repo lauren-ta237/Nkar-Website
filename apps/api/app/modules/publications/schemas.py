@@ -2,11 +2,11 @@ from uuid import UUID
 
 from pydantic import Field
 
-from app.modules.base import HttpUrlStr, Metadata, ModuleModel
+from app.modules.base import HttpUrlStr, Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import ContentStatus
 
 
-class PublicationCreate(ModuleModel):
+class PublicationCreate(ModuleRequestModel):
     title: str = Field(min_length=1, max_length=200)
     author_name: str = Field(min_length=1, max_length=200)
     description: str | None = None
@@ -18,7 +18,7 @@ class PublicationCreate(ModuleModel):
     status: ContentStatus = ContentStatus.DRAFT
 
 
-class PublicationUpdate(ModuleModel):
+class PublicationUpdate(ModuleRequestModel):
     title: str | None = Field(default=None, min_length=1, max_length=200)
     author_name: str | None = Field(default=None, min_length=1, max_length=200)
     description: str | None = None

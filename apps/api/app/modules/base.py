@@ -21,6 +21,10 @@ class ModuleModel(BaseModel):
     model_config = ConfigDict(from_attributes=True, extra="forbid")
 
 
+class ModuleRequestModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True, extra="ignore")
+
+
 class Metadata(ModuleModel):
     id: UUID
     created_at: datetime
@@ -28,7 +32,7 @@ class Metadata(ModuleModel):
     created_by_id: UUID | None = None
 
 
-class ContentBase(ModuleModel):
+class ContentBase(ModuleRequestModel):
     title: str = Field(min_length=3, max_length=200)
     slug: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=220)
     is_featured: bool = False

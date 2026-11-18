@@ -3,11 +3,11 @@ from typing import Any
 
 from pydantic import Field, model_validator
 
-from app.modules.base import HttpUrlStr, Metadata, ModuleModel
+from app.modules.base import HttpUrlStr, Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import ProjectStatus
 
 
-class DevelopmentProjectCreate(ModuleModel):
+class DevelopmentProjectCreate(ModuleRequestModel):
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)
     location: str = Field(min_length=1, max_length=255)
@@ -26,7 +26,7 @@ class DevelopmentProjectCreate(ModuleModel):
         return self
 
 
-class DevelopmentProjectUpdate(ModuleModel):
+class DevelopmentProjectUpdate(ModuleRequestModel):
     title: str | None = Field(default=None, min_length=1, max_length=200)
     description: str | None = Field(default=None, min_length=1)
     location: str | None = Field(default=None, max_length=255)

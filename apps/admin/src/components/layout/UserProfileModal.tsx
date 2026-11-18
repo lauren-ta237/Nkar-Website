@@ -91,7 +91,12 @@ export const UserProfileModal: React.FC = () => {
     );
   };
 
-  const permissions = {
+  const normalizedRole = (currentUser.role || 'CONTENT_EDITOR').toUpperCase() as
+    | 'SUPER_ADMIN'
+    | 'CONTENT_REVIEWER'
+    | 'CONTENT_EDITOR';
+
+  const rolePermissionsMap = {
     SUPER_ADMIN: [
       { name: 'Full Database CRUD across all 10 entities', granted: true },
       { name: 'Administrator Account Provisioning & Role Assignment', granted: true },
@@ -116,7 +121,9 @@ export const UserProfileModal: React.FC = () => {
       { name: 'Approve/Reject Content Submissions', granted: false },
       { name: 'Manage Administrators or Audit Logs', granted: false },
     ],
-  }[currentUser.role];
+  };
+
+  const permissions = rolePermissionsMap[normalizedRole] || rolePermissionsMap.CONTENT_EDITOR;
 
   return (
     <Sheet open={profileModalOpen} onOpenChange={setProfileModalOpen}>
@@ -245,6 +252,7 @@ export const UserProfileModal: React.FC = () => {
                   value={avatar}
                   onChange={(url) => setAvatar(url)}
                   accept="image/*"
+                  folder="nkar_woo_lan/avatars"
                   helperText="Upload JPG, PNG, or WebP portrait photograph"
                 />
               </div>

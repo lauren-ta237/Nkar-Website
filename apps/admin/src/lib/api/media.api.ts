@@ -56,7 +56,12 @@ export async function deleteAdminMedia(publicId: string, resourceType: string = 
 
 export function useAdminMediaMutations() {
   const uploadMutation = useMutation({
-    mutationFn: uploadAdminMedia,
+    mutationFn: (args: File | { file: File; folder?: string; onProgress?: (percent: number) => void }) => {
+      if (args instanceof File) {
+        return uploadAdminMedia(args);
+      }
+      return uploadAdminMedia(args.file, args.folder, args.onProgress);
+    },
   });
 
   const deleteMutation = useMutation({

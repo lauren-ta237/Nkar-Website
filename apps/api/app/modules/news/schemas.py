@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import Field
 
-from app.modules.base import ContentBase, HttpUrlStr, Metadata, ModuleModel
+from app.modules.base import ContentBase, HttpUrlStr, Metadata, ModuleModel, ModuleRequestModel
 from app.shared.enums import ContentStatus, NewsCategory
 
 
@@ -17,7 +17,7 @@ class NewsCreate(ContentBase):
     review_notes: str | None = Field(default=None, max_length=1000)
 
 
-class NewsUpdate(ModuleModel):
+class NewsUpdate(ModuleRequestModel):
     title: str | None = Field(default=None, min_length=3, max_length=200)
     slug: str | None = Field(default=None, pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=220)
     summary: str | None = Field(default=None, max_length=500)

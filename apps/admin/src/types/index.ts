@@ -3,15 +3,41 @@
 // TypeScript schemas strictly mirroring FastAPI Pydantic models:
 // apps/api/app/modules/*/schemas.py and apps/api/app/modules/base.py
 
-export type Role = 'SUPER_ADMIN' | 'CONTENT_EDITOR' | 'CONTENT_REVIEWER';
+export type Role = 'SUPER_ADMIN' | 'CONTENT_EDITOR' | 'CONTENT_REVIEWER' | 'super_admin' | 'content_editor' | 'content_reviewer';
 export type UserRole = Role;
-export type UserStatus = 'ACTIVE' | 'SUSPENDED';
-export type ContentStatus = 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'PUBLISHED' | 'REJECTED' | 'ARCHIVED';
-export type MediaType = 'IMAGE' | 'VIDEO' | 'DOCUMENT';
-export type ProjectStatus = 'PROPOSED' | 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED';
-export type ContactStatus = 'UNREAD' | 'IN_PROGRESS' | 'RESOLVED' | 'ARCHIVED';
-export type HeritageCategory = 'VILLAGE_HISTORY' | 'CUSTOMS' | 'LANGUAGE' | 'ROYAL_LINEAGE' | 'HISTORICAL_ARTIFACTS';
-export type NewsCategory = 'GENERAL' | 'CULTURE' | 'DEVELOPMENT' | 'ROYAL_PALACE' | 'EDUCATION' | 'HEALTH';
+export type UserStatus = 'ACTIVE' | 'SUSPENDED' | 'active' | 'suspended';
+export type ContentStatus = 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'PUBLISHED' | 'REJECTED' | 'ARCHIVED' | 'draft' | 'submitted' | 'approved' | 'rejected' | 'published' | 'archived';
+export type MediaType = 'IMAGE' | 'VIDEO' | 'DOCUMENT' | 'image' | 'video' | 'document';
+export type ProjectStatus = 'PROPOSED' | 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED' | 'proposed' | 'ongoing' | 'completed';
+export type ContactStatus = 'UNREAD' | 'IN_PROGRESS' | 'RESOLVED' | 'ARCHIVED' | 'unread' | 'in_progress' | 'resolved' | 'archived';
+export type HeritageCategory =
+  | 'history'
+  | 'origins'
+  | 'culture'
+  | 'traditions'
+  | 'customs'
+  | 'language'
+  | 'royal_lineage'
+  | 'artifacts'
+  | 'VILLAGE_HISTORY'
+  | 'CUSTOMS'
+  | 'LANGUAGE'
+  | 'ROYAL_LINEAGE'
+  | 'HISTORICAL_ARTIFACTS';
+export type NewsCategory =
+  | 'announcements'
+  | 'clan_news'
+  | 'obituaries'
+  | 'celebrations'
+  | 'education'
+  | 'health'
+  | 'culture'
+  | 'GENERAL'
+  | 'CULTURE'
+  | 'DEVELOPMENT'
+  | 'ROYAL_PALACE'
+  | 'EDUCATION'
+  | 'HEALTH';
 export type PublicationFileType = 'PDF' | 'DOCX' | 'EPUB' | string;
 
 export type AuditAction =

@@ -26,7 +26,15 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet';
 
-const CATEGORY_NAMES: Record<HeritageCategory, string> = {
+const CATEGORY_NAMES: Record<string, string> = {
+  history: 'Village History',
+  origins: 'Origins & Migration',
+  culture: 'Culture & Arts',
+  traditions: 'Traditions',
+  customs: 'Customs & Rites',
+  language: 'Language & Proverbs',
+  royal_lineage: 'Royal Lineage',
+  artifacts: 'Historical Artifacts',
   VILLAGE_HISTORY: 'Village History',
   CUSTOMS: 'Customs & Rites',
   LANGUAGE: 'Language & Proverbs',
