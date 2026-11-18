@@ -1,7 +1,8 @@
 import React from 'react';
 import { X, CheckCircle, Clock, AlertCircle, Mail, ArrowRight, Bell } from 'lucide-react';
 import { useAdminStore } from '../../store/useAdminStore';
-import { usePendingReviews, useContactsList } from '@/lib/api/queries';
+import { useAdminPendingReviews } from '@/lib/api/dashboard.api';
+import { useAdminContactsList } from '@/lib/api/contacts.api';
 import {
   Sheet,
   SheetContent,
@@ -18,8 +19,8 @@ export const NotificationDrawer: React.FC = () => {
     currentUser,
   } = useAdminStore();
 
-  const { data: pendingItems = [] } = usePendingReviews();
-  const { data: contacts = [] } = useContactsList();
+  const { data: pendingItems = [] } = useAdminPendingReviews({ enabled: notificationDrawerOpen });
+  const { data: contacts = [] } = useAdminContactsList({ status: 'unread', enabled: notificationDrawerOpen });
 
   const unreadMessages = contacts.filter((c) => c.status === 'UNREAD');
 
@@ -73,7 +74,7 @@ export const NotificationDrawer: React.FC = () => {
                           {item.type} · {item.category || 'General'}
                         </span>
                         <h4 className="text-xs font-bold text-stone-900 truncate mt-0.5">{item.title}</h4>
-                        <p className="text-[11px] text-stone-500 mt-1">Submitted by {item.submittedBy}</p>
+                        <p className="text-[11px] text-stone-500 mt-1">Submitted by {item.submittedBy || item.submitted_by || item.author_id || 'Staff'}</p>
                       </div>
                     </div>
 

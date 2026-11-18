@@ -11,7 +11,7 @@ import {
   Clock,
   ScrollText,
 } from 'lucide-react';
-import { useHeritageList, useHeritageMutations } from '@/lib/api/queries';
+import { useAdminHeritageList, useAdminHeritageMutations } from '@/lib/api/heritage.api';
 import { Heritage, HeritageCategory } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -36,8 +36,8 @@ const CATEGORY_NAMES: Record<HeritageCategory, string> = {
 
 export const HeritageView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: heritage = [], isLoading } = useHeritageList();
-  const { createMutation, updateMutation, publishMutation, deleteMutation } = useHeritageMutations();
+  const { data: heritage = [], isLoading } = useAdminHeritageList();
+  const { createMutation, updateMutation, publishMutation, deleteMutation } = useAdminHeritageMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');

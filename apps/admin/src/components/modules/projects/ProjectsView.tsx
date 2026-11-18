@@ -11,7 +11,7 @@ import {
   TrendingUp,
   Clock,
 } from 'lucide-react';
-import { useProjectsList, useProjectsMutations } from '@/lib/api/queries';
+import { useAdminProjectsList, useAdminProjectsMutations } from '@/lib/api/projects.api';
 import { DevelopmentProject } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -21,8 +21,8 @@ import { ProjectsFormModal } from './ProjectsFormModal';
 
 export const ProjectsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: projects = [], isLoading } = useProjectsList();
-  const { createMutation, updateMutation, deleteMutation } = useProjectsMutations();
+  const { data: projects = [], isLoading } = useAdminProjectsList();
+  const { createMutation, updateMutation, deleteMutation } = useAdminProjectsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');

@@ -14,7 +14,7 @@ import {
   Phone,
   AlertTriangle,
 } from 'lucide-react';
-import { useUsersList, useUsersMutations } from '@/lib/api/queries';
+import { useAdminUsersList, useAdminUsersMutations } from '@/lib/api/users.api';
 import { User, Role } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -24,8 +24,8 @@ import { UserFormModal } from './UserFormModal';
 
 export const UsersView: React.FC = () => {
   const { currentUser, switchRole } = useAdminStore();
-  const { data: users = [], isLoading } = useUsersList();
-  const { createMutation, updateMutation, toggleStatusMutation } = useUsersMutations();
+  const { data: users = [], isLoading } = useAdminUsersList();
+  const { createMutation, updateMutation, toggleStatusMutation } = useAdminUsersMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('ALL');

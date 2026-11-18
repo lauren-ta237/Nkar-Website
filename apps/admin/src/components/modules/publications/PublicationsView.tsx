@@ -10,7 +10,7 @@ import {
   FileText,
   Calendar,
 } from 'lucide-react';
-import { usePublicationsList, usePublicationsMutations } from '@/lib/api/queries';
+import { useAdminPublicationsList, useAdminPublicationsMutations } from '@/lib/api/publications.api';
 import { Publication } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -20,9 +20,9 @@ import { PublicationsFormModal } from './PublicationsFormModal';
 
 export const PublicationsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: publications = [], isLoading } = usePublicationsList();
+  const { data: publications = [], isLoading } = useAdminPublicationsList();
   const { createMutation, updateMutation, publishMutation, deleteMutation } =
-    usePublicationsMutations();
+    useAdminPublicationsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [formatFilter, setFormatFilter] = useState('ALL');

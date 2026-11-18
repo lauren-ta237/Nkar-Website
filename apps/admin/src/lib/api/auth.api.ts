@@ -21,7 +21,9 @@ export type AuthUser = {
   id: string;
   name: string;
   email: string;
-  role?: string;
+  role: string;
+  status?: string;
+  avatar_url?: string | null;
 };
 
 export type LoginPayload = {
@@ -30,7 +32,11 @@ export type LoginPayload = {
 };
 
 export type LoginResponse = {
-  token: string;
+  token?: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
   user: AuthUser;
 };
 
@@ -41,7 +47,8 @@ export type RegisterPayload = {
 };
 
 export type RegisterResponse = {
-  token: string;
+  access_token: string;
+  token_type: string;
   user: AuthUser;
 };
 
@@ -53,7 +60,10 @@ export type RegisterResponse = {
  */
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
   const res = await api.post<LoginResponse>("/auth/login", payload);
-  setToken(res.data.token);
+  const token = res.data.access_token || res.data.token;
+  if (token) {
+    setToken(token);
+  }
   return res.data;
 }
 
@@ -65,7 +75,9 @@ export async function register(
   payload: RegisterPayload
 ): Promise<RegisterResponse> {
   const res = await api.post<RegisterResponse>("/auth/register", payload);
-  setToken(res.data.token);
+  if (res.data.access_token) {
+    setToken(res.data.access_token);
+  }
   return res.data;
 }
 
@@ -74,8 +86,8 @@ export async function register(
  * Returns the currently authenticated user, or 401 if none.
  */
 export async function me(): Promise<AuthUser> {
-  const res = await api.get<AuthUser>("/auth/me");
-  return res.data;
+  const res = await api.get<{ success: boolean; data: AuthUser }>("/auth/me");
+  return res.data.data;
 }
 
 /**

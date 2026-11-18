@@ -16,13 +16,11 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { useAdminStore } from '../../store/useAdminStore';
-import {
-  useNewsList,
-  useEventsList,
-  useHeritageList,
-  useLeadershipList,
-  useProjectsList,
-} from '@/lib/api/queries';
+import { useAdminNewsList } from '@/lib/api/news.api';
+import { useAdminEventsList } from '@/lib/api/events.api';
+import { useAdminHeritageList } from '@/lib/api/heritage.api';
+import { useAdminLeadershipList } from '@/lib/api/leadership.api';
+import { useAdminProjectsList } from '@/lib/api/projects.api';
 import {
   Dialog,
   DialogContent,
@@ -34,11 +32,11 @@ export const PublicSitePreviewModal: React.FC = () => {
   const { publicPreviewOpen, setPublicPreviewOpen } = useAdminStore();
   const [deviceView, setDeviceView] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
 
-  const { data: news = [] } = useNewsList();
-  const { data: events = [] } = useEventsList();
-  const { data: heritage = [] } = useHeritageList();
-  const { data: leaders = [] } = useLeadershipList();
-  const { data: projects = [] } = useProjectsList();
+  const { data: news = [] } = useAdminNewsList({ enabled: publicPreviewOpen });
+  const { data: events = [] } = useAdminEventsList({ enabled: publicPreviewOpen });
+  const { data: heritage = [] } = useAdminHeritageList({ enabled: publicPreviewOpen });
+  const { data: leaders = [] } = useAdminLeadershipList({ enabled: publicPreviewOpen });
+  const { data: projects = [] } = useAdminProjectsList({ enabled: publicPreviewOpen });
 
   const publishedNews = news.filter((n) => n.status === 'PUBLISHED').slice(0, 3);
   const upcomingEvents = events.filter((e) => e.status === 'PUBLISHED').slice(0, 3);

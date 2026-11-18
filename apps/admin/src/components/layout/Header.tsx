@@ -16,7 +16,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { useAdminStore, INITIAL_USERS, AdminPage } from '../../store/useAdminStore';
-import { useDashboardStats } from '@/lib/api/queries';
+import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
 import { Role } from '../../types';
 import {
   DropdownMenu,
@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
     setLogoutConfirmOpen,
   } = useAdminStore();
 
-  const { data: stats } = useDashboardStats();
+  const { data: stats } = useAdminDashboardStats();
 
   const totalNotifications = (stats?.pendingReviews || 0) + (stats?.unreadMessages || 0);
 

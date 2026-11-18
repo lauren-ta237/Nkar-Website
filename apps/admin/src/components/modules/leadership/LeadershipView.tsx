@@ -9,7 +9,7 @@ import {
   Calendar,
   ArrowUpDown,
 } from 'lucide-react';
-import { useLeadershipList, useLeadershipMutations } from '@/lib/api/queries';
+import { useAdminLeadershipList, useAdminLeadershipMutations } from '@/lib/api/leadership.api';
 import { Leadership } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -19,8 +19,8 @@ import { LeadershipFormModal } from './LeadershipFormModal';
 
 export const LeadershipView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: leadership = [], isLoading } = useLeadershipList();
-  const { createMutation, updateMutation, deleteMutation } = useLeadershipMutations();
+  const { data: leadership = [], isLoading } = useAdminLeadershipList();
+  const { createMutation, updateMutation, deleteMutation } = useAdminLeadershipMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [formModalOpen, setFormModalOpen] = useState(false);

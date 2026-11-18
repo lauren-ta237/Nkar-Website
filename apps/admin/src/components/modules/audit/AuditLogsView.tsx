@@ -9,14 +9,15 @@ import {
   ArrowRight,
   Lock,
 } from 'lucide-react';
-import { useAuditLogs } from '@/lib/api/queries';
+import { useAdminAuditLogs } from '@/lib/api/audit.api';
 import { AuditAction, EntityType } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { EmptyState } from '../../common/EmptyState';
 
 export const AuditLogsView: React.FC = () => {
   const { currentUser, switchRole } = useAdminStore();
-  const { data: logs = [], isLoading } = useAuditLogs();
+  const isSuperAdmin = currentUser.role === 'SUPER_ADMIN';
+  const { data: logs = [], isLoading } = useAdminAuditLogs({ enabled: isSuperAdmin });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [actionFilter, setActionFilter] = useState<string>('ALL');

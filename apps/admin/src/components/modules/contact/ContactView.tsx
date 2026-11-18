@@ -13,7 +13,7 @@ import {
   Send,
   Filter,
 } from 'lucide-react';
-import { useContactsList, useContactsMutations } from '@/lib/api/queries';
+import { useAdminContactsList, useAdminContactsMutations } from '@/lib/api/contacts.api';
 import { ContactSubmission, ContactStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -22,8 +22,8 @@ import { ConfirmModal } from '../../common/ConfirmModal';
 
 export const ContactView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: contacts = [], isLoading } = useContactsList();
-  const { updateStatusMutation, deleteMutation } = useContactsMutations();
+  const { data: contacts = [], isLoading } = useAdminContactsList();
+  const { updateStatusMutation, deleteMutation } = useAdminContactsMutations();
 
   const [selectedId, setSelectedId] = useState<string | null>(contacts[0]?.id || null);
   const [searchQuery, setSearchQuery] = useState('');

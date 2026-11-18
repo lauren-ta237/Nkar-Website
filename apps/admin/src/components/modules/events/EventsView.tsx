@@ -13,7 +13,7 @@ import {
   LayoutGrid,
   List,
 } from 'lucide-react';
-import { useEventsList, useEventsMutations } from '@/lib/api/queries';
+import { useAdminEventsList, useAdminEventsMutations } from '@/lib/api/events.api';
 import { EventItem } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -24,9 +24,9 @@ import { InteractiveCalendar } from './InteractiveCalendar';
 
 export const EventsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: events = [], isLoading } = useEventsList();
+  const { data: events = [], isLoading } = useAdminEventsList();
   const { createMutation, updateMutation, publishMutation, archiveMutation, deleteMutation } =
-    useEventsMutations();
+    useAdminEventsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');

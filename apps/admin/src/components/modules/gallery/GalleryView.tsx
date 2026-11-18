@@ -10,7 +10,7 @@ import {
   Folder,
   Tag,
 } from 'lucide-react';
-import { useGalleryList, useGalleryMutations } from '@/lib/api/queries';
+import { useAdminGalleryList, useAdminGalleryMutations } from '@/lib/api/gallery.api';
 import { Gallery } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -27,8 +27,8 @@ import {
 
 export const GalleryView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: gallery = [], isLoading } = useGalleryList();
-  const { createMutation, updateMutation, publishMutation, deleteMutation } = useGalleryMutations();
+  const { data: gallery = [], isLoading } = useAdminGalleryList();
+  const { createMutation, updateMutation, publishMutation, deleteMutation } = useAdminGalleryMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('ALL');

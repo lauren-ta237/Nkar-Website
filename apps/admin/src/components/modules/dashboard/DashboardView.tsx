@@ -22,24 +22,24 @@ import {
 } from 'lucide-react';
 import { useAdminStore } from '../../../store/useAdminStore';
 import {
-  useDashboardStats,
-  usePendingReviews,
-  useProjectsList,
-  useAuditLogs,
-  useNewsMutations,
-} from '@/lib/api/queries';
+  useAdminDashboardStats,
+  useAdminPendingReviews,
+} from '@/lib/api/dashboard.api';
+import { useAdminProjectsList } from '@/lib/api/projects.api';
+import { useAdminAuditLogs } from '@/lib/api/audit.api';
+import { useAdminNewsMutations } from '@/lib/api/news.api';
 import { StatCard } from '../../common/StatCard';
 import { StatusBadge } from '../../common/StatusBadge';
 import { ReviewActionModal } from '../../common/ReviewActionModal';
 
 export const DashboardView: React.FC = () => {
   const { setCurrentPage, currentUser } = useAdminStore();
-  const { data: stats, isLoading: statsLoading } = useDashboardStats();
-  const { data: pendingItems = [] } = usePendingReviews();
-  const { data: projects = [] } = useProjectsList();
-  const { data: auditLogs = [] } = useAuditLogs();
+  const { data: stats, isLoading: statsLoading } = useAdminDashboardStats();
+  const { data: pendingItems = [] } = useAdminPendingReviews();
+  const { data: projects = [] } = useAdminProjectsList();
+  const { data: auditLogs = [] } = useAdminAuditLogs();
 
-  const { approveMutation, rejectMutation } = useNewsMutations();
+  const { approveMutation, rejectMutation } = useAdminNewsMutations();
 
   // Chart timeframes
   const [activityTimeframe, setActivityTimeframe] = useState<'Weekly' | 'Monthly' | 'Yearly'>('Monthly');
@@ -298,7 +298,7 @@ export const DashboardView: React.FC = () => {
                     {item.title}
                   </h4>
                   <p className="text-[11px] text-stone-500 mt-1 line-clamp-1">
-                    Submitted by: <span className="font-medium text-stone-700">{item.submittedBy}</span>
+                    Submitted by: <span className="font-medium text-stone-700">{item.submittedBy || item.submitted_by || item.author_id || 'Staff'}</span>
                   </p>
                 </div>
 

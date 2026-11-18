@@ -24,7 +24,7 @@ import {
   User as UserIcon,
 } from 'lucide-react';
 import { useAdminStore, AdminPage, INITIAL_USERS } from '../../store/useAdminStore';
-import { useDashboardStats } from '@/lib/api/queries';
+import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
 import {
   Sheet,
   SheetContent,
@@ -64,7 +64,7 @@ export const Sidebar: React.FC = () => {
     toggleTheme,
     switchRole,
   } = useAdminStore();
-  const { data: stats } = useDashboardStats();
+  const { data: stats } = useAdminDashboardStats();
 
   const navItems: NavItem[] = [
     { page: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },

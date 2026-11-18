@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { useNewsList, useNewsMutations } from '@/lib/api/queries';
+import { useAdminNewsList, useAdminNewsMutations } from '@/lib/api/news.api';
 import { News, ContentStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -26,7 +26,7 @@ import { NewsDetailModal } from './NewsDetailModal';
 
 export const NewsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: news = [], isLoading } = useNewsList();
+  const { data: news = [], isLoading } = useAdminNewsList();
   const {
     createMutation,
     updateMutation,
@@ -35,7 +35,7 @@ export const NewsView: React.FC = () => {
     publishMutation,
     archiveMutation,
     deleteMutation,
-  } = useNewsMutations();
+  } = useAdminNewsMutations();
 
   // Filters & State
   const [searchQuery, setSearchQuery] = useState('');

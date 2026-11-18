@@ -15,7 +15,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useAdminStore } from '../../store/useAdminStore';
-import { useUsersMutations } from '@/lib/api/queries';
+import { useAdminUsersMutations } from '@/lib/api/users.api';
 import { FileUpload } from '../common/FileUpload';
 import {
   Sheet,
@@ -27,7 +27,7 @@ import {
 
 export const UserProfileModal: React.FC = () => {
   const { profileModalOpen, setProfileModalOpen, currentUser } = useAdminStore();
-  const { updateProfileMutation } = useUsersMutations();
+  const { updateProfileMutation } = useAdminUsersMutations();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState('');
