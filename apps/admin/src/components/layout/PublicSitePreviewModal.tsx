@@ -57,7 +57,7 @@ export const PublicSitePreviewModal: React.FC = () => {
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full overflow-hidden border border-[#D4AF37]/80 bg-black shrink-0">
               <img
-                src="/assets/aistudio/image_63748073.png"
+                src="/assets/logo.jpeg"
                 alt="Nkar Woo Làn"
                 className="w-full h-full object-contain"
               />
@@ -140,7 +140,7 @@ export const PublicSitePreviewModal: React.FC = () => {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-[#D4AF37] bg-black shrink-0">
                   <img
-                    src="/assets/aistudio/image_63748073.png"
+                    src="/assets/logo.jpeg"
                     alt="Nkar Woo Làn"
                     className="w-full h-full object-contain"
                   />
@@ -290,7 +290,7 @@ export const PublicSitePreviewModal: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full overflow-hidden border border-[#D4AF37] bg-black">
                     <img
-                      src="/assets/aistudio/image_63748073.png"
+                      src="/assets/logo.jpeg"
                       alt="Nkar Woo Làn"
                       className="w-full h-full object-contain"
                     />

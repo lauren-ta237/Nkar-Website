@@ -132,7 +132,7 @@ export const DashboardView: React.FC = () => {
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
             <img
-              src="/assets/aistudio/image_63748073.png"
+              src="/assets/logo.jpeg"
               alt="Nkar Woo Làn Official Logo"
               className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain shrink-0 border-2 border-[#D4AF37] shadow-md bg-black"
               referrerPolicy="no-referrer"

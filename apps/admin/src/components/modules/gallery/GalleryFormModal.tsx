@@ -61,10 +61,10 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
       setTitle('');
       setMediaType('IMAGE');
       setCategory(CATEGORIES[0]);
-      setMediaUrl('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&auto=format&fit=crop&q=80');
+      setMediaUrl('');
       setThumbnailUrl('');
       setDescription('');
-      setTagsInput('Nkar, Culture, Heritage');
+      setTagsInput('');
       setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'SUBMITTED' : 'PUBLISHED');
     }
     setError('');
@@ -179,6 +179,7 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
             accept={mediaType === 'VIDEO' ? 'video/mp4,video/webm,video/ogg,video/*' : 'image/*'}
             mediaTypeHint={mediaType === 'VIDEO' ? 'video' : 'image'}
             maxSizeBytes={mediaType === 'VIDEO' ? 50 * 1024 * 1024 : 15 * 1024 * 1024}
+            folder="nkar_woo_lan/gallery"
             helperText={
               mediaType === 'VIDEO'
                 ? 'Upload MP4, WebM or OGG video (up to 50MB)'

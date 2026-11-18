@@ -20,12 +20,26 @@ export interface MediaUploadResult {
 
 // ---- pure api routes -----------------------------------------------------
 
-export async function uploadAdminMedia(file: File): Promise<MediaUploadResult> {
+export async function uploadAdminMedia(
+  file: File,
+  folder?: string,
+  onProgress?: (percent: number) => void
+): Promise<MediaUploadResult> {
   const formData = new FormData();
   formData.append('file', file);
+  if (folder) {
+    formData.append('folder', folder);
+  }
+
   const res = await api.post<ApiResponse<MediaUploadResult>>('/media/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total && onProgress) {
+        const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        onProgress(percent);
+      }
     },
   });
   return res.data.data;

@@ -65,9 +65,9 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
       setSlug('');
       setSummary('');
       setContent('');
-      setCoverImage('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80');
+      setCoverImage('');
       setCategory(CATEGORIES[0]);
-      setTagsInput('Nkar, Fondom, Community');
+      setTagsInput('');
       setIsFeatured(false);
       setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'DRAFT' : 'PUBLISHED');
     }
@@ -217,6 +217,7 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
               onChange={(url) => setCoverImage(url)}
               accept="image/*"
               helperText="Upload JPG, PNG, or WebP cover photograph"
+              folder="nkar_woo_lan/news"
               required
             />
           </div>

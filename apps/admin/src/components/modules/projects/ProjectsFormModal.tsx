@@ -50,13 +50,13 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
     } else {
       setTitle('');
       setDescription('');
-      setLocation('Roh-Nkar / Central Axis');
-      setBudgetCfa(30000000);
-      setStatus('IN_PROGRESS');
-      setProgressPercentage(35);
-      setCoverImageUrl('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&auto=format&fit=crop&q=80');
-      setStartDate('2026-01-15');
-      setCompletionDate('2026-12-30');
+      setLocation('');
+      setBudgetCfa(0);
+      setStatus('PROPOSED');
+      setProgressPercentage(0);
+      setCoverImageUrl('');
+      setStartDate('');
+      setCompletionDate('');
     }
     setError('');
   }, [initialData, isOpen]);
@@ -207,6 +207,7 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
             onChange={setCoverImageUrl}
             accept="image/*"
             mediaTypeHint="image"
+            folder="nkar_woo_lan/projects"
             helperText="Upload official site or project progress photograph (JPEG, PNG, WebP up to 15MB)"
           />
 

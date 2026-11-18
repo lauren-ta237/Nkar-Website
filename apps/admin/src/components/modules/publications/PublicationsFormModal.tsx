@@ -51,12 +51,12 @@ export const PublicationsFormModal: React.FC<PublicationsFormModalProps> = ({
     } else {
       setTitle('');
       setDescription('');
-      setAuthor('Nkar History & Cultural Heritage Society');
-      setPublicationYear('2026');
-      setDocumentUrl('https://example.com/publications/monograph.pdf');
+      setAuthor('');
+      setPublicationYear(String(new Date().getFullYear()));
+      setDocumentUrl('');
       setFileType('PDF');
-      setFileSizeBytes(5242880);
-      setCoverImageUrl('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80');
+      setFileSizeBytes(0);
+      setCoverImageUrl('');
       setStatus('PUBLISHED');
     }
     setError('');
@@ -188,6 +188,7 @@ export const PublicationsFormModal: React.FC<PublicationsFormModalProps> = ({
             accept=".pdf,.docx,.doc,.epub,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             mediaTypeHint="document"
             maxSizeBytes={50 * 1024 * 1024}
+            folder="nkar_woo_lan/publications"
             helperText="Upload official manuscript or electronic publication (PDF, DOCX, EPUB up to 50MB)"
           />
 
@@ -197,6 +198,7 @@ export const PublicationsFormModal: React.FC<PublicationsFormModalProps> = ({
             onChange={setCoverImageUrl}
             accept="image/*"
             mediaTypeHint="image"
+            folder="nkar_woo_lan/publications"
             helperText="Upload publication cover or title page illustration (JPEG, PNG, WebP up to 15MB)"
           />
 

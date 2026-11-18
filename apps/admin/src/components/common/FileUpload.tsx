@@ -9,8 +9,9 @@ import {
   AlertCircle,
   CheckCircle2,
   File,
+  ImageOff,
 } from 'lucide-react';
-import { storageService, UploadOptions } from '../../services/storage';
+import { uploadAdminMedia } from '@/lib/api/media.api';
 
 interface FileUploadProps {
   label?: string;
@@ -22,6 +23,7 @@ interface FileUploadProps {
   maxSizeBytes?: number;
   helperText?: string;
   required?: boolean;
+  folder?: string; // e.g. "nkar_woo_lan/news"
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
@@ -34,11 +36,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   maxSizeBytes,
   helperText,
   required = false,
+  folder,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>('');
+  const [imageLoadError, setImageLoadError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Determine media category
@@ -50,30 +54,79 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     mediaTypeHint === 'document' ||
     accept.includes('.pdf') ||
     accept.includes('.docx') ||
-    (value && (value.endsWith('.pdf') || value.endsWith('.docx') || value.startsWith('data:application/pdf')));
+    (value && (value.endsWith('.pdf') || value.endsWith('.docx') || value.includes('/raw/upload/')));
 
   const effectiveMaxBytes = maxSizeBytes || maxSizeMB * 1024 * 1024;
 
+  const validateFile = (file: File): { valid: boolean; error?: string } => {
+    if (file.size > effectiveMaxBytes) {
+      const maxMb = Math.round(effectiveMaxBytes / (1024 * 1024));
+      return {
+        valid: false,
+        error: `File size (${(file.size / (1024 * 1024)).toFixed(1)}MB) exceeds maximum limit of ${maxMb}MB.`,
+      };
+    }
+
+    if (accept && accept !== '*/*') {
+      const allowed = accept.split(',').map((s) => s.trim().toLowerCase());
+      const fileType = file.type.toLowerCase();
+      const name = file.name.toLowerCase();
+
+      const isMatch = allowed.some((pattern) => {
+        if (pattern.endsWith('/*')) {
+          const prefix = pattern.replace('/*', '');
+          return fileType.startsWith(prefix);
+        }
+        if (pattern.startsWith('.')) {
+          return name.endsWith(pattern);
+        }
+        return fileType === pattern;
+      });
+
+      if (!isMatch) {
+        return {
+          valid: false,
+          error: `Invalid file format. Allowed formats: ${allowed.join(', ')}`,
+        };
+      }
+    }
+
+    return { valid: true };
+  };
+
   const handleFileProcess = async (file: File) => {
     setErrorMessage(null);
+    setImageLoadError(false);
+
+    const validation = validateFile(file);
+    if (!validation.valid) {
+      setErrorMessage(validation.error || 'Invalid file');
+      return;
+    }
+
     setUploadProgress(0);
     setFileName(file.name);
 
     try {
-      const options: UploadOptions = {
-        maxSizeBytes: effectiveMaxBytes,
-        onProgress: (percent) => setUploadProgress(percent),
-      };
+      const result = await uploadAdminMedia(file, folder, (percent) => {
+        setUploadProgress(percent);
+      });
 
-      if (accept && accept !== '*/*') {
-        options.allowedTypes = accept.split(',').map((s) => s.trim());
+      // Pass only authentic remote Cloudinary HTTPS URL - never base64
+      const mediaUrl = result.secure_url || result.url;
+      if (!mediaUrl) {
+        throw new Error('Server did not return a valid asset URL');
       }
 
-      const result = await storageService.uploadFile(file, options);
-      onChange(result.url, file);
+      onChange(mediaUrl, file);
       setUploadProgress(null);
     } catch (err: any) {
-      setErrorMessage(err.message || 'File upload failed. Please try another file.');
+      const detail = err?.payload?.detail;
+      const msg =
+        (typeof detail === 'string' ? detail : detail?.message) ||
+        err?.message ||
+        'Upload to Cloudinary storage failed. Please check network connection and credentials.';
+      setErrorMessage(msg);
       setUploadProgress(null);
     }
   };
@@ -83,7 +136,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     if (file) {
       handleFileProcess(file);
     }
-    // reset input so the same file can be re-selected if desired
     e.target.value = '';
   };
 
@@ -109,6 +161,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     onChange('');
     setFileName('');
     setErrorMessage(null);
+    setImageLoadError(false);
     setUploadProgress(null);
   };
 
@@ -133,13 +186,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         className="hidden"
       />
 
-      {/* Uploading State with Progress Bar */}
+      {/* Uploading State with Live Progress Bar */}
       {uploadProgress !== null && (
         <div className="p-4 bg-[#FAF8F5] border border-[#E8E4DA] rounded-xl space-y-2">
           <div className="flex items-center justify-between text-xs text-stone-700">
             <span className="font-semibold flex items-center gap-1.5 truncate">
               <Upload className="w-3.5 h-3.5 text-[#153E2E] animate-bounce" />
-              Uploading {fileName || 'media file'}...
+              Uploading {fileName || 'media file'} to Cloudinary...
             </span>
             <span className="font-mono tabular-nums text-stone-500">{uploadProgress}%</span>
           </div>
@@ -184,27 +237,31 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                 <span className="text-[10px] font-bold uppercase mt-1">Document</span>
               </div>
             ) : (
-              <div className="w-full sm:w-36 h-24 rounded-lg overflow-hidden border border-stone-200 bg-stone-100 shrink-0">
-                <img
-                  src={value}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80';
-                  }}
-                />
+              <div className="w-full sm:w-36 h-24 rounded-lg overflow-hidden border border-stone-200 bg-stone-100 shrink-0 flex items-center justify-center">
+                {imageLoadError ? (
+                  <div className="text-center p-2 text-stone-400">
+                    <ImageOff className="w-6 h-6 mx-auto mb-1 text-stone-400" />
+                    <span className="text-[10px] block">Preview Unavailable</span>
+                  </div>
+                ) : (
+                  <img
+                    src={value}
+                    alt="Uploaded preview"
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={() => setImageLoadError(true)}
+                  />
+                )}
               </div>
             )}
 
             {/* Actions & info */}
             <div className="flex-1 min-w-0 w-full sm:w-auto">
               <p className="text-xs font-bold text-stone-900 truncate">
-                {fileName || (isVideo ? 'Selected Video File' : isDocument ? 'Selected Document' : 'Selected Image')}
+                {fileName || (isVideo ? 'Uploaded Video File' : isDocument ? 'Uploaded Document' : 'Uploaded Image')}
               </p>
-              <p className="text-[11px] text-stone-500 mt-0.5">
-                Saved & ready to publish to Nkar Woo Làn database
+              <p className="text-[11px] text-stone-500 mt-0.5 truncate font-mono text-[10px]">
+                {value}
               </p>
 
               <div className="flex items-center gap-2 mt-2.5">
@@ -259,10 +316,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             <p className="text-[11px] text-stone-500 mt-1">
               {helperText ||
                 (isVideo
-                  ? `Supports MP4, WebM video files up to ${maxSizeMB}MB`
+                  ? `Uploads to Cloudinary (MP4, WebM up to ${maxSizeMB}MB)`
                   : isDocument
-                  ? `Supports PDF, DOCX, EPUB documents up to ${maxSizeMB}MB`
-                  : `Supports JPG, PNG, WebP image files up to ${maxSizeMB}MB`)}
+                  ? `Uploads to Cloudinary (PDF, DOCX, EPUB up to ${maxSizeMB}MB)`
+                  : `Uploads to Cloudinary (JPG, PNG, WebP up to ${maxSizeMB}MB)`)}
             </p>
           </div>
         )

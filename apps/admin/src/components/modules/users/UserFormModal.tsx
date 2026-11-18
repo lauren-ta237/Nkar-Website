@@ -49,10 +49,10 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
     } else {
       setName('');
       setEmail('');
-      setPassword('Temporary123!');
+      setPassword('');
       setRole('CONTENT_EDITOR');
       setStatus('ACTIVE');
-      setAvatarUrl('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80');
+      setAvatarUrl('');
     }
     setError('');
   }, [initialData, isOpen]);
@@ -196,6 +196,7 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
             onChange={setAvatarUrl}
             accept="image/*"
             mediaTypeHint="image"
+            folder="nkar_woo_lan/users"
             helperText="Upload official profile portrait (JPEG, PNG, WebP up to 10MB)"
           />
 

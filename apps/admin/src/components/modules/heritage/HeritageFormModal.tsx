@@ -54,7 +54,7 @@ export const HeritageFormModal: React.FC<HeritageFormModalProps> = ({
       setTitle('');
       setCategory('VILLAGE_HISTORY');
       setContent('');
-      setMediaUrls(['https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80']);
+      setMediaUrls(['']);
       setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'SUBMITTED' : 'PUBLISHED');
     }
     setError('');
@@ -204,6 +204,7 @@ export const HeritageFormModal: React.FC<HeritageFormModalProps> = ({
                     onChange={(newUrl) => handleMediaChange(i, newUrl)}
                     accept="image/*,video/*"
                     helperText="Upload artifact photograph or historical video recording"
+                    folder="nkar_woo_lan/heritage"
                   />
                 </div>
               ))}

@@ -47,11 +47,11 @@ export const LeadershipFormModal: React.FC<LeadershipFormModalProps> = ({
       setStatus(initialData.status);
     } else {
       setName('');
-      setTraditionalTitle('Senior Kingmaker & Council Member');
+      setTraditionalTitle('');
       setBiography('');
-      setActivePeriod('2015 — Present');
-      setPortraitPhoto('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=80');
-      setDisplayOrder(5);
+      setActivePeriod('');
+      setPortraitPhoto('');
+      setDisplayOrder(1);
       setLineage('');
       setStatus('PUBLISHED');
     }
@@ -168,6 +168,7 @@ export const LeadershipFormModal: React.FC<LeadershipFormModalProps> = ({
             onChange={setPortraitPhoto}
             accept="image/*"
             mediaTypeHint="image"
+            folder="nkar_woo_lan/leadership"
             helperText="Upload official photograph of the traditional leader (JPEG, PNG, WebP up to 15MB)"
           />
 

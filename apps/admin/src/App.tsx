@@ -9,6 +9,7 @@ import { NotificationDrawer } from './components/layout/NotificationDrawer';
 import { UserProfileModal } from './components/layout/UserProfileModal';
 import { PublicSitePreviewModal } from './components/layout/PublicSitePreviewModal';
 import { LogoutModal } from './components/layout/LogoutModal';
+import { AuthGuard } from './components/auth/AuthGuard';
 
 // Module Views
 import { DashboardView } from './components/modules/dashboard/DashboardView';
@@ -40,7 +41,9 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AdminPortalContent />
+      <AuthGuard>
+        <AdminPortalContent />
+      </AuthGuard>
     </QueryClientProvider>
   );
 }

@@ -69,11 +69,11 @@ export const EventsFormModal: React.FC<EventsFormModalProps> = ({
       setTitle('');
       setSlug('');
       setDescription('');
-      setLocation('Nkar Royal Palace Grounds');
+      setLocation('');
       setEventDate(new Date().toISOString().split('T')[0]);
       setStartTime('09:00');
       setEndTime('17:00');
-      setOrganizer('Nkar Traditional Council');
+      setOrganizer('');
       setCoverImage('');
       setIsFeatured(false);
       setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'SUBMITTED' : 'PUBLISHED');
@@ -230,6 +230,7 @@ export const EventsFormModal: React.FC<EventsFormModalProps> = ({
               onChange={(url) => setCoverImage(url)}
               accept="image/*"
               helperText="Upload JPG, PNG, or WebP promotional cover image"
+              folder="nkar_woo_lan/events"
             />
           </div>
 

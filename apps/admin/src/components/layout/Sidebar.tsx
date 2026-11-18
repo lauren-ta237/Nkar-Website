@@ -419,7 +419,7 @@ export const Sidebar: React.FC = () => {
             {/* Official Nkar Woo Làn Emblem Logo */}
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
               <img
-                src="/assets/aistudio/image_63748073.png"
+                src="/assets/logo.jpeg"
                 alt="Nkar Woo Làn Official Logo"
                 className="w-full h-full object-contain"
                 referrerPolicy="no-referrer"
@@ -465,7 +465,7 @@ export const Sidebar: React.FC = () => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
                 <img
-                  src="/assets/aistudio/image_63748073.png"
+                  src="/assets/logo.jpeg"
                   alt="Nkar Woo Làn Official Logo"
                   className="w-full h-full object-contain"
                   referrerPolicy="no-referrer"

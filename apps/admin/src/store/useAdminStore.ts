@@ -55,7 +55,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-1',
     name: 'Fon Martin Fongang',
-    email: 'fon.martin@nkarwoolad.cm',
+    email: 'admin@nkarwoolan.org',
     role: 'SUPER_ADMIN',
     status: 'ACTIVE',
     avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
@@ -65,7 +65,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-2',
     name: 'Dr. Shey Berinyuy',
-    email: 'shey.berinyuy@nkarwoolad.cm',
+    email: 'reviewer@nkarwoolan.org',
     role: 'CONTENT_REVIEWER',
     status: 'ACTIVE',
     avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
@@ -75,7 +75,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-3',
     name: 'Yaa Stella Wirba',
-    email: 'stella.wirba@nkarwoolad.cm',
+    email: 'editor@nkarwoolan.org',
     role: 'CONTENT_EDITOR',
     status: 'ACTIVE',
     avatar_url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
