@@ -1,7 +1,8 @@
 import React from 'react';
 import { X, CheckCircle, Clock, AlertCircle, Mail, ArrowRight, Bell } from 'lucide-react';
 import { useAdminStore } from '../../store/useAdminStore';
-import { usePendingReviews, useContactsList } from '@/lib/api/queries';
+import { useAdminPendingReviews } from '@/lib/api/dashboard.api';
+import { useAdminContactsList } from '@/lib/api/contacts.api';
 import {
   Sheet,
   SheetContent,
@@ -18,8 +19,8 @@ export const NotificationDrawer: React.FC = () => {
     currentUser,
   } = useAdminStore();
 
-  const { data: pendingItems = [] } = usePendingReviews();
-  const { data: contacts = [] } = useContactsList();
+  const { data: pendingItems = [] } = useAdminPendingReviews({ enabled: notificationDrawerOpen });
+  const { data: contacts = [] } = useAdminContactsList({ status: 'unread', enabled: notificationDrawerOpen });
 
   const unreadMessages = contacts.filter((c) => c.status === 'UNREAD');
 
@@ -73,13 +74,13 @@ export const NotificationDrawer: React.FC = () => {
                           {item.type} · {item.category || 'General'}
                         </span>
                         <h4 className="text-xs font-bold text-stone-900 truncate mt-0.5">{item.title}</h4>
-                        <p className="text-[11px] text-stone-500 mt-1">Submitted by {item.submittedBy}</p>
+                        <p className="text-[11px] text-stone-500 mt-1">Submitted by {item.submittedBy || item.submitted_by || item.author_id || 'Staff'}</p>
                       </div>
                     </div>
 
                     <div className="mt-2.5 pt-2 border-t border-[#E8E4DA] flex items-center justify-between">
                       <span className="text-[10px] text-stone-400 font-mono">
-                        {new Date(item.createdAt).toLocaleDateString()}
+                        {new Date(item.created_at).toLocaleDateString()}
                       </span>
                       <button
                         onClick={() => {
@@ -126,9 +127,9 @@ export const NotificationDrawer: React.FC = () => {
                     className="p-3 bg-white border border-[#E5E0D5] hover:border-stone-400 rounded-xl cursor-pointer transition-colors"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-stone-900 truncate">{msg.senderName}</span>
+                      <span className="text-xs font-bold text-stone-900 truncate">{msg.sender_name}</span>
                       <span className="text-[10px] text-stone-400 font-mono">
-                        {new Date(msg.createdAt).toLocaleDateString()}
+                        {new Date(msg.created_at).toLocaleDateString()}
                       </span>
                     </div>
                     <p className="text-[11px] font-medium text-stone-700 truncate mt-0.5">{msg.subject}</p>

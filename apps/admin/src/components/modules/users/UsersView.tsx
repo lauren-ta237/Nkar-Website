@@ -14,7 +14,7 @@ import {
   Phone,
   AlertTriangle,
 } from 'lucide-react';
-import { useUsersList, useUsersMutations } from '@/lib/api/queries';
+import { useAdminUsersList, useAdminUsersMutations } from '@/lib/api/users.api';
 import { User, Role } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -24,8 +24,8 @@ import { UserFormModal } from './UserFormModal';
 
 export const UsersView: React.FC = () => {
   const { currentUser, switchRole } = useAdminStore();
-  const { data: users = [], isLoading } = useUsersList();
-  const { createMutation, updateMutation, toggleStatusMutation } = useUsersMutations();
+  const { data: users = [], isLoading } = useAdminUsersList();
+  const { createMutation, updateMutation, toggleStatusMutation } = useAdminUsersMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('ALL');
@@ -40,17 +40,16 @@ export const UsersView: React.FC = () => {
     const matchesSearch =
       searchQuery === '' ||
       u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (u.title && u.title.toLowerCase().includes(searchQuery.toLowerCase()));
+      u.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
     return matchesSearch && matchesRole;
   });
 
-  const handleCreateOrUpdate = (data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateOrUpdate = (data: any) => {
     if (editingUser) {
       updateMutation.mutate(
-        { id: editingUser.id, updates: data },
+        { id: editingUser.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -66,13 +65,9 @@ export const UsersView: React.FC = () => {
   };
 
   const handleToggleStatus = (target: User) => {
-    const newStatus = target.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
-    toggleStatusMutation.mutate(
-      { id: target.id, status: newStatus },
-      {
-        onSuccess: () => setSuspendConfirmUser(null),
-      }
-    );
+    toggleStatusMutation.mutate(target.id, {
+      onSuccess: () => setSuspendConfirmUser(null),
+    });
   };
 
   return (
@@ -177,7 +172,7 @@ export const UsersView: React.FC = () => {
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
                         <img
-                          src={user.avatar}
+                          src={user.avatar_url || ''}
                           alt={user.name}
                           className="w-9 h-9 rounded-full object-cover border border-[#D4AF37]/50 shrink-0"
                           referrerPolicy="no-referrer"
@@ -192,7 +187,7 @@ export const UsersView: React.FC = () => {
                             )}
                           </div>
                           <span className="text-[11px] text-stone-500 truncate block">
-                            {user.title || user.email}
+                            {user.email}
                           </span>
                         </div>
                       </div>
@@ -225,17 +220,11 @@ export const UsersView: React.FC = () => {
                           <Mail className="w-3 h-3 text-stone-400" />
                           <span>{user.email}</span>
                         </p>
-                        {user.phone && (
-                          <p className="flex items-center gap-1 text-[11px] font-mono text-stone-400">
-                            <Phone className="w-3 h-3 text-stone-400" />
-                            <span>{user.phone}</span>
-                          </p>
-                        )}
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 whitespace-nowrap font-mono text-stone-500 text-[11px]">
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      {new Date(user.created_at).toLocaleDateString()}
                     </td>
 
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">

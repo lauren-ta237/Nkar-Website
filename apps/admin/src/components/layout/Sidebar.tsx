@@ -24,7 +24,7 @@ import {
   User as UserIcon,
 } from 'lucide-react';
 import { useAdminStore, AdminPage, INITIAL_USERS } from '../../store/useAdminStore';
-import { useDashboardStats } from '@/lib/api/queries';
+import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
 import {
   Sheet,
   SheetContent,
@@ -64,7 +64,7 @@ export const Sidebar: React.FC = () => {
     toggleTheme,
     switchRole,
   } = useAdminStore();
-  const { data: stats } = useDashboardStats();
+  const { data: stats } = useAdminDashboardStats();
 
   const navItems: NavItem[] = [
     { page: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -184,7 +184,7 @@ export const Sidebar: React.FC = () => {
               >
                 <div className="relative shrink-0">
                   <img
-                    src={user.avatar}
+                    src={user.avatar_url || ''}
                     alt={user.name}
                     className="w-6 h-6 rounded-full object-cover"
                     referrerPolicy="no-referrer"
@@ -218,7 +218,7 @@ export const Sidebar: React.FC = () => {
             <DropdownMenuTrigger className="outline-none">
               <div className="relative cursor-pointer p-0.5 rounded-full hover:ring-2 hover:ring-[#D4AF37] transition-all">
                 <img
-                  src={currentUser.avatar}
+                  src={currentUser.avatar_url || ''}
                   alt={currentUser.name}
                   className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]"
                   referrerPolicy="no-referrer"
@@ -292,7 +292,7 @@ export const Sidebar: React.FC = () => {
             <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 hover:border-[#D4AF37] dark:hover:border-[#D4AF37] transition-all cursor-pointer shadow-2xs">
               <div className="relative shrink-0">
                 <img
-                  src={currentUser.avatar}
+                  src={currentUser.avatar_url || ''}
                   alt={currentUser.name}
                   className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]"
                   referrerPolicy="no-referrer"
@@ -419,7 +419,7 @@ export const Sidebar: React.FC = () => {
             {/* Official Nkar Woo Làn Emblem Logo */}
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
               <img
-                src="/assets/aistudio/image_63748073.png"
+                src="/assets/logo.jpeg"
                 alt="Nkar Woo Làn Official Logo"
                 className="w-full h-full object-contain"
                 referrerPolicy="no-referrer"
@@ -465,7 +465,7 @@ export const Sidebar: React.FC = () => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
                 <img
-                  src="/assets/aistudio/image_63748073.png"
+                  src="/assets/logo.jpeg"
                   alt="Nkar Woo Làn Official Logo"
                   className="w-full h-full object-contain"
                   referrerPolicy="no-referrer"

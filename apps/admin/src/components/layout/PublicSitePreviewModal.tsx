@@ -16,13 +16,11 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { useAdminStore } from '../../store/useAdminStore';
-import {
-  useNewsList,
-  useEventsList,
-  useHeritageList,
-  useLeadershipList,
-  useProjectsList,
-} from '@/lib/api/queries';
+import { useAdminNewsList } from '@/lib/api/news.api';
+import { useAdminEventsList } from '@/lib/api/events.api';
+import { useAdminHeritageList } from '@/lib/api/heritage.api';
+import { useAdminLeadershipList } from '@/lib/api/leadership.api';
+import { useAdminProjectsList } from '@/lib/api/projects.api';
 import {
   Dialog,
   DialogContent,
@@ -34,11 +32,11 @@ export const PublicSitePreviewModal: React.FC = () => {
   const { publicPreviewOpen, setPublicPreviewOpen } = useAdminStore();
   const [deviceView, setDeviceView] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
 
-  const { data: news = [] } = useNewsList();
-  const { data: events = [] } = useEventsList();
-  const { data: heritage = [] } = useHeritageList();
-  const { data: leaders = [] } = useLeadershipList();
-  const { data: projects = [] } = useProjectsList();
+  const { data: news = [] } = useAdminNewsList({ enabled: publicPreviewOpen });
+  const { data: events = [] } = useAdminEventsList({ enabled: publicPreviewOpen });
+  const { data: heritage = [] } = useAdminHeritageList({ enabled: publicPreviewOpen });
+  const { data: leaders = [] } = useAdminLeadershipList({ enabled: publicPreviewOpen });
+  const { data: projects = [] } = useAdminProjectsList({ enabled: publicPreviewOpen });
 
   const publishedNews = news.filter((n) => n.status === 'PUBLISHED').slice(0, 3);
   const upcomingEvents = events.filter((e) => e.status === 'PUBLISHED').slice(0, 3);
@@ -59,7 +57,7 @@ export const PublicSitePreviewModal: React.FC = () => {
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full overflow-hidden border border-[#D4AF37]/80 bg-black shrink-0">
               <img
-                src="/assets/aistudio/image_63748073.png"
+                src="/assets/logo.jpeg"
                 alt="Nkar Woo Làn"
                 className="w-full h-full object-contain"
               />
@@ -142,7 +140,7 @@ export const PublicSitePreviewModal: React.FC = () => {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-[#D4AF37] bg-black shrink-0">
                   <img
-                    src="/assets/aistudio/image_63748073.png"
+                    src="/assets/logo.jpeg"
                     alt="Nkar Woo Làn"
                     className="w-full h-full object-contain"
                   />
@@ -221,9 +219,9 @@ export const PublicSitePreviewModal: React.FC = () => {
                       key={item.id}
                       className="bg-[#FAF8F5] border border-[#E8E4DA] rounded-xl overflow-hidden shadow-xs flex flex-col justify-between"
                     >
-                      {item.coverImage && (
+                      {item.cover_image && (
                         <img
-                          src={item.coverImage}
+                          src={item.cover_image}
                           alt={item.title}
                           className="w-full h-36 object-cover"
                         />
@@ -240,7 +238,7 @@ export const PublicSitePreviewModal: React.FC = () => {
                         </p>
                       </div>
                       <div className="p-4 pt-0 text-[10px] text-stone-400 font-mono">
-                        Published: {new Date(item.createdAt).toLocaleDateString()}
+                        Published: {new Date(item.created_at).toLocaleDateString()}
                       </div>
                     </div>
                   ))
@@ -269,11 +267,14 @@ export const PublicSitePreviewModal: React.FC = () => {
                     className="p-4 bg-white border border-[#E8E4DA] rounded-xl shadow-xs space-y-2"
                   >
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-[#153E2E]">{evt.eventDate}</span>
-                      <span className="text-[10px] text-stone-400 font-mono">{evt.startTime} - {evt.endTime}</span>
+                      <span className="font-bold text-[#153E2E]">{new Date(evt.start_datetime).toLocaleDateString()}</span>
+                      <span className="text-[10px] text-stone-400 font-mono">
+                        {new Date(evt.start_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {evt.end_datetime ? ` - ${new Date(evt.end_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+                      </span>
                     </div>
                     <h4 className="text-sm font-bold text-stone-900">{evt.title}</h4>
-                    <p className="text-xs text-stone-600 line-clamp-2">{evt.description}</p>
+                    <p className="text-xs text-stone-600 line-clamp-2">{evt.content}</p>
                     <div className="flex items-center gap-1 text-[11px] text-stone-500 pt-1">
                       <MapPin className="w-3.5 h-3.5 text-[#153E2E]" />
                       <span>{evt.location}</span>
@@ -289,7 +290,7 @@ export const PublicSitePreviewModal: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full overflow-hidden border border-[#D4AF37] bg-black">
                     <img
-                      src="/assets/aistudio/image_63748073.png"
+                      src="/assets/logo.jpeg"
                       alt="Nkar Woo Làn"
                       className="w-full h-full object-contain"
                     />

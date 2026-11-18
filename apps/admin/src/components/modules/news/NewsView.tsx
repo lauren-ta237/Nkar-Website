@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { useNewsList, useNewsMutations } from '@/lib/api/queries';
+import { useAdminNewsList, useAdminNewsMutations } from '@/lib/api/news.api';
 import { News, ContentStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -26,7 +26,7 @@ import { NewsDetailModal } from './NewsDetailModal';
 
 export const NewsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: news = [], isLoading } = useNewsList();
+  const { data: news = [], isLoading } = useAdminNewsList();
   const {
     createMutation,
     updateMutation,
@@ -35,7 +35,7 @@ export const NewsView: React.FC = () => {
     publishMutation,
     archiveMutation,
     deleteMutation,
-  } = useNewsMutations();
+  } = useAdminNewsMutations();
 
   // Filters & State
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,7 +56,7 @@ export const NewsView: React.FC = () => {
     const matchesSearch =
       searchQuery === '' ||
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.summary || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesStatus = statusFilter === 'ALL' || item.status === statusFilter;
@@ -70,10 +70,10 @@ export const NewsView: React.FC = () => {
 
   const categories = Array.from(new Set(news.map((n) => n.category)));
 
-  const handleCreateOrUpdate = (data: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'viewsCount'>) => {
+  const handleCreateOrUpdate = (data: Omit<News, 'id' | 'created_at' | 'updated_at' | 'views'>) => {
     if (editingArticle) {
       updateMutation.mutate(
-        { id: editingArticle.id, updates: data },
+        { id: editingArticle.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -215,7 +215,7 @@ export const NewsView: React.FC = () => {
                   const canEdit =
                     currentUser.role === 'SUPER_ADMIN' ||
                     currentUser.role === 'CONTENT_REVIEWER' ||
-                    (currentUser.role === 'CONTENT_EDITOR' && item.authorId === currentUser.id);
+                    (currentUser.role === 'CONTENT_EDITOR' && item.author_id === currentUser.id);
 
                   const canDelete = currentUser.role === 'SUPER_ADMIN';
 
@@ -231,9 +231,9 @@ export const NewsView: React.FC = () => {
                     <tr key={item.id} className="hover:bg-[#FAF9F6] transition-colors group">
                       <td className="py-3 px-4 max-w-xs">
                         <div className="flex items-center gap-3">
-                          {item.coverImage ? (
+                          {item.cover_image ? (
                             <img
-                              src={item.coverImage}
+                              src={item.cover_image}
                               alt=""
                               className="w-10 h-10 rounded-lg object-cover border border-stone-200 shrink-0"
                               referrerPolicy="no-referrer"
@@ -245,7 +245,7 @@ export const NewsView: React.FC = () => {
                           )}
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
-                              {item.isFeatured && (
+                              {item.is_featured && (
                                 <Star className="w-3 h-3 text-[#D4AF37] fill-[#D4AF37] shrink-0" />
                               )}
                               <span className="font-bold text-stone-900 truncate block group-hover:text-[#153E2E] transition-colors">
@@ -266,7 +266,7 @@ export const NewsView: React.FC = () => {
                       </td>
 
                       <td className="py-3 px-4 whitespace-nowrap text-stone-600">
-                        {item.authorName}
+                        {item.author_id ? 'Editor' : 'Desk'}
                       </td>
 
                       <td className="py-3 px-4 whitespace-nowrap">
@@ -274,11 +274,11 @@ export const NewsView: React.FC = () => {
                       </td>
 
                       <td className="py-3 px-4 whitespace-nowrap font-mono text-stone-500 text-[11px]">
-                        {new Date(item.createdAt).toLocaleDateString()}
+                        {new Date(item.created_at).toLocaleDateString()}
                       </td>
 
                       <td className="py-3 px-4 text-center tabular-nums text-stone-600 font-medium">
-                        {item.viewsCount}
+                        {item.views}
                       </td>
 
                       <td className="py-3 px-4 text-right whitespace-nowrap">
@@ -421,11 +421,11 @@ export const NewsView: React.FC = () => {
           itemTitle={reviewModalArticle.title}
           itemType="News Article"
           onApprove={(notes) => {
-            approveMutation.mutate({ id: reviewModalArticle.id, notes });
+            approveMutation.mutate({ id: reviewModalArticle.id, review_notes: notes });
             setReviewModalArticle(null);
           }}
           onReject={(notes) => {
-            rejectMutation.mutate({ id: reviewModalArticle.id, notes });
+            rejectMutation.mutate({ id: reviewModalArticle.id, review_notes: notes });
             setReviewModalArticle(null);
           }}
           onCancel={() => setReviewModalArticle(null)}

@@ -12,8 +12,9 @@
 // through TanStack Query.
 
 import { api } from "./config/axios-client";
-import { setToken, clearToken } from "../auth-token";
+import { setToken, clearToken, getToken } from "../auth-token";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { User, Role, UserStatus } from "@/types";
 
 // ---- types ---------------------------------------------------------------
 
@@ -21,8 +22,45 @@ export type AuthUser = {
   id: string;
   name: string;
   email: string;
-  role?: string;
+  role: string;
+  status?: string;
+  avatar_url?: string | null;
+  created_at?: string;
+  updated_at?: string;
 };
+
+export function normalizeAuthUser(raw: AuthUser | any): User {
+  if (!raw) {
+    return {
+      id: 'usr-fallback',
+      name: 'Administrator',
+      email: 'admin@nkarwoolan.org',
+      role: 'SUPER_ADMIN',
+      status: 'ACTIVE',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+  }
+
+  const roleUpper = (raw.role || 'content_editor').toUpperCase();
+  const role: Role =
+    roleUpper === 'SUPER_ADMIN'
+      ? 'SUPER_ADMIN'
+      : roleUpper === 'CONTENT_REVIEWER'
+      ? 'CONTENT_REVIEWER'
+      : 'CONTENT_EDITOR';
+
+  return {
+    id: raw.id,
+    name: raw.name,
+    email: raw.email,
+    role,
+    status: (raw.status?.toUpperCase() || 'ACTIVE') as UserStatus,
+    avatar_url: raw.avatar_url || null,
+    created_at: raw.created_at || new Date().toISOString(),
+    updated_at: raw.updated_at || new Date().toISOString(),
+  };
+}
 
 export type LoginPayload = {
   email: string;
@@ -30,7 +68,11 @@ export type LoginPayload = {
 };
 
 export type LoginResponse = {
-  token: string;
+  token?: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
   user: AuthUser;
 };
 
@@ -41,7 +83,8 @@ export type RegisterPayload = {
 };
 
 export type RegisterResponse = {
-  token: string;
+  access_token: string;
+  token_type: string;
   user: AuthUser;
 };
 
@@ -53,7 +96,10 @@ export type RegisterResponse = {
  */
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
   const res = await api.post<LoginResponse>("/auth/login", payload);
-  setToken(res.data.token);
+  const token = res.data.access_token || res.data.token;
+  if (token) {
+    setToken(token);
+  }
   return res.data;
 }
 
@@ -65,7 +111,9 @@ export async function register(
   payload: RegisterPayload
 ): Promise<RegisterResponse> {
   const res = await api.post<RegisterResponse>("/auth/register", payload);
-  setToken(res.data.token);
+  if (res.data.access_token) {
+    setToken(res.data.access_token);
+  }
   return res.data;
 }
 
@@ -74,8 +122,8 @@ export async function register(
  * Returns the currently authenticated user, or 401 if none.
  */
 export async function me(): Promise<AuthUser> {
-  const res = await api.get<AuthUser>("/auth/me");
-  return res.data;
+  const res = await api.get<any>("/auth/me");
+  return res.data?.data ?? res.data;
 }
 
 /**
@@ -94,46 +142,52 @@ export async function logout(): Promise<void> {
 
 // ---- hooks ---------------------------------------------------------------
 
-const AUTH_KEY = ["nkar", "auth"];
+export const AUTH_QUERY_KEYS = {
+  ALL: ["nkar", "auth"] as const,
+  ME: ["nkar", "auth", "me"] as const,
+};
 
-/** GET /auth/me — re-fetched on window focus by default; disable per-call if needed. */
-export function useMe(options = {}) {
+/** GET /auth/me */
+export function useMe(options: { enabled?: boolean; retry?: number | boolean } = {}) {
+  const token = typeof window !== 'undefined' ? getToken() : null;
   return useQuery({
-    queryKey: [...AUTH_KEY, "me"],
+    queryKey: AUTH_QUERY_KEYS.ME,
     queryFn: () => me(),
-    ...options,
+    enabled: options.enabled ?? Boolean(token),
+    retry: options.retry ?? false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
-/** POST /auth/login — a write, so useMutation. */
+/** POST /auth/login */
 export function useLogin() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: login,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: AUTH_KEY });
+      queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.ALL });
     },
   });
 }
 
-/** POST /auth/register — a write, so useMutation. */
+/** POST /auth/register */
 export function useRegister() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: register,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: AUTH_KEY });
+      queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.ALL });
     },
   });
 }
 
-/** POST /auth/logout — clears the token on success. */
+/** POST /auth/logout */
 export function useLogout() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: AUTH_KEY });
+      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEYS.ALL });
     },
   });
 }

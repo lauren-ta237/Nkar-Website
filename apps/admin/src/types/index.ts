@@ -1,169 +1,18 @@
+// types/index.ts
+//
+// TypeScript schemas strictly mirroring FastAPI Pydantic models:
+// apps/api/app/modules/*/schemas.py and apps/api/app/modules/base.py
+
 export type Role = 'SUPER_ADMIN' | 'CONTENT_EDITOR' | 'CONTENT_REVIEWER';
-
+export type UserRole = Role;
 export type UserStatus = 'ACTIVE' | 'SUSPENDED';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: Role;
-  status: UserStatus;
-  avatar: string;
-  phone?: string;
-  title?: string;
-  lastLogin?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export type ContentStatus = 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'PUBLISHED' | 'REJECTED' | 'ARCHIVED';
-
-export interface News {
-  id: string;
-  title: string;
-  slug: string;
-  summary: string;
-  content: string;
-  coverImage: string;
-  category: string;
-  tags: string[];
-  isFeatured: boolean;
-  status: ContentStatus;
-  authorId: string;
-  authorName: string;
-  reviewerId?: string;
-  reviewNotes?: string;
-  publishedAt?: string;
-  viewsCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface EventItem {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  location: string;
-  eventDate: string; // YYYY-MM-DD
-  startTime: string; // HH:mm
-  endTime: string; // HH:mm
-  organizer: string;
-  coverImage: string;
-  isFeatured: boolean;
-  status: ContentStatus;
-  authorId: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type HeritageCategory =
-  | 'VILLAGE_HISTORY'
-  | 'CUSTOMS'
-  | 'LANGUAGE'
-  | 'ROYAL_LINEAGE'
-  | 'HISTORICAL_ARTIFACTS';
-
-export interface Heritage {
-  id: string;
-  title: string;
-  category: HeritageCategory;
-  summary: string;
-  content: string;
-  supportingMedia: string[];
-  oralTraditionSource?: string;
-  status: ContentStatus;
-  authorId: string;
-  authorName: string;
-  reviewNotes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Leadership {
-  id: string;
-  name: string;
-  traditionalTitle: string;
-  biography: string;
-  activePeriod: string;
-  portraitPhoto: string;
-  displayOrder: number;
-  lineage?: string;
-  status: ContentStatus;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type MediaType = 'PHOTO' | 'VIDEO';
-
-export interface Gallery {
-  id: string;
-  title: string;
-  mediaType: MediaType;
-  album: string;
-  category: string;
-  mediaUrl: string;
-  thumbnailUrl?: string;
-  description: string;
-  tags: string[];
-  status: ContentStatus;
-  uploadedBy: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type PublicationFileType = 'PDF' | 'EPUB' | 'DOCX' | 'EXTERNAL_LINK';
-
-export interface Publication {
-  id: string;
-  title: string;
-  description: string;
-  author: string;
-  publicationDate: string;
-  documentUrl: string;
-  fileType: PublicationFileType;
-  fileSize?: string;
-  coverImage?: string;
-  status: ContentStatus;
-  uploadedBy: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type ProjectStatus = 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED';
-
-export interface DevelopmentProject {
-  id: string;
-  projectName: string;
-  description: string;
-  location: string;
-  budgetXAF: number;
-  status: ProjectStatus;
-  progressPercentage: number;
-  coverImage: string;
-  startDate: string;
-  completionDate?: string;
-  leadCoordinator: string;
-  fundingSource: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type ContactStatus = 'UNREAD' | 'IN_PROGRESS' | 'RESOLVED';
-
-export interface ContactSubmission {
-  id: string;
-  senderName: string;
-  email: string;
-  phoneNumber?: string;
-  subject: string;
-  message: string;
-  status: ContactStatus;
-  internalNotes?: string;
-  assignedTo?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+export type MediaType = 'IMAGE' | 'VIDEO' | 'DOCUMENT';
+export type ProjectStatus = 'PROPOSED' | 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD' | 'CANCELLED';
+export type ContactStatus = 'UNREAD' | 'IN_PROGRESS' | 'RESOLVED' | 'ARCHIVED';
+export type HeritageCategory = 'VILLAGE_HISTORY' | 'CUSTOMS' | 'LANGUAGE' | 'ROYAL_LINEAGE' | 'HISTORICAL_ARTIFACTS';
+export type NewsCategory = 'GENERAL' | 'CULTURE' | 'DEVELOPMENT' | 'ROYAL_PALACE' | 'EDUCATION' | 'HEALTH';
+export type PublicationFileType = 'PDF' | 'DOCX' | 'EPUB' | string;
 
 export type AuditAction =
   | 'CREATE'
@@ -174,7 +23,8 @@ export type AuditAction =
   | 'ACTIVATE'
   | 'APPROVE'
   | 'REJECT'
-  | 'ARCHIVE';
+  | 'ARCHIVE'
+  | string;
 
 export type EntityType =
   | 'Users'
@@ -185,21 +35,167 @@ export type EntityType =
   | 'Gallery'
   | 'Publications'
   | 'DevelopmentProjects'
-  | 'ContactSubmissions';
+  | 'ContactSubmissions'
+  | string;
 
-export interface AuditLog {
+export interface Metadata {
   id: string;
-  action: AuditAction;
-  entityType: EntityType;
-  entityId: string;
-  entityTitle?: string;
-  adminId: string;
-  adminName: string;
-  adminRole: Role;
-  details: string;
-  timestamp: string;
+  created_at: string;
+  updated_at: string;
+  created_by_id?: string | null;
 }
 
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  meta?: {
+    total?: number;
+    total_items?: number;
+    page?: number;
+    page_size?: number;
+    skip?: number;
+    limit?: number;
+  };
+}
+
+// User (users/schemas.py -> UserResponse)
+export interface User extends Metadata {
+  name: string;
+  email: string;
+  role: Role;
+  status: UserStatus;
+  avatar_url?: string | null;
+}
+
+// News (news/schemas.py -> NewsResponse)
+export interface News extends Metadata {
+  title: string;
+  slug: string;
+  summary: string | null;
+  content: string;
+  cover_image: string | null;
+  category: NewsCategory | string;
+  tags: string[];
+  status: ContentStatus;
+  is_featured: boolean;
+  author_id?: string | null;
+  reviewer_id?: string | null;
+  review_notes?: string | null;
+  published_at?: string | null;
+  views: number;
+}
+
+// Event (events/schemas.py -> EventResponse)
+export interface EventItem extends Metadata {
+  title: string;
+  slug: string;
+  location: string;
+  start_datetime: string;
+  end_datetime?: string | null;
+  content: string;
+  cover_image?: string | null;
+  media: string[];
+  organizer_name?: string | null;
+  status: ContentStatus;
+  is_featured: boolean;
+}
+
+// Heritage (heritage/schemas.py -> HeritageResponse)
+export interface Heritage extends Metadata {
+  title: string;
+  slug: string;
+  content: string;
+  category: HeritageCategory;
+  images: string[];
+  status: ContentStatus;
+  is_featured: boolean;
+  author_id?: string | null;
+  reviewed_by_id?: string | null;
+}
+
+// Leadership (leadership/schemas.py -> LeadershipResponse)
+export interface Leadership extends Metadata {
+  name: string;
+  traditional_title: string;
+  biography?: string | null;
+  historical_notes?: string | null;
+  portrait_url?: string | null;
+  start_year?: number | null;
+  end_year?: number | null;
+  period_label?: string | null;
+  order_index: number;
+  status: ContentStatus;
+}
+
+// Gallery (gallery/schemas.py -> GalleryResponse)
+export interface Gallery extends Metadata {
+  title: string;
+  alt_text?: string | null;
+  description?: string | null;
+  media_type: MediaType;
+  media_url: string;
+  thumbnail_url?: string | null;
+  category: string;
+  tags: string[];
+  status: ContentStatus;
+  uploaded_by_id?: string | null;
+}
+
+// Publication (publications/schemas.py -> PublicationResponse)
+export interface Publication extends Metadata {
+  title: string;
+  author_name: string;
+  description?: string | null;
+  cover_image_url?: string | null;
+  document_url: string;
+  file_type: string;
+  file_size_bytes?: number | null;
+  publication_year?: number | null;
+  status: ContentStatus;
+  uploaded_by_id?: string | null;
+}
+
+// DevelopmentProject (projects/schemas.py -> DevelopmentProjectResponse)
+export interface DevelopmentProject extends Metadata {
+  title: string;
+  description: string;
+  location: string;
+  status: ProjectStatus;
+  budget_cfa?: number | null;
+  progress_percentage: number;
+  cover_image_url?: string | null;
+  start_date?: string | null;
+  completion_date?: string | null;
+  milestones?: Record<string, unknown>[] | null;
+}
+
+// ContactSubmission (contacts/schemas.py -> ContactSubmissionResponse)
+export interface ContactSubmission extends Metadata {
+  sender_name: string;
+  sender_email: string;
+  phone?: string | null;
+  subject: string;
+  message: string;
+  status: ContactStatus;
+  assigned_to_id?: string | null;
+  internal_notes?: string | null;
+}
+
+// AuditLog (audit/schemas.py -> AuditLogResponse)
+export interface AuditLog {
+  id: string;
+  actor_id?: string | null;
+  action: AuditAction;
+  resource_type: string;
+  resource_id: string;
+  severity: string;
+  details?: string | null;
+  changes?: Record<string, unknown> | null;
+  metadata_json?: Record<string, unknown> | null;
+  created_at: string;
+}
+
+// Dashboard statistics aggregate
 export interface DashboardStats {
   totalNews: number;
   publishedNews: number;
@@ -208,7 +204,7 @@ export interface DashboardStats {
   galleryItems: number;
   publicationsCount: number;
   developmentProjectsCount: number;
-  registeredAdmins: number;
-  pendingReviews: number;
-  unreadMessages: number;
+  pendingReviews?: number;
+  unreadMessages?: number;
+  registeredAdmins?: number;
 }

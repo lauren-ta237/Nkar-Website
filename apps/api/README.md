@@ -185,3 +185,4 @@ All public listing endpoints accept `page` (default 1, minimum 1) and `page_size
 - `PUT /api/v1/{module}/admin/items/{id}` — Update entity record
 - `DELETE /api/v1/{module}/admin/items/{id}` — Delete entity record
 - `GET /api/v1/audit` — View security audit log (Super Admin only)
+

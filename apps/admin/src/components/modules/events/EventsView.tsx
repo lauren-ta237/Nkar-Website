@@ -13,7 +13,7 @@ import {
   LayoutGrid,
   List,
 } from 'lucide-react';
-import { useEventsList, useEventsMutations } from '@/lib/api/queries';
+import { useAdminEventsList, useAdminEventsMutations } from '@/lib/api/events.api';
 import { EventItem } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -24,9 +24,9 @@ import { InteractiveCalendar } from './InteractiveCalendar';
 
 export const EventsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: events = [], isLoading } = useEventsList();
+  const { data: events = [], isLoading } = useAdminEventsList();
   const { createMutation, updateMutation, publishMutation, archiveMutation, deleteMutation } =
-    useEventsMutations();
+    useAdminEventsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -46,16 +46,16 @@ export const EventsView: React.FC = () => {
       searchQuery === '' ||
       e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       e.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.organizer.toLowerCase().includes(searchQuery.toLowerCase());
+      (e.organizer_name || '').toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesStatus = statusFilter === 'ALL' || e.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreateOrUpdate = (data: Omit<EventItem, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateOrUpdate = (data: Omit<EventItem, 'id' | 'created_at' | 'updated_at'>) => {
     if (editingEvent && editingEvent.id) {
       updateMutation.mutate(
-        { id: editingEvent.id, updates: data },
+        { id: editingEvent.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -189,9 +189,8 @@ export const EventsView: React.FC = () => {
           }}
           onScheduleForDate={(dateStr) => {
             setEditingEvent({
-              eventDate: dateStr,
-              startTime: '09:00',
-              endTime: '17:00',
+              start_datetime: `${dateStr}T09:00:00Z`,
+              end_datetime: `${dateStr}T17:00:00Z`,
               location: 'Nkar Royal Palace Grand Courtyard',
             });
             setFormModalOpen(true);
@@ -215,7 +214,7 @@ export const EventsView: React.FC = () => {
             const canEdit =
               currentUser.role === 'SUPER_ADMIN' ||
               currentUser.role === 'CONTENT_REVIEWER' ||
-              (currentUser.role === 'CONTENT_EDITOR' && event.authorId === currentUser.id);
+              (currentUser.role === 'CONTENT_EDITOR' && event.created_by_id === currentUser.id);
 
             const canDelete = currentUser.role === 'SUPER_ADMIN';
 
@@ -225,10 +224,10 @@ export const EventsView: React.FC = () => {
                 className="bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
               >
                 <div>
-                  {event.coverImage && (
+                  {event.cover_image && (
                     <div className="w-full h-40 bg-stone-100 dark:bg-stone-800 overflow-hidden relative">
                       <img
-                        src={event.coverImage}
+                        src={event.cover_image}
                         alt={event.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         referrerPolicy="no-referrer"
@@ -236,7 +235,7 @@ export const EventsView: React.FC = () => {
                       <div className="absolute top-2.5 right-2.5">
                         <StatusBadge status={event.status} />
                       </div>
-                      {event.isFeatured && (
+                      {event.is_featured && (
                         <div className="absolute bottom-2.5 left-2.5 bg-[#153E2E]/90 text-[#D4AF37] text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 backdrop-blur-xs">
                           <Star className="w-3 h-3 fill-[#D4AF37]" /> Featured
                         </div>
@@ -249,16 +248,19 @@ export const EventsView: React.FC = () => {
                       {event.title}
                     </h3>
                     <p className="text-xs text-stone-500 dark:text-stone-400 line-clamp-2 leading-relaxed">
-                      {event.description}
+                      {event.content}
                     </p>
 
                     <div className="space-y-1.5 pt-2 border-t border-[#F2EFE9] dark:border-stone-800 text-xs text-stone-600 dark:text-stone-300">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-[#D4AF37]" />
-                        <span className="font-semibold text-stone-800 dark:text-stone-200">{event.eventDate}</span>
+                        <span className="font-semibold text-stone-800 dark:text-stone-200">{new Date(event.start_datetime).toLocaleDateString()}</span>
                         <span className="text-stone-400">·</span>
                         <Clock className="w-3.5 h-3.5 text-stone-400" />
-                        <span>{event.startTime} - {event.endTime}</span>
+                        <span>
+                          {new Date(event.start_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          {event.end_datetime ? ` - ${new Date(event.end_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+                        </span>
                       </div>
 
                       <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400 truncate">
@@ -267,7 +269,7 @@ export const EventsView: React.FC = () => {
                       </div>
 
                       <p className="text-[11px] text-stone-400 truncate">
-                        Organizer: <span className="font-medium text-stone-700 dark:text-stone-300">{event.organizer}</span>
+                        Organizer: <span className="font-medium text-stone-700 dark:text-stone-300">{event.organizer_name || '—'}</span>
                       </p>
                     </div>
                   </div>
@@ -333,16 +335,16 @@ export const EventsView: React.FC = () => {
                   const canEdit =
                     currentUser.role === 'SUPER_ADMIN' ||
                     currentUser.role === 'CONTENT_REVIEWER' ||
-                    (currentUser.role === 'CONTENT_EDITOR' && event.authorId === currentUser.id);
+                    (currentUser.role === 'CONTENT_EDITOR' && event.created_by_id === currentUser.id);
                   const canDelete = currentUser.role === 'SUPER_ADMIN';
 
                   return (
                     <tr key={event.id} className="hover:bg-[#FAF9F6] dark:hover:bg-stone-800/40 transition-colors">
                       <td className="py-3.5 px-4 max-w-xs">
                         <div className="flex items-center gap-3">
-                          {event.coverImage ? (
+                          {event.cover_image ? (
                             <img
-                              src={event.coverImage}
+                              src={event.cover_image}
                               alt=""
                               className="w-10 h-10 rounded-lg object-cover border border-stone-200 dark:border-stone-700 shrink-0"
                             />
@@ -362,11 +364,14 @@ export const EventsView: React.FC = () => {
                         </div>
                       </td>
                       <td className="py-3.5 px-4 whitespace-nowrap font-mono text-stone-600 dark:text-stone-300 text-[11px]">
-                        <div>{event.eventDate}</div>
-                        <div className="text-[10px] text-stone-400">{event.startTime} - {event.endTime}</div>
+                        <div>{new Date(event.start_datetime).toLocaleDateString()}</div>
+                        <div className="text-[10px] text-stone-400">
+                          {new Date(event.start_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          {event.end_datetime ? ` - ${new Date(event.end_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+                        </div>
                       </td>
                       <td className="py-3.5 px-4 whitespace-nowrap text-stone-700 dark:text-stone-300">
-                        {event.organizer}
+                        {event.organizer_name || '—'}
                       </td>
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <StatusBadge status={event.status} />

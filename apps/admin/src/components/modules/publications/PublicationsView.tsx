@@ -10,7 +10,7 @@ import {
   FileText,
   Calendar,
 } from 'lucide-react';
-import { usePublicationsList, usePublicationsMutations } from '@/lib/api/queries';
+import { useAdminPublicationsList, useAdminPublicationsMutations } from '@/lib/api/publications.api';
 import { Publication } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -20,9 +20,9 @@ import { PublicationsFormModal } from './PublicationsFormModal';
 
 export const PublicationsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: publications = [], isLoading } = usePublicationsList();
+  const { data: publications = [], isLoading } = useAdminPublicationsList();
   const { createMutation, updateMutation, publishMutation, deleteMutation } =
-    usePublicationsMutations();
+    useAdminPublicationsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [formatFilter, setFormatFilter] = useState('ALL');
@@ -35,17 +35,17 @@ export const PublicationsView: React.FC = () => {
     const matchesSearch =
       searchQuery === '' ||
       p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase());
+      p.author_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (p.description || '').toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesFormat = formatFilter === 'ALL' || p.fileType === formatFilter;
+    const matchesFormat = formatFilter === 'ALL' || p.file_type === formatFilter;
     return matchesSearch && matchesFormat;
   });
 
-  const handleCreateOrUpdate = (data: Omit<Publication, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateOrUpdate = (data: Omit<Publication, 'id' | 'created_at' | 'updated_at'>) => {
     if (editingPub) {
       updateMutation.mutate(
-        { id: editingPub.id, updates: data },
+        { id: editingPub.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -148,9 +148,9 @@ export const PublicationsView: React.FC = () => {
             >
               <div>
                 <div className="flex items-start gap-4">
-                  {pub.coverImage ? (
+                  {pub.cover_image_url ? (
                     <img
-                      src={pub.coverImage}
+                      src={pub.cover_image_url}
                       alt={pub.title}
                       className="w-20 h-28 rounded-xl object-cover border border-stone-200 shadow-xs shrink-0"
                       referrerPolicy="no-referrer"
@@ -158,14 +158,14 @@ export const PublicationsView: React.FC = () => {
                   ) : (
                     <div className="w-20 h-28 rounded-xl bg-stone-100 border border-stone-200 flex flex-col items-center justify-center text-stone-400 shrink-0">
                       <FileText className="w-8 h-8" />
-                      <span className="text-[10px] font-bold mt-1 uppercase">{pub.fileType}</span>
+                      <span className="text-[10px] font-bold mt-1 uppercase">{pub.file_type}</span>
                     </div>
                   )}
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-1 mb-1">
                       <span className="text-[10px] font-bold text-stone-600 bg-stone-100 px-2 py-0.5 rounded font-mono uppercase">
-                        {pub.fileType} {pub.fileSize && `· ${pub.fileSize}`}
+                        {pub.file_type} {pub.file_size_bytes && `· ${(pub.file_size_bytes / (1024 * 1024)).toFixed(1)} MB`}
                       </span>
                       <StatusBadge status={pub.status} />
                     </div>
@@ -174,24 +174,24 @@ export const PublicationsView: React.FC = () => {
                       {pub.title}
                     </h3>
                     <p className="text-xs font-semibold text-[#8B6508] mt-1 truncate">
-                      By {pub.author}
+                      By {pub.author_name}
                     </p>
 
                     <div className="flex items-center gap-1.5 text-[11px] text-stone-400 mt-2 font-mono">
                       <Calendar className="w-3 h-3 text-stone-400" />
-                      <span>{pub.publicationDate}</span>
+                      <span>{pub.publication_year || '—'}</span>
                     </div>
                   </div>
                 </div>
 
                 <p className="text-xs text-stone-600 mt-3.5 line-clamp-2 leading-relaxed">
-                  {pub.description}
+                  {pub.description || '—'}
                 </p>
               </div>
 
               <div className="mt-4 pt-3 border-t border-[#F2EFE9] flex items-center justify-between text-xs">
                 <a
-                  href={pub.documentUrl}
+                  href={pub.document_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold text-[#153E2E] hover:underline flex items-center gap-1"

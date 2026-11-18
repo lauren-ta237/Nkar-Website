@@ -1,6 +1,7 @@
 import React from 'react';
 import { LogOut, ShieldAlert } from 'lucide-react';
-import { useAdminStore, INITIAL_USERS } from '../../store/useAdminStore';
+import { useAdminStore } from '../../store/useAdminStore';
+import { useLogout } from '@/lib/api/auth.api';
 import {
   Dialog,
   DialogContent,
@@ -11,14 +12,16 @@ import {
 } from '@/components/ui/dialog';
 
 export const LogoutModal: React.FC = () => {
-  const { logoutConfirmOpen, setLogoutConfirmOpen, currentUser, setCurrentUser, switchRole } =
-    useAdminStore();
+  const { logoutConfirmOpen, setLogoutConfirmOpen, currentUser } = useAdminStore();
+  const logoutMutation = useLogout();
 
-  const handleConfirmLogout = () => {
-    // Switch to alternate council admin or reset
+  const handleConfirmLogout = async () => {
     setLogoutConfirmOpen(false);
-    // Cycle to editor or reset
-    switchRole('CONTENT_EDITOR');
+    try {
+      await logoutMutation.mutateAsync();
+    } catch {
+      // Token already cleared in finally block of logout()
+    }
   };
 
   return (

@@ -16,7 +16,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { useAdminStore, INITIAL_USERS, AdminPage } from '../../store/useAdminStore';
-import { useDashboardStats } from '@/lib/api/queries';
+import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
 import { Role } from '../../types';
 import {
   DropdownMenu,
@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
     setLogoutConfirmOpen,
   } = useAdminStore();
 
-  const { data: stats } = useDashboardStats();
+  const { data: stats } = useAdminDashboardStats();
 
   const totalNotifications = (stats?.pendingReviews || 0) + (stats?.unreadMessages || 0);
 
@@ -76,7 +76,7 @@ export const Header: React.FC = () => {
         <div className="lg:hidden flex items-center gap-1.5 shrink-0">
           <div className="w-8 h-8 rounded-full overflow-hidden border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
             <img
-              src="/assets/aistudio/image_63748073.png"
+              src="/assets/logo.jpeg"
               alt="Nkar Woo Làn"
               className="w-full h-full object-contain"
               referrerPolicy="no-referrer"
@@ -186,7 +186,7 @@ export const Header: React.FC = () => {
                 }`}
               >
                 <img
-                  src={user.avatar}
+                  src={user.avatar_url || ''}
                   alt={user.name}
                   className="w-7 h-7 rounded-full object-cover border border-[#D4AF37]/30 shrink-0"
                   referrerPolicy="no-referrer"
@@ -223,7 +223,7 @@ export const Header: React.FC = () => {
               title="Administrator Account"
             >
               <img
-                src={currentUser.avatar}
+                src={currentUser.avatar_url || ''}
                 alt={currentUser.name}
                 className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37] shrink-0"
                 referrerPolicy="no-referrer"

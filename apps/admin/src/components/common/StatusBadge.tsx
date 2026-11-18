@@ -7,7 +7,8 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
-  switch (status) {
+  const norm = (status || '').toUpperCase();
+  switch (norm) {
     case 'PUBLISHED':
     case 'ACTIVE':
     case 'COMPLETED':
@@ -15,7 +16,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
       return (
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50/80 px-2.5 py-1 rounded-md border border-emerald-200/60">
           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-          <span>{status === 'PUBLISHED' ? 'Published' : status === 'ACTIVE' ? 'Active' : status === 'COMPLETED' ? 'Completed' : 'Resolved'}</span>
+          <span>{norm === 'PUBLISHED' ? 'Published' : norm === 'ACTIVE' ? 'Active' : norm === 'COMPLETED' ? 'Completed' : 'Resolved'}</span>
         </span>
       );
 
@@ -29,20 +30,22 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
 
     case 'SUBMITTED':
     case 'IN_PROGRESS':
+    case 'ONGOING':
       return (
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-900 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200/80">
           <Clock className="w-3.5 h-3.5 text-amber-600" />
-          <span>{status === 'SUBMITTED' ? 'Under Review' : 'In Progress'}</span>
+          <span>{norm === 'SUBMITTED' ? 'Under Review' : 'In Progress'}</span>
         </span>
       );
 
     case 'DRAFT':
     case 'PLANNING':
+    case 'PROPOSED':
     case 'UNREAD':
       return (
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-700 bg-stone-100 px-2.5 py-1 rounded-md border border-stone-200">
           <FileEdit className="w-3.5 h-3.5 text-stone-500" />
-          <span>{status === 'DRAFT' ? 'Draft' : status === 'PLANNING' ? 'Planning' : 'Unread'}</span>
+          <span>{norm === 'DRAFT' ? 'Draft' : norm === 'UNREAD' ? 'Unread' : norm === 'PROPOSED' ? 'Proposed' : 'Planning'}</span>
         </span>
       );
 
@@ -52,7 +55,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
       return (
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-800 bg-red-50 px-2.5 py-1 rounded-md border border-red-200/80">
           <XCircle className="w-3.5 h-3.5 text-red-600" />
-          <span>{status === 'REJECTED' ? 'Rejected' : status === 'SUSPENDED' ? 'Suspended' : 'Cancelled'}</span>
+          <span>{norm === 'REJECTED' ? 'Rejected' : norm === 'SUSPENDED' ? 'Suspended' : 'Cancelled'}</span>
         </span>
       );
 
@@ -61,7 +64,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
       return (
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-600 bg-stone-100/70 px-2.5 py-1 rounded-md border border-stone-200">
           <Archive className="w-3.5 h-3.5 text-stone-400" />
-          <span>{status === 'ARCHIVED' ? 'Archived' : 'On Hold'}</span>
+          <span>{norm === 'ARCHIVED' ? 'Archived' : 'On Hold'}</span>
         </span>
       );
 

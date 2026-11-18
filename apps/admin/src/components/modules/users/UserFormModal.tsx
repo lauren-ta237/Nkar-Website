@@ -15,7 +15,7 @@ interface UserFormModalProps {
   isOpen: boolean;
   initialData?: User | null;
   onClose: () => void;
-  onSubmit: (data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (data: Omit<User, 'id' | 'created_at' | 'updated_at'> & { password?: string }) => void;
   isLoading?: boolean;
 }
 
@@ -32,11 +32,10 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [role, setRole] = useState<Role>('CONTENT_EDITOR');
   const [status, setStatus] = useState<UserStatus>('ACTIVE');
-  const [avatar, setAvatar] = useState('');
-  const [title, setTitle] = useState('');
-  const [phone, setPhone] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -45,17 +44,15 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
       setEmail(initialData.email);
       setRole(initialData.role);
       setStatus(initialData.status);
-      setAvatar(initialData.avatar);
-      setTitle(initialData.title || '');
-      setPhone(initialData.phone || '');
+      setAvatarUrl(initialData.avatar_url || '');
+      setPassword('');
     } else {
       setName('');
       setEmail('');
+      setPassword('');
       setRole('CONTENT_EDITOR');
       setStatus('ACTIVE');
-      setAvatar('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80');
-      setTitle('Cultural Documentation Officer');
-      setPhone('+237 670 00 11 22');
+      setAvatarUrl('');
     }
     setError('');
   }, [initialData, isOpen]);
@@ -69,14 +66,18 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
       return;
     }
 
+    if (!initialData && (!password || password.length < 8)) {
+      setError('Password must be at least 8 characters long.');
+      return;
+    }
+
     onSubmit({
       name: name.trim(),
       email: email.trim(),
       role,
       status,
-      avatar: avatar.trim() || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      title: title.trim() || undefined,
-      phone: phone.trim() || undefined,
+      avatar_url: avatarUrl.trim() || null,
+      ...(password ? { password } : {}),
     });
   };
 
@@ -115,29 +116,16 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Official Email Address *</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="officer@nkarwoolad.cm"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Telephone / WhatsApp</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+237 6XX XX XX XX"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              />
-            </div>
+          <div>
+            <label className="block text-xs font-semibold text-stone-700 mb-1">Official Email Address *</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="officer@nkarwoolad.cm"
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+              required
+            />
           </div>
 
           <div>
@@ -173,40 +161,42 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {!initialData && (
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Traditional / Working Title</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">Temporary Password *</label>
               <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Secretary to the Council"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 8 characters"
                 className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+                required
               />
             </div>
+          )}
 
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Account State</label>
-              <select
-                value={status}
-                disabled={isSelf}
-                onChange={(e) => setStatus(e.target.value as UserStatus)}
-                className={`w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800 ${
-                  isSelf ? 'bg-stone-100 text-stone-500 cursor-not-allowed opacity-80' : ''
-                }`}
-              >
-                <option value="ACTIVE">Active (Normal Access)</option>
-                <option value="SUSPENDED">Suspended (Blocked Access)</option>
-              </select>
-            </div>
+          <div>
+            <label className="block text-xs font-semibold text-stone-700 mb-1">Account State</label>
+            <select
+              value={status}
+              disabled={isSelf}
+              onChange={(e) => setStatus(e.target.value as UserStatus)}
+              className={`w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800 ${
+                isSelf ? 'bg-stone-100 text-stone-500 cursor-not-allowed opacity-80' : ''
+              }`}
+            >
+              <option value="ACTIVE">Active (Normal Access)</option>
+              <option value="SUSPENDED">Suspended (Blocked Access)</option>
+            </select>
           </div>
 
           <FileUpload
-            label="Administrator Profile Picture *"
-            value={avatar}
-            onChange={setAvatar}
+            label="Administrator Profile Picture"
+            value={avatarUrl}
+            onChange={setAvatarUrl}
             accept="image/*"
             mediaTypeHint="image"
+            folder="nkar_woo_lan/users"
             helperText="Upload official profile portrait (JPEG, PNG, WebP up to 10MB)"
           />
 

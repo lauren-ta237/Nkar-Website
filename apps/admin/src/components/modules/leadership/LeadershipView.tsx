@@ -9,7 +9,7 @@ import {
   Calendar,
   ArrowUpDown,
 } from 'lucide-react';
-import { useLeadershipList, useLeadershipMutations } from '@/lib/api/queries';
+import { useAdminLeadershipList, useAdminLeadershipMutations } from '@/lib/api/leadership.api';
 import { Leadership } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -19,8 +19,8 @@ import { LeadershipFormModal } from './LeadershipFormModal';
 
 export const LeadershipView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: leadership = [], isLoading } = useLeadershipList();
-  const { createMutation, updateMutation, deleteMutation } = useLeadershipMutations();
+  const { data: leadership = [], isLoading } = useAdminLeadershipList();
+  const { createMutation, updateMutation, deleteMutation } = useAdminLeadershipMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [formModalOpen, setFormModalOpen] = useState(false);
@@ -31,14 +31,14 @@ export const LeadershipView: React.FC = () => {
     (l) =>
       searchQuery === '' ||
       l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      l.traditionalTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (l.lineage && l.lineage.toLowerCase().includes(searchQuery.toLowerCase()))
+      l.traditional_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (l.historical_notes && l.historical_notes.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const handleCreateOrUpdate = (data: Omit<Leadership, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateOrUpdate = (data: Omit<Leadership, 'id' | 'created_at' | 'updated_at'>) => {
     if (editingLeader) {
       updateMutation.mutate(
-        { id: editingLeader.id, updates: data },
+        { id: editingLeader.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -129,13 +129,13 @@ export const LeadershipView: React.FC = () => {
                 <div className="flex items-start gap-4">
                   <div className="relative shrink-0">
                     <img
-                      src={leader.portraitPhoto}
+                      src={leader.portrait_url || ''}
                       alt={leader.name}
                       className="w-16 h-16 rounded-2xl object-cover border-2 border-[#D4AF37] shadow-sm"
                       referrerPolicy="no-referrer"
                     />
                     <span className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-[#153E2E] text-[#D4AF37] font-bold text-[11px] flex items-center justify-center border border-white">
-                      #{leader.displayOrder}
+                      #{leader.order_index}
                     </span>
                   </div>
 
@@ -145,7 +145,7 @@ export const LeadershipView: React.FC = () => {
                       {leader.name}
                     </h3>
                     <p className="text-xs font-semibold text-[#8B6508] mt-0.5 leading-snug">
-                      {leader.traditionalTitle}
+                      {leader.traditional_title}
                     </p>
                   </div>
                 </div>
@@ -153,12 +153,12 @@ export const LeadershipView: React.FC = () => {
                 <div className="mt-3.5 space-y-2 text-xs">
                   <div className="flex items-center gap-1.5 text-stone-500 font-mono text-[11px]">
                     <Calendar className="w-3.5 h-3.5 text-stone-400" />
-                    <span>Period: {leader.activePeriod}</span>
+                    <span>Period: {leader.period_label || '—'}</span>
                   </div>
 
-                  {leader.lineage && (
+                  {leader.historical_notes && (
                     <p className="text-[11px] text-stone-500 bg-[#FAF8F5] p-2 rounded-lg border border-[#EAE6DD] truncate">
-                      Lineage: <span className="font-semibold text-stone-700">{leader.lineage}</span>
+                      Notes: <span className="font-semibold text-stone-700">{leader.historical_notes}</span>
                     </p>
                   )}
 
@@ -170,7 +170,7 @@ export const LeadershipView: React.FC = () => {
 
               <div className="mt-4 pt-3 border-t border-[#F2EFE9] flex items-center justify-between">
                 <span className="text-[10px] text-stone-400 font-mono">
-                  Order Index: #{leader.displayOrder}
+                  Order Index: #{leader.order_index}
                 </span>
 
                 <div className="flex items-center gap-1">

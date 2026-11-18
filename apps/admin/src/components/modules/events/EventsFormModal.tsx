@@ -15,7 +15,7 @@ interface EventsFormModalProps {
   isOpen: boolean;
   initialData?: Partial<EventItem> | null;
   onClose: () => void;
-  onSubmit: (data: Omit<EventItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (data: Omit<EventItem, 'id' | 'created_at' | 'updated_at'>) => void;
   isLoading?: boolean;
 }
 
@@ -45,24 +45,35 @@ export const EventsFormModal: React.FC<EventsFormModalProps> = ({
     if (initialData) {
       setTitle(initialData.title || '');
       setSlug(initialData.slug || '');
-      setDescription(initialData.description || '');
+      setDescription(initialData.content || '');
       setLocation(initialData.location || '');
-      setEventDate(initialData.eventDate || '');
-      setStartTime(initialData.startTime || '09:00');
-      setEndTime(initialData.endTime || '17:00');
-      setOrganizer(initialData.organizer || '');
-      setCoverImage(initialData.coverImage || '');
-      setIsFeatured(initialData.isFeatured || false);
+      if (initialData.start_datetime) {
+        const d = new Date(initialData.start_datetime);
+        setEventDate(d.toISOString().split('T')[0]);
+        setStartTime(d.toTimeString().slice(0, 5));
+      } else {
+        setEventDate(new Date().toISOString().split('T')[0]);
+        setStartTime('09:00');
+      }
+      if (initialData.end_datetime) {
+        const d = new Date(initialData.end_datetime);
+        setEndTime(d.toTimeString().slice(0, 5));
+      } else {
+        setEndTime('17:00');
+      }
+      setOrganizer(initialData.organizer_name || '');
+      setCoverImage(initialData.cover_image || '');
+      setIsFeatured(initialData.is_featured || false);
       setStatus(initialData.status || 'PUBLISHED');
     } else {
       setTitle('');
       setSlug('');
       setDescription('');
-      setLocation('Nkar Royal Palace Grounds');
+      setLocation('');
       setEventDate(new Date().toISOString().split('T')[0]);
       setStartTime('09:00');
       setEndTime('17:00');
-      setOrganizer('Nkar Traditional Council');
+      setOrganizer('');
       setCoverImage('');
       setIsFeatured(false);
       setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'SUBMITTED' : 'PUBLISHED');
@@ -94,16 +105,15 @@ export const EventsFormModal: React.FC<EventsFormModalProps> = ({
     onSubmit({
       title: title.trim(),
       slug: slug.trim() || `event-${Date.now()}`,
-      description: description.trim(),
+      content: description.trim(),
       location: location.trim(),
-      eventDate,
-      startTime,
-      endTime,
-      organizer: organizer.trim(),
-      coverImage: coverImage.trim() || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80',
-      isFeatured,
+      start_datetime: new Date(`${eventDate}T${startTime}:00Z`).toISOString(),
+      end_datetime: endTime ? new Date(`${eventDate}T${endTime}:00Z`).toISOString() : null,
+      organizer_name: organizer.trim(),
+      cover_image: coverImage.trim() || null,
+      media: initialData?.media || [],
+      is_featured: isFeatured,
       status,
-      authorId: currentUser.id,
     });
   };
 
@@ -220,6 +230,7 @@ export const EventsFormModal: React.FC<EventsFormModalProps> = ({
               onChange={(url) => setCoverImage(url)}
               accept="image/*"
               helperText="Upload JPG, PNG, or WebP promotional cover image"
+              folder="nkar_woo_lan/events"
             />
           </div>
 

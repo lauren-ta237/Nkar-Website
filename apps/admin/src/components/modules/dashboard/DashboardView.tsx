@@ -22,24 +22,24 @@ import {
 } from 'lucide-react';
 import { useAdminStore } from '../../../store/useAdminStore';
 import {
-  useDashboardStats,
-  usePendingReviews,
-  useProjectsList,
-  useAuditLogs,
-  useNewsMutations,
-} from '@/lib/api/queries';
+  useAdminDashboardStats,
+  useAdminPendingReviews,
+} from '@/lib/api/dashboard.api';
+import { useAdminProjectsList } from '@/lib/api/projects.api';
+import { useAdminAuditLogs } from '@/lib/api/audit.api';
+import { useAdminNewsMutations } from '@/lib/api/news.api';
 import { StatCard } from '../../common/StatCard';
 import { StatusBadge } from '../../common/StatusBadge';
 import { ReviewActionModal } from '../../common/ReviewActionModal';
 
 export const DashboardView: React.FC = () => {
   const { setCurrentPage, currentUser } = useAdminStore();
-  const { data: stats, isLoading: statsLoading } = useDashboardStats();
-  const { data: pendingItems = [] } = usePendingReviews();
-  const { data: projects = [] } = useProjectsList();
-  const { data: auditLogs = [] } = useAuditLogs();
+  const { data: stats, isLoading: statsLoading } = useAdminDashboardStats();
+  const { data: pendingItems = [] } = useAdminPendingReviews();
+  const { data: projects = [] } = useAdminProjectsList();
+  const { data: auditLogs = [] } = useAdminAuditLogs();
 
-  const { approveMutation, rejectMutation } = useNewsMutations();
+  const { approveMutation, rejectMutation } = useAdminNewsMutations();
 
   // Chart timeframes
   const [activityTimeframe, setActivityTimeframe] = useState<'Weekly' | 'Monthly' | 'Yearly'>('Monthly');
@@ -60,7 +60,7 @@ export const DashboardView: React.FC = () => {
   const activeProjects = projects.filter((p) => p.status === 'IN_PROGRESS').length;
   const avgProgress =
     totalProjects > 0
-      ? Math.round(projects.reduce((sum, p) => sum + p.progressPercentage, 0) / totalProjects)
+      ? Math.round(projects.reduce((sum, p) => sum + p.progress_percentage, 0) / totalProjects)
       : 0;
 
   // Carousel navigation
@@ -132,7 +132,7 @@ export const DashboardView: React.FC = () => {
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
             <img
-              src="/assets/aistudio/image_63748073.png"
+              src="/assets/logo.jpeg"
               alt="Nkar Woo Làn Official Logo"
               className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain shrink-0 border-2 border-[#D4AF37] shadow-md bg-black"
               referrerPolicy="no-referrer"
@@ -290,7 +290,7 @@ export const DashboardView: React.FC = () => {
                       {item.type}
                     </span>
                     <span className="text-[11px] text-stone-400 font-mono">
-                      {new Date(item.createdAt).toLocaleDateString()}
+                      {new Date(item.created_at).toLocaleDateString()}
                     </span>
                   </div>
 
@@ -298,7 +298,7 @@ export const DashboardView: React.FC = () => {
                     {item.title}
                   </h4>
                   <p className="text-[11px] text-stone-500 mt-1 line-clamp-1">
-                    Submitted by: <span className="font-medium text-stone-700">{item.submittedBy}</span>
+                    Submitted by: <span className="font-medium text-stone-700">{item.submittedBy || item.submitted_by || item.author_id || 'Staff'}</span>
                   </p>
                 </div>
 
@@ -653,16 +653,16 @@ export const DashboardView: React.FC = () => {
                     >
                       {log.action}
                     </span>
-                    <span className="font-semibold text-stone-800 truncate">{log.entityType}</span>
+                    <span className="font-semibold text-stone-800 truncate">{log.resource_type}</span>
                   </div>
-                  <p className="text-stone-600 line-clamp-1">{log.details}</p>
+                  <p className="text-stone-600 line-clamp-1">{log.details || '—'}</p>
                   <p className="text-[10px] text-stone-400 mt-1">
-                    By <span className="font-medium text-stone-700">{log.adminName}</span> ({log.adminRole.replace('_', ' ')})
+                    Actor: <span className="font-mono text-stone-700">{log.actor_id || 'System'}</span>
                   </p>
                 </div>
 
                 <span className="text-[10px] text-stone-400 font-mono whitespace-nowrap shrink-0">
-                  {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
             ))}
@@ -690,7 +690,7 @@ export const DashboardView: React.FC = () => {
                 <div key={proj.id} className="p-3 bg-[#FAF8F5] border border-[#EAE6DD] rounded-xl">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
-                      <h4 className="text-xs font-bold text-stone-900 truncate">{proj.projectName}</h4>
+                      <h4 className="text-xs font-bold text-stone-900 truncate">{proj.title}</h4>
                       <p className="text-[11px] text-stone-500 mt-0.5 truncate">{proj.location}</p>
                     </div>
                     <StatusBadge status={proj.status} />
@@ -699,14 +699,14 @@ export const DashboardView: React.FC = () => {
                   <div className="mt-3">
                     <div className="flex justify-between text-[11px] mb-1">
                       <span className="text-stone-500">
-                        Budget: <span className="font-semibold text-stone-800 tabular-nums">{proj.budgetXAF.toLocaleString()} XAF</span>
+                        Budget: <span className="font-semibold text-stone-800 tabular-nums">{(proj.budget_cfa || 0).toLocaleString()} XAF</span>
                       </span>
-                      <span className="font-bold text-[#153E2E] tabular-nums">{proj.progressPercentage}%</span>
+                      <span className="font-bold text-[#153E2E] tabular-nums">{proj.progress_percentage}%</span>
                     </div>
                     <div className="w-full h-2 bg-stone-200/70 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-[#153E2E] rounded-full"
-                        style={{ width: `${proj.progressPercentage}%` }}
+                        style={{ width: `${proj.progress_percentage}%` }}
                       />
                     </div>
                   </div>
@@ -718,7 +718,7 @@ export const DashboardView: React.FC = () => {
           <div className="mt-4 pt-3 border-t border-[#F2EFE9] flex items-center justify-between text-xs text-stone-500">
             <span>Total Capital Deployed:</span>
             <span className="font-bold text-stone-900 tabular-nums">
-              {projects.reduce((acc, p) => acc + p.budgetXAF, 0).toLocaleString()} XAF
+              {projects.reduce((acc, p) => acc + (p.budget_cfa || 0), 0).toLocaleString()} XAF
             </span>
           </div>
         </div>
@@ -731,11 +731,11 @@ export const DashboardView: React.FC = () => {
           itemTitle={reviewModalItem.title}
           itemType={reviewModalItem.type}
           onApprove={(notes) => {
-            approveMutation.mutate({ id: reviewModalItem.id, notes });
+            approveMutation.mutate({ id: reviewModalItem.id, review_notes: notes });
             setReviewModalItem(null);
           }}
           onReject={(notes) => {
-            rejectMutation.mutate({ id: reviewModalItem.id, notes });
+            rejectMutation.mutate({ id: reviewModalItem.id, review_notes: notes });
             setReviewModalItem(null);
           }}
           onCancel={() => setReviewModalItem(null)}

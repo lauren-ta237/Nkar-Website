@@ -10,7 +10,7 @@ import {
   Folder,
   Tag,
 } from 'lucide-react';
-import { useGalleryList, useGalleryMutations } from '@/lib/api/queries';
+import { useAdminGalleryList, useAdminGalleryMutations } from '@/lib/api/gallery.api';
 import { Gallery } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -27,34 +27,34 @@ import {
 
 export const GalleryView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: gallery = [], isLoading } = useGalleryList();
-  const { createMutation, updateMutation, publishMutation, deleteMutation } = useGalleryMutations();
+  const { data: gallery = [], isLoading } = useAdminGalleryList();
+  const { createMutation, updateMutation, publishMutation, deleteMutation } = useAdminGalleryMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [albumFilter, setAlbumFilter] = useState('ALL');
+  const [categoryFilter, setCategoryFilter] = useState('ALL');
 
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Gallery | null>(null);
   const [viewImage, setViewImage] = useState<Gallery | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  const albums = Array.from(new Set(gallery.map((g) => g.album)));
+  const categories = Array.from(new Set(gallery.map((g) => g.category)));
 
   const filtered = gallery.filter((item) => {
     const matchesSearch =
       searchQuery === '' ||
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesAlbum = albumFilter === 'ALL' || item.album === albumFilter;
-    return matchesSearch && matchesAlbum;
+    const matchesCategory = categoryFilter === 'ALL' || item.category === categoryFilter;
+    return matchesSearch && matchesCategory;
   });
 
-  const handleCreateOrUpdate = (data: Omit<Gallery, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateOrUpdate = (data: Omit<Gallery, 'id' | 'created_at' | 'updated_at'>) => {
     if (editingItem) {
       updateMutation.mutate(
-        { id: editingItem.id, updates: data },
+        { id: editingItem.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -122,14 +122,14 @@ export const GalleryView: React.FC = () => {
 
           <div>
             <select
-              value={albumFilter}
-              onChange={(e) => setAlbumFilter(e.target.value)}
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
               className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
             >
-              <option value="ALL">All Curated Albums</option>
-              {albums.map((alb) => (
-                <option key={alb} value={alb}>
-                  {alb}
+              <option value="ALL">All Categories</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
                 </option>
               ))}
             </select>
@@ -159,7 +159,7 @@ export const GalleryView: React.FC = () => {
               <div>
                 <div className="relative w-full h-48 bg-stone-100 overflow-hidden">
                   <img
-                    src={item.mediaUrl}
+                    src={item.media_url}
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     referrerPolicy="no-referrer"
@@ -168,15 +168,15 @@ export const GalleryView: React.FC = () => {
                     <StatusBadge status={item.status} />
                   </div>
                   <div className="absolute top-2.5 left-2.5 bg-black/60 text-white text-[10px] font-semibold px-2 py-0.5 rounded flex items-center gap-1 backdrop-blur-xs">
-                    {item.mediaType === 'VIDEO' ? <Video className="w-3 h-3" /> : <ImageIcon className="w-3 h-3" />}
-                    <span>{item.mediaType}</span>
+                    {item.media_type === 'VIDEO' ? <Video className="w-3 h-3" /> : <ImageIcon className="w-3 h-3" />}
+                    <span>{item.media_type}</span>
                   </div>
                 </div>
 
                 <div className="p-4 space-y-2">
                   <div className="flex items-center gap-1.5 text-[11px] text-[#153E2E] font-semibold">
                     <Folder className="w-3 h-3 text-[#D4AF37]" />
-                    <span className="truncate">{item.album}</span>
+                    <span className="truncate">{item.category}</span>
                   </div>
 
                   <h3 className="text-sm font-bold text-stone-900 group-hover:text-[#153E2E] transition-colors line-clamp-1">
@@ -184,7 +184,7 @@ export const GalleryView: React.FC = () => {
                   </h3>
 
                   <p className="text-xs text-stone-500 line-clamp-2 leading-relaxed">
-                    {item.description}
+                    {item.description || '—'}
                   </p>
 
                   {item.tags.length > 0 && (
@@ -201,7 +201,7 @@ export const GalleryView: React.FC = () => {
 
               <div className="p-3 bg-[#FAF8F5] border-t border-[#E8E4DA] flex items-center justify-between text-xs">
                 <span className="text-[10px] text-stone-400 font-mono">
-                  By {item.uploadedBy.split(' ')[0]}
+                  {item.uploaded_by_id ? 'By Admin' : 'System'}
                 </span>
 
                 <div className="flex items-center gap-1">
@@ -248,7 +248,7 @@ export const GalleryView: React.FC = () => {
           <DialogContent className="sm:max-w-4xl p-0 overflow-hidden bg-stone-900 border-stone-800 text-stone-100">
             <div className="relative max-h-[70vh] bg-black flex items-center justify-center overflow-hidden">
               <img
-                src={viewImage.mediaUrl}
+                src={viewImage.media_url}
                 alt={viewImage.title}
                 className="max-h-[70vh] w-auto object-contain"
                 referrerPolicy="no-referrer"
@@ -260,7 +260,7 @@ export const GalleryView: React.FC = () => {
                 <DialogDescription className="text-xs text-stone-400 mt-1">{viewImage.description}</DialogDescription>
               </DialogHeader>
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-stone-800 text-xs text-stone-400">
-                <span>Album: <strong className="text-amber-400 font-medium">{viewImage.album}</strong></span>
+                <span>Category: <strong className="text-amber-400 font-medium">{viewImage.category}</strong></span>
                 <button
                   type="button"
                   onClick={() => setViewImage(null)}

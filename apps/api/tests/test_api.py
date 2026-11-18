@@ -199,6 +199,53 @@ async def test_media_upload_no_mock_credential_check(client: AsyncClient, admin_
 
 
 @pytest.mark.asyncio
+async def test_admin_dashboard_stats(client: AsyncClient, admin_token: str):
+    # Unauthenticated access rejected
+    unauth = await client.get("/api/v1/admin/dashboard/stats")
+    assert unauth.status_code in (401, 403)
+
+    # Super admin access returns aggregated counts
+    res = await client.get(
+        "/api/v1/admin/dashboard/stats",
+        headers={"Authorization": f"Bearer {admin_token}"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["success"] is True
+    stats = data["data"]
+    assert stats["totalNews"] >= 3
+    assert stats["heritageRecords"] >= 3
+    assert stats["registeredAdmins"] >= 3
+    assert "activeProjectsCount" in stats
+    assert "averageProjectProgress" in stats
+
+
+@pytest.mark.asyncio
+async def test_admin_dashboard_pending_reviews(client: AsyncClient, admin_token: str):
+    res = await client.get(
+        "/api/v1/admin/dashboard/pending-reviews",
+        headers={"Authorization": f"Bearer {admin_token}"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["success"] is True
+    assert isinstance(data["data"], list)
+
+
+@pytest.mark.asyncio
+async def test_admin_dashboard_search(client: AsyncClient, admin_token: str):
+    res = await client.get(
+        "/api/v1/admin/dashboard/search?q=Nkar",
+        headers={"Authorization": f"Bearer {admin_token}"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["success"] is True
+    assert len(data["data"]) >= 1
+    assert any("Nkar" in item["title"] for item in data["data"])
+
+
+@pytest.mark.asyncio
 async def test_audit_logs_rbac_protection(client: AsyncClient, admin_token: str):
     # Unauthenticated access must be rejected
     unauth_res = await client.get("/api/v1/audit")

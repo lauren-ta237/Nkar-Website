@@ -11,7 +11,7 @@ import {
   TrendingUp,
   Clock,
 } from 'lucide-react';
-import { useProjectsList, useProjectsMutations } from '@/lib/api/queries';
+import { useAdminProjectsList, useAdminProjectsMutations } from '@/lib/api/projects.api';
 import { DevelopmentProject } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -21,8 +21,8 @@ import { ProjectsFormModal } from './ProjectsFormModal';
 
 export const ProjectsView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: projects = [], isLoading } = useProjectsList();
-  const { createMutation, updateMutation, deleteMutation } = useProjectsMutations();
+  const { data: projects = [], isLoading } = useAdminProjectsList();
+  const { createMutation, updateMutation, deleteMutation } = useAdminProjectsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -34,7 +34,7 @@ export const ProjectsView: React.FC = () => {
   const filtered = projects.filter((p) => {
     const matchesSearch =
       searchQuery === '' ||
-      p.projectName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.description.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -42,10 +42,10 @@ export const ProjectsView: React.FC = () => {
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreateOrUpdate = (data: Omit<DevelopmentProject, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleCreateOrUpdate = (data: Omit<DevelopmentProject, 'id' | 'created_at' | 'updated_at'>) => {
     if (editingProject) {
       updateMutation.mutate(
-        { id: editingProject.id, updates: data },
+        { id: editingProject.id, data },
         {
           onSuccess: () => {
             setFormModalOpen(false);
@@ -71,7 +71,7 @@ export const ProjectsView: React.FC = () => {
   const canManage = currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER';
   const canDelete = currentUser.role === 'SUPER_ADMIN';
 
-  const totalCommittedBudget = projects.reduce((acc, p) => acc + p.budgetXAF, 0);
+  const totalCommittedBudget = projects.reduce((acc, p) => acc + (p.budget_cfa || 0), 0);
 
   return (
     <div className="space-y-6">
@@ -179,11 +179,11 @@ export const ProjectsView: React.FC = () => {
               className="bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
             >
               <div>
-                {proj.coverImage && (
+                {proj.cover_image_url && (
                   <div className="w-full h-44 bg-stone-100 overflow-hidden relative">
                     <img
-                      src={proj.coverImage}
-                      alt={proj.projectName}
+                      src={proj.cover_image_url}
+                      alt={proj.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       referrerPolicy="no-referrer"
                     />
@@ -200,7 +200,7 @@ export const ProjectsView: React.FC = () => {
                   </div>
 
                   <h3 className="text-base font-bold text-stone-900 group-hover:text-[#153E2E] transition-colors leading-snug">
-                    {proj.projectName}
+                    {proj.title}
                   </h3>
 
                   <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
@@ -212,7 +212,7 @@ export const ProjectsView: React.FC = () => {
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-stone-500">Budget:</span>
                       <span className="font-bold text-stone-900 tabular-nums">
-                        {proj.budgetXAF.toLocaleString()} XAF
+                        {(proj.budget_cfa || 0).toLocaleString()} XAF
                       </span>
                     </div>
 
@@ -220,24 +220,15 @@ export const ProjectsView: React.FC = () => {
                       <div className="flex justify-between text-[11px] mb-1">
                         <span className="text-stone-500">Milestone Progress</span>
                         <span className="font-bold text-[#153E2E] tabular-nums">
-                          {proj.progressPercentage}%
+                          {proj.progress_percentage}%
                         </span>
                       </div>
                       <div className="w-full h-2.5 bg-stone-200 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-[#153E2E] to-[#40916C] rounded-full transition-all duration-500"
-                          style={{ width: `${proj.progressPercentage}%` }}
+                          style={{ width: `${proj.progress_percentage}%` }}
                         />
                       </div>
-                    </div>
-
-                    <div className="pt-1 flex flex-col gap-1 text-[11px] text-stone-500">
-                      <p className="truncate">
-                        Lead: <span className="font-semibold text-stone-700">{proj.leadCoordinator}</span>
-                      </p>
-                      <p className="truncate">
-                        Funding: <span className="text-stone-700">{proj.fundingSource}</span>
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -245,7 +236,7 @@ export const ProjectsView: React.FC = () => {
 
               <div className="p-4 bg-[#FAF8F5] border-t border-[#E8E4DA] flex items-center justify-between text-xs">
                 <span className="text-[11px] text-stone-400 font-mono">
-                  Started {proj.startDate}
+                  Started {proj.start_date || '—'}
                 </span>
 
                 <div className="flex items-center gap-1">

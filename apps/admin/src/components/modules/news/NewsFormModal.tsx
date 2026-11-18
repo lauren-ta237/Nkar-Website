@@ -15,7 +15,7 @@ interface NewsFormModalProps {
   isOpen: boolean;
   initialData?: News | null;
   onClose: () => void;
-  onSubmit: (data: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'viewsCount'>) => void;
+  onSubmit: (data: Omit<News, 'id' | 'created_at' | 'updated_at' | 'views'>) => void;
   isLoading?: boolean;
 }
 
@@ -53,21 +53,21 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
     if (initialData) {
       setTitle(initialData.title);
       setSlug(initialData.slug);
-      setSummary(initialData.summary);
+      setSummary(initialData.summary || '');
       setContent(initialData.content);
-      setCoverImage(initialData.coverImage);
+      setCoverImage(initialData.cover_image || '');
       setCategory(initialData.category);
       setTagsInput(initialData.tags.join(', '));
-      setIsFeatured(initialData.isFeatured);
+      setIsFeatured(initialData.is_featured);
       setStatus(initialData.status);
     } else {
       setTitle('');
       setSlug('');
       setSummary('');
       setContent('');
-      setCoverImage('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80');
+      setCoverImage('');
       setCategory(CATEGORIES[0]);
-      setTagsInput('Nkar, Fondom, Community');
+      setTagsInput('');
       setIsFeatured(false);
       setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'DRAFT' : 'PUBLISHED');
     }
@@ -114,17 +114,16 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
 
     onSubmit({
       title: title.trim(),
-      slug: slug.trim(),
-      summary: summary.trim(),
+      slug: slug.trim() || `news-${Date.now()}`,
+      summary: summary.trim() || null,
       content: content.trim(),
-      coverImage: coverImage.trim() || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80',
+      cover_image: coverImage.trim() || null,
       category,
       tags,
-      isFeatured,
+      is_featured: isFeatured,
       status,
-      authorId: initialData?.authorId || currentUser.id,
-      authorName: initialData?.authorName || currentUser.name,
-      publishedAt: status === 'PUBLISHED' ? new Date().toISOString() : undefined,
+      author_id: initialData?.author_id || currentUser.id,
+      published_at: status === 'PUBLISHED' ? new Date().toISOString() : null,
     });
   };
 
@@ -218,6 +217,7 @@ export const NewsFormModal: React.FC<NewsFormModalProps> = ({
               onChange={(url) => setCoverImage(url)}
               accept="image/*"
               helperText="Upload JPG, PNG, or WebP cover photograph"
+              folder="nkar_woo_lan/news"
               required
             />
           </div>

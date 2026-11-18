@@ -14,7 +14,7 @@ interface LeadershipFormModalProps {
   isOpen: boolean;
   initialData?: Leadership | null;
   onClose: () => void;
-  onSubmit: (data: Omit<Leadership, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (data: Omit<Leadership, 'id' | 'created_at' | 'updated_at'>) => void;
   isLoading?: boolean;
 }
 
@@ -38,20 +38,20 @@ export const LeadershipFormModal: React.FC<LeadershipFormModalProps> = ({
   useEffect(() => {
     if (initialData) {
       setName(initialData.name);
-      setTraditionalTitle(initialData.traditionalTitle);
-      setBiography(initialData.biography);
-      setActivePeriod(initialData.activePeriod);
-      setPortraitPhoto(initialData.portraitPhoto);
-      setDisplayOrder(initialData.displayOrder);
-      setLineage(initialData.lineage || '');
+      setTraditionalTitle(initialData.traditional_title);
+      setBiography(initialData.biography || '');
+      setActivePeriod(initialData.period_label || '');
+      setPortraitPhoto(initialData.portrait_url || '');
+      setDisplayOrder(initialData.order_index);
+      setLineage(initialData.historical_notes || '');
       setStatus(initialData.status);
     } else {
       setName('');
-      setTraditionalTitle('Senior Kingmaker & Council Member');
+      setTraditionalTitle('');
       setBiography('');
-      setActivePeriod('2015 — Present');
-      setPortraitPhoto('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=80');
-      setDisplayOrder(5);
+      setActivePeriod('');
+      setPortraitPhoto('');
+      setDisplayOrder(1);
       setLineage('');
       setStatus('PUBLISHED');
     }
@@ -69,12 +69,12 @@ export const LeadershipFormModal: React.FC<LeadershipFormModalProps> = ({
 
     onSubmit({
       name: name.trim(),
-      traditionalTitle: traditionalTitle.trim(),
-      biography: biography.trim(),
-      activePeriod: activePeriod.trim(),
-      portraitPhoto: portraitPhoto.trim() || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=80',
-      displayOrder: Number(displayOrder) || 1,
-      lineage: lineage.trim() || undefined,
+      traditional_title: traditionalTitle.trim(),
+      biography: biography.trim() || null,
+      period_label: activePeriod.trim() || null,
+      portrait_url: portraitPhoto.trim() || null,
+      order_index: Number(displayOrder) || 0,
+      historical_notes: lineage.trim() || null,
       status,
     });
   };
@@ -168,6 +168,7 @@ export const LeadershipFormModal: React.FC<LeadershipFormModalProps> = ({
             onChange={setPortraitPhoto}
             accept="image/*"
             mediaTypeHint="image"
+            folder="nkar_woo_lan/leadership"
             helperText="Upload official photograph of the traditional leader (JPEG, PNG, WebP up to 15MB)"
           />
 

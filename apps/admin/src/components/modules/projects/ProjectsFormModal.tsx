@@ -14,7 +14,7 @@ interface ProjectsFormModalProps {
   isOpen: boolean;
   initialData?: DevelopmentProject | null;
   onClose: () => void;
-  onSubmit: (data: Omit<DevelopmentProject, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (data: Omit<DevelopmentProject, 'id' | 'created_at' | 'updated_at'>) => void;
   isLoading?: boolean;
 }
 
@@ -25,44 +25,38 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
   onSubmit,
   isLoading = false,
 }) => {
-  const [projectName, setProjectName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
-  const [budgetXAF, setBudgetXAF] = useState<number>(25000000);
+  const [budgetCfa, setBudgetCfa] = useState<number>(25000000);
   const [status, setStatus] = useState<ProjectStatus>('IN_PROGRESS');
   const [progressPercentage, setProgressPercentage] = useState<number>(50);
-  const [coverImage, setCoverImage] = useState('');
+  const [coverImageUrl, setCoverImageUrl] = useState('');
   const [startDate, setStartDate] = useState('');
   const [completionDate, setCompletionDate] = useState('');
-  const [leadCoordinator, setLeadCoordinator] = useState('');
-  const [fundingSource, setFundingSource] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (initialData) {
-      setProjectName(initialData.projectName);
+      setTitle(initialData.title);
       setDescription(initialData.description);
       setLocation(initialData.location);
-      setBudgetXAF(initialData.budgetXAF);
+      setBudgetCfa(initialData.budget_cfa || 0);
       setStatus(initialData.status);
-      setProgressPercentage(initialData.progressPercentage);
-      setCoverImage(initialData.coverImage);
-      setStartDate(initialData.startDate);
-      setCompletionDate(initialData.completionDate || '');
-      setLeadCoordinator(initialData.leadCoordinator);
-      setFundingSource(initialData.fundingSource);
+      setProgressPercentage(initialData.progress_percentage);
+      setCoverImageUrl(initialData.cover_image_url || '');
+      setStartDate(initialData.start_date || '');
+      setCompletionDate(initialData.completion_date || '');
     } else {
-      setProjectName('');
+      setTitle('');
       setDescription('');
-      setLocation('Roh-Nkar / Central Axis');
-      setBudgetXAF(30000000);
-      setStatus('IN_PROGRESS');
-      setProgressPercentage(35);
-      setCoverImage('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&auto=format&fit=crop&q=80');
-      setStartDate('2026-01-15');
-      setCompletionDate('2026-12-30');
-      setLeadCoordinator('Eng. Francis Mbinkar');
-      setFundingSource('NKACUDA Community Development & Diaspora Fund');
+      setLocation('');
+      setBudgetCfa(0);
+      setStatus('PROPOSED');
+      setProgressPercentage(0);
+      setCoverImageUrl('');
+      setStartDate('');
+      setCompletionDate('');
     }
     setError('');
   }, [initialData, isOpen]);
@@ -71,8 +65,8 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!projectName.trim() || !description.trim() || !location.trim() || !startDate) {
-      setError('Project name, description, location, and start date are required.');
+    if (!title.trim() || !description.trim() || !location.trim()) {
+      setError('Project title, description, and location are required.');
       return;
     }
     if (progressPercentage < 0 || progressPercentage > 100) {
@@ -81,17 +75,16 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
     }
 
     onSubmit({
-      projectName: projectName.trim(),
+      title: title.trim(),
       description: description.trim(),
       location: location.trim(),
-      budgetXAF: Number(budgetXAF) || 0,
+      budget_cfa: Number(budgetCfa) || null,
       status,
-      progressPercentage: Number(progressPercentage) || 0,
-      coverImage: coverImage.trim() || 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&auto=format&fit=crop&q=80',
-      startDate,
-      completionDate: completionDate.trim() || undefined,
-      leadCoordinator: leadCoordinator.trim(),
-      fundingSource: fundingSource.trim(),
+      progress_percentage: Number(progressPercentage) || 0,
+      cover_image_url: coverImageUrl.trim() || null,
+      start_date: startDate || null,
+      completion_date: completionDate.trim() || null,
+      milestones: initialData?.milestones || null,
     });
   };
 
@@ -119,8 +112,8 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
             <label className="block text-xs font-semibold text-stone-700 mb-1">Project Name *</label>
             <input
               type="text"
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Nkar Gravity-Fed Community Water Supply Phase II"
               className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-900 font-semibold"
               required
@@ -146,8 +139,8 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
                 type="number"
                 min="0"
                 step="100000"
-                value={budgetXAF}
-                onChange={(e) => setBudgetXAF(Number(e.target.value))}
+                value={budgetCfa}
+                onChange={(e) => setBudgetCfa(Number(e.target.value))}
                 className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800 tabular-nums font-semibold"
                 required
               />
@@ -208,36 +201,13 @@ export const ProjectsFormModal: React.FC<ProjectsFormModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Lead Project Coordinator</label>
-              <input
-                type="text"
-                value={leadCoordinator}
-                onChange={(e) => setLeadCoordinator(e.target.value)}
-                placeholder="e.g. Eng. Francis Mbinkar"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Funding Source</label>
-              <input
-                type="text"
-                value={fundingSource}
-                onChange={(e) => setFundingSource(e.target.value)}
-                placeholder="e.g. Diaspora Contributions / Council Grant"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              />
-            </div>
-          </div>
-
           <FileUpload
-            label="Project Cover / Site Photograph *"
-            value={coverImage}
-            onChange={setCoverImage}
+            label="Project Cover / Site Photograph"
+            value={coverImageUrl}
+            onChange={setCoverImageUrl}
             accept="image/*"
             mediaTypeHint="image"
+            folder="nkar_woo_lan/projects"
             helperText="Upload official site or project progress photograph (JPEG, PNG, WebP up to 15MB)"
           />
 

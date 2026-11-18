@@ -13,7 +13,7 @@ import {
   Send,
   Filter,
 } from 'lucide-react';
-import { useContactsList, useContactsMutations } from '@/lib/api/queries';
+import { useAdminContactsList, useAdminContactsMutations } from '@/lib/api/contacts.api';
 import { ContactSubmission, ContactStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
@@ -22,8 +22,8 @@ import { ConfirmModal } from '../../common/ConfirmModal';
 
 export const ContactView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: contacts = [], isLoading } = useContactsList();
-  const { updateStatusMutation, deleteMutation } = useContactsMutations();
+  const { data: contacts = [], isLoading } = useAdminContactsList();
+  const { updateStatusMutation, deleteMutation } = useAdminContactsMutations();
 
   const [selectedId, setSelectedId] = useState<string | null>(contacts[0]?.id || null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,8 +34,8 @@ export const ContactView: React.FC = () => {
   const filtered = contacts.filter((c) => {
     const matchesSearch =
       searchQuery === '' ||
-      c.senderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.sender_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.sender_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.message.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -52,7 +52,7 @@ export const ContactView: React.FC = () => {
   const handleSaveNote = () => {
     if (activeContact && internalNoteText.trim()) {
       updateStatusMutation.mutate(
-        { id: activeContact.id, status: activeContact.status, notes: internalNoteText.trim() },
+        { id: activeContact.id, status: activeContact.status, internal_notes: internalNoteText.trim() },
         {
           onSuccess: () => setInternalNoteText(''),
         }
@@ -158,9 +158,9 @@ export const ContactView: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-stone-900 truncate">{msg.senderName}</span>
+                      <span className="font-bold text-stone-900 truncate">{msg.sender_name}</span>
                       <span className="text-[10px] text-stone-400 font-mono">
-                        {new Date(msg.createdAt).toLocaleDateString()}
+                        {new Date(msg.created_at).toLocaleDateString()}
                       </span>
                     </div>
 
@@ -171,8 +171,8 @@ export const ContactView: React.FC = () => {
 
                     <div className="mt-2 flex items-center justify-between">
                       <StatusBadge status={msg.status} />
-                      {msg.assignedTo && (
-                        <span className="text-[10px] text-stone-400">Assigned: {msg.assignedTo.split(' ')[0]}</span>
+                      {msg.assigned_to_id && (
+                        <span className="text-[10px] text-stone-400">Assigned</span>
                       )}
                     </div>
                   </div>
@@ -193,14 +193,14 @@ export const ContactView: React.FC = () => {
                     {activeContact.subject}
                   </h3>
                   <div className="flex items-center gap-3 text-xs text-stone-500 mt-1">
-                    <span className="font-semibold text-stone-800">{activeContact.senderName}</span>
+                    <span className="font-semibold text-stone-800">{activeContact.sender_name}</span>
                     <span>·</span>
-                    <span>{activeContact.email}</span>
-                    {activeContact.phoneNumber && (
+                    <span>{activeContact.sender_email}</span>
+                    {activeContact.phone && (
                       <>
                         <span>·</span>
                         <span className="flex items-center gap-1 font-mono">
-                          <Phone className="w-3 h-3" /> {activeContact.phoneNumber}
+                          <Phone className="w-3 h-3" /> {activeContact.phone}
                         </span>
                       </>
                     )}
@@ -270,9 +270,9 @@ export const ContactView: React.FC = () => {
                     Internal Council & Administrative Notes
                   </p>
 
-                  {activeContact.internalNotes ? (
+                  {activeContact.internal_notes ? (
                     <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-900 leading-relaxed mb-3">
-                      {activeContact.internalNotes}
+                      {activeContact.internal_notes}
                     </div>
                   ) : (
                     <p className="text-xs text-stone-400 italic mb-2">No internal notes recorded yet.</p>
@@ -300,8 +300,8 @@ export const ContactView: React.FC = () => {
 
               {/* Footer */}
               <div className="p-4 border-t border-[#E8E4DA] bg-[#FAF8F5] flex items-center justify-between text-[11px] text-stone-500">
-                <span>Received: {new Date(activeContact.createdAt).toLocaleString()}</span>
-                <span>Assigned to: {activeContact.assignedTo || 'Unassigned'}</span>
+                <span>Received: {new Date(activeContact.created_at).toLocaleString()}</span>
+                <span>Assigned to: {activeContact.assigned_to_id || 'Unassigned'}</span>
               </div>
             </div>
           ) : (

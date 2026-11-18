@@ -11,7 +11,6 @@ import {
   Download,
 } from 'lucide-react';
 import { useAdminStore } from '../../../store/useAdminStore';
-import { backendApi } from '@/lib/api/backend';
 import { useQueryClient } from '@tanstack/react-query';
 import { ConfirmModal } from '../../common/ConfirmModal';
 
@@ -20,9 +19,9 @@ export const SettingsView: React.FC = () => {
   const queryClient = useQueryClient();
 
   const [fondomName, setFondomName] = useState('Nkar Fondom (Nkar Woo Làn)');
-  const [traditionalCapital, setTraditionalCapital] = useState('Nkar Village, Bui Division, North West Region, Cameroon');
-  const [officialContact, setOfficialContact] = useState('traditionalcouncil@nkarwoolad.cm');
-  const [phoneNumber, setPhoneNumber] = useState('+237 677 89 45 12');
+  const [traditionalCapital, setTraditionalCapital] = useState('Nkar Kingdom/Fondom, Bui Division, Northwest Region, Cameroon');
+  const [officialContact, setOfficialContact] = useState('info@nkarwoolan.org');
+  const [phoneNumber, setPhoneNumber] = useState('+237 679 632 780');
   const [reviewRequired, setReviewRequired] = useState(true);
   const [publicInquiriesEnabled, setPublicInquiriesEnabled] = useState(true);
   const [savedSuccess, setSavedSuccess] = useState(false);
@@ -38,10 +37,9 @@ export const SettingsView: React.FC = () => {
   };
 
   const handleResetFactoryData = () => {
-    backendApi.resetAllData();
     queryClient.invalidateQueries();
     setResetConfirmOpen(false);
-    setResetSuccessMessage('Database successfully restored to clean authentic Nkar Woo Làn demo dataset.');
+    setResetSuccessMessage('Client cache invalidated and refreshed from API.');
     setTimeout(() => setResetSuccessMessage(null), 5000);
   };
 
