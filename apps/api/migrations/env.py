@@ -11,8 +11,10 @@ import app.database.base  # noqa: F401
 
 config = context.config
 
-# Set the SQLAlchemy URL directly from application settings using lowercase database_url
-config.set_main_option("sqlalchemy.url", settings.database_url)
+# Set the SQLAlchemy URL directly from application settings using lowercase database_url,
+# escaping percent signs (%) so configparser doesn't trigger invalid interpolation errors.
+db_url = str(settings.database_url).replace("%", "%%")
+config.set_main_option("sqlalchemy.url", db_url)
 
 if config.config_file_name:
     fileConfig(config.config_file_name)
