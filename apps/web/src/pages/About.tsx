@@ -10,20 +10,27 @@ import AboutSection from '@/components/about/AboutSection';
 import TraditionsGrid from '@/components/about/TraditionsGrid';
 import { site } from '@/data/site';
 import { images } from '@/data/images';
-import { aboutLead, traditions as staticTraditions, timeline, aboutSections as staticAboutSections } from '@/data/culture';
+import {
+  aboutLead,
+  traditions as staticTraditions,
+  timeline,
+  aboutSections as staticAboutSections,
+  type AboutSection as AboutSectionData,
+} from '@/data/culture';
 import { useHeritageList } from '@/lib/api/heritage.api';
 
 export default function About() {
   const { hash } = useLocation();
   const { data: heritageItems = [], isLoading } = useHeritageList();
 
-  const sections = useMemo(() => {
-    if (heritageItems.length > 0) {
+  const sections = useMemo<AboutSectionData[]>(() => {
+    if (Array.isArray(heritageItems) && heritageItems.length > 0) {
       return heritageItems.map((h) => ({
         id: h.slug || h.id,
         eyebrow: h.category ? h.category.replace(/_/g, ' ') : 'Heritage',
         title: h.title,
-        image: h.images && h.images.length > 0 ? h.images[0] : null,
+        image: Array.isArray(h.images) && h.images.length > 0 ? h.images[0] : null,
+        imageAlt: h.title,
         paragraphs: (h.content || '').split('\n\n').filter(Boolean),
       }));
     }
@@ -103,8 +110,7 @@ export default function About() {
           <AboutSection
             key={section.id}
             section={section}
-            flipped={index % 2 === 1}
-            dark={index % 2 === 1}
+            index={index}
           />
         ))
       )}
