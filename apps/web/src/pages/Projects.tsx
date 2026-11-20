@@ -4,15 +4,14 @@ import SectionHeading from '@/components/SectionHeading';
 import ContentNotice from '@/components/ContentNotice';
 import ProjectCard from '@/components/ProjectCard';
 import LoadingState from '@/components/LoadingState';
-import { projectNote } from '@/data/projects';
 import { contributeWays } from '@/data/site';
-import { useProjects } from '@/hooks/useContent';
+import { useProjectsList } from '@/lib/api/projects.api';
 
 export default function Projects() {
-  const projectsQuery = useProjects();
-  const projects = projectsQuery.data || [];
+  const { data: projects = [], isLoading } = useProjectsList();
 
-  const countBy = (status: string) => projects.filter((project) => project.status === status).length;
+  const countBy = (statusVal: string) =>
+    projects.filter((p) => p.status?.toLowerCase() === statusVal.toLowerCase()).length;
 
   return (
     <>
@@ -20,18 +19,20 @@ export default function Projects() {
         eyebrow="Development projects"
         title="What Nkar is building together"
         description="Ongoing, planned, and completed initiatives in water, roads, education, and the palace, carried forward by the village and its sons and daughters abroad."
-        note={projectNote}
+        note="Project milestones, budgets, and execution progress are published directly by the community development committees."
       />
 
       <section className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
-          <ContentNotice>{projectNote}</ContentNotice>
+          <ContentNotice>
+            Infrastructure and community project figures are verified and updated as works progress across the quarters.
+          </ContentNotice>
 
           <div className="mt-10 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-3">
             {[
-              { label: 'Ongoing', status: 'Ongoing' },
-              { label: 'Planned', status: 'Planned' },
-              { label: 'Completed', status: 'Completed' }
+              { label: 'Ongoing', status: 'ongoing' },
+              { label: 'Proposed', status: 'proposed' },
+              { label: 'Completed', status: 'completed' }
             ].map((item) => (
               <div key={item.label} className="bg-ivory p-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold-600">
@@ -44,8 +45,14 @@ export default function Projects() {
             ))}
           </div>
 
-          {projectsQuery.isLoading ? (
+          {isLoading ? (
             <LoadingState label="Loading the project register…" />
+          ) : projects.length === 0 ? (
+            <div className="mt-12 p-8 text-center border border-border bg-card">
+              <p className="text-sm text-muted-foreground italic">
+                No development projects currently registered in the database.
+              </p>
+            </div>
           ) : (
             <div className="mt-12 space-y-8">
               {projects.map((project) => (

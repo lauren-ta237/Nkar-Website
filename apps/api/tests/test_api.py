@@ -294,3 +294,68 @@ async def test_update_news_with_extra_fields_ignored(client: AsyncClient, admin_
     data = update_res.json()
     assert data["success"] is True
     assert data["data"]["id"] == target_id
+
+
+@pytest.mark.asyncio
+async def test_public_search(client: AsyncClient):
+    # Public unauthenticated search
+    res = await client.get("/api/v1/search?q=Nkar")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["success"] is True
+    assert isinstance(data["data"], list)
+    if data["data"]:
+        assert "id" in data["data"][0]
+        assert "title" in data["data"][0]
+        assert "type" in data["data"][0]
+        assert "url" in data["data"][0]
+
+
+@pytest.mark.asyncio
+async def test_news_detail_by_slug(client: AsyncClient):
+    # Fetch list first to get an existing published article's slug
+    list_res = await client.get("/api/v1/news")
+    assert list_res.status_code == 200
+    items = list_res.json()["data"]
+    if items:
+        slug = items[0]["slug"]
+        detail_res = await client.get(f"/api/v1/news/{slug}")
+        assert detail_res.status_code == 200
+        detail = detail_res.json()
+        assert detail["success"] is True
+        assert detail["data"]["slug"] == slug
+
+
+@pytest.mark.asyncio
+async def test_events_detail_by_slug(client: AsyncClient):
+    list_res = await client.get("/api/v1/events")
+    assert list_res.status_code == 200
+    items = list_res.json()["data"]
+    if items:
+        slug = items[0]["slug"]
+        detail_res = await client.get(f"/api/v1/events/{slug}")
+        assert detail_res.status_code == 200
+        detail = detail_res.json()
+        assert detail["success"] is True
+        assert detail["data"]["slug"] == slug
+
+
+@pytest.mark.asyncio
+async def test_heritage_detail_by_slug(client: AsyncClient):
+    list_res = await client.get("/api/v1/heritage")
+    assert list_res.status_code == 200
+    items = list_res.json()["data"]
+    if items:
+        slug = items[0]["slug"]
+        detail_res = await client.get(f"/api/v1/heritage/{slug}")
+        assert detail_res.status_code == 200
+        detail = detail_res.json()
+        assert detail["success"] is True
+        assert detail["data"]["slug"] == slug
+
+
+@pytest.mark.asyncio
+async def test_item_detail_not_found(client: AsyncClient):
+    res = await client.get("/api/v1/news/non-existent-article-slug-xyz")
+    assert res.status_code == 404
+

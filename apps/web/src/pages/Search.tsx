@@ -1,15 +1,27 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, Search as SearchIcon } from 'lucide-react';
 import FilterChips from '@/components/FilterChips';
 import LoadingState from '@/components/LoadingState';
-import { searchContent, searchTypes, useSearchIndex } from '@/hooks/useContent';
+import { usePublicSearch } from '@/lib/api/search.api';
 import type { FormEvent } from 'react';
 
+const SEARCH_TYPES = [
+  'All',
+  'News',
+  'Event',
+  'Heritage',
+  'Leadership',
+  'Project',
+  'Publication',
+  'Gallery'
+];
+
 const typeStyles: Record<string, string> = {
-  Page: 'border-forest-600 bg-forest-700 text-ivory',
   News: 'border-gold-500 bg-gold-100 text-gold-700',
   Event: 'border-clay-500 bg-clay-100 text-clay-700',
+  Heritage: 'border-forest-600 bg-forest-700 text-ivory',
+  Leadership: 'border-gold-500 bg-forest-900 text-gold-300',
   Project: 'border-border bg-cream text-forest-700',
   Publication: 'border-border bg-ivory text-forest-700',
   Gallery: 'border-gold-500 bg-ivory text-gold-700'
@@ -19,16 +31,13 @@ export default function Search() {
   const [params, setParams] = useSearchParams();
   const [term, setTerm] = useState(params.get('q') || '');
   const [type, setType] = useState('All');
-  const indexQuery = useSearchIndex();
 
   useEffect(() => {
     setTerm(params.get('q') || '');
   }, [params]);
 
-  const results = useMemo(
-    () => searchContent(indexQuery.data || [], term, type),
-    [indexQuery.data, term, type]
-  );
+  const activeQuery = params.get('q') || '';
+  const { data: results = [], isLoading } = usePublicSearch(activeQuery, type);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -80,76 +89,74 @@ export default function Search() {
         <div className="mx-auto w-full max-w-5xl px-6">
           <div className="flex flex-wrap items-center justify-between gap-6">
             <FilterChips
-              options={Array.from(searchTypes)}
+              options={SEARCH_TYPES}
               value={type}
               onChange={setType}
-              label="Filter results by type"
+              label="Filter search results by type"
             />
-            <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              {results.length} {results.length === 1 ? 'result' : 'results'}
-              {term.trim() ? ` for “${term.trim()}”` : ''}
-            </p>
+            {activeQuery && !isLoading && (
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                {results.length} {results.length === 1 ? 'result' : 'results'}
+              </p>
+            )}
           </div>
 
-          {indexQuery.isLoading ? (
-            <LoadingState label="Searching the archive…" />
-          ) : results.length === 0 ? (
-            <div className="mt-12 border border-gold-500/40 bg-gold-50/70 p-8 text-center">
-              <p className="font-display text-2xl text-forest-700">
-                Nothing found for “{term.trim()}”.
-              </p>
-              <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-forest-800">
-                Try another search term, such as a quarter, a family name, a development project, or a traditional ceremony. If what you
-                are looking for is not here yet, it may not have been published: write to the
-                custodians and they will help you find it.
-              </p>
-              <Link
-                to="/contact"
-                className="mt-6 inline-flex items-center gap-2 bg-forest-700 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-ivory transition-colors hover:bg-gold-600"
-              >
-                Ask the custodians
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
-          ) : (
-            <ul className="mt-10 space-y-4">
-              {results.map((item) => (
-                <li key={item.id}>
-                  <Link
-                    to={item.to}
-                    className="group flex flex-col gap-4 border border-border bg-card p-6 transition-colors hover:border-gold-500/60 md:flex-row md:items-start md:justify-between"
-                  >
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span
-                          className={`border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] ${
-                            typeStyles[item.type] || typeStyles.Page
-                          }`}
-                        >
-                          {item.type}
-                        </span>
-                        {item.meta && (
-                          <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                            {item.meta}
+          <div className="mt-10">
+            {isLoading ? (
+              <LoadingState label="Searching the live database…" />
+            ) : !activeQuery ? (
+              <div className="border border-dashed border-border p-12 text-center">
+                <p className="font-display text-2xl text-forest-700">Type a keyword to begin</p>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Search by village quarter, clan, traditional institution, event date or keyword.
+                </p>
+              </div>
+            ) : results.length === 0 ? (
+              <div className="border border-border bg-card p-12 text-center">
+                <p className="font-display text-2xl text-forest-700">No results found</p>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Nothing matching “{activeQuery}” was found in the archive. Try another spelling or contact the palace custodians.
+                </p>
+              </div>
+            ) : (
+              <ul className="divide-y divide-border border-y border-border">
+                {results.map((item) => (
+                  <li key={item.id} className="py-6">
+                    <Link
+                      to={item.url}
+                      className="group flex items-start justify-between gap-6"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] ${
+                              typeStyles[item.type] || 'border-border bg-card text-forest-700'
+                            }`}
+                          >
+                            {item.type}
                           </span>
+                          {item.category && (
+                            <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                              {item.category}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="font-display text-2xl text-forest-700 transition-colors group-hover:text-gold-600">
+                          {item.title}
+                        </h3>
+                        {item.subtitle && (
+                          <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                            {item.subtitle}
+                          </p>
                         )}
                       </div>
-                      <h2 className="mt-3 font-display text-2xl leading-snug text-forest-700">
-                        {item.title}
-                      </h2>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                        {item.summary}
-                      </p>
-                    </div>
-                    <span className="inline-flex shrink-0 items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-forest-600 transition-colors group-hover:text-gold-600">
-                      Open
-                      <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+                      <ArrowUpRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold-600" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </section>
     </>

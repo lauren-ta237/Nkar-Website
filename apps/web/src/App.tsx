@@ -16,6 +16,10 @@ import Books from '@/pages/Books';
 import Projects from '@/pages/Projects';
 import Contact from '@/pages/Contact';
 import Search from '@/pages/Search';
+import NewsDetail from '@/pages/NewsDetail';
+import EventDetail from '@/pages/EventDetail';
+import HeritageDetail from '@/pages/HeritageDetail';
+import ProjectDetail from '@/pages/ProjectDetail';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError } = useAuth();
@@ -48,6 +52,10 @@ const AuthenticatedApp = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/news/:slug" element={<NewsDetail />} />
+        <Route path="/events/:slug" element={<EventDetail />} />
+        <Route path="/heritage/:slug" element={<HeritageDetail />} />
+        <Route path="/projects/:id" element={<ProjectDetail />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

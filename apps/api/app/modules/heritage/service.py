@@ -63,6 +63,16 @@ async def get_heritage_by_id(db: AsyncSession, item_id: UUID) -> Heritage | None
     return await db.get(Heritage, item_id)
 
 
+async def get_heritage_by_identifier(db: AsyncSession, identifier: str) -> Heritage | None:
+    try:
+        val_uuid = UUID(identifier)
+        return await db.get(Heritage, val_uuid)
+    except ValueError:
+        pass
+    stmt = select(Heritage).where(Heritage.slug == identifier)
+    return await db.scalar(stmt)
+
+
 async def create_heritage(db: AsyncSession, payload: HeritageCreate, author_id: UUID) -> Heritage:
     data = payload.model_dump(exclude_unset=True)
     item = Heritage(

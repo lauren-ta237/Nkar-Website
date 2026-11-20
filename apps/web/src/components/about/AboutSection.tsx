@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import ContentNotice from '@/components/ContentNotice';
 import Reveal from '@/components/Reveal';
@@ -28,6 +30,16 @@ export default function AboutSection({ section, index }: AboutSectionProps) {
             {section.paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}
+          </div>
+
+          <div className="mt-6">
+            <Link
+              to={`/heritage/${section.id}`}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-gold-600 hover:text-forest-700 transition-colors"
+            >
+              Explore Archive Record
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
           </div>
           {section.pending && (
             <ContentNotice className="mt-8" tone="cream" title="Draft: Pending Verification">

@@ -67,6 +67,16 @@ async def get_event_by_id(db: AsyncSession, event_id: UUID) -> Event | None:
     return await db.get(Event, event_id)
 
 
+async def get_event_by_identifier(db: AsyncSession, identifier: str) -> Event | None:
+    try:
+        val_uuid = UUID(identifier)
+        return await db.get(Event, val_uuid)
+    except ValueError:
+        pass
+    stmt = select(Event).where(Event.slug == identifier)
+    return await db.scalar(stmt)
+
+
 async def create_event(db: AsyncSession, payload: EventCreate, author_id: UUID) -> Event:
     data = payload.model_dump(exclude_unset=True)
     event_item = Event(**data, created_by_id=author_id)

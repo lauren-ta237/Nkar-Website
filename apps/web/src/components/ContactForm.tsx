@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Check, Loader2, Send } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { contactTopics } from '@/data/site';
+import { useSubmitContact } from '@/lib/api/contacts.api';
 
 const schema = z.object({
   name: z.string().min(2, 'Please tell us your name.'),
@@ -27,6 +29,7 @@ const errorClass = 'mt-2 text-xs text-clay-700';
 
 export default function ContactForm() {
   const [reviewed, setReviewed] = useState<FormValues | null>(null);
+  const submitMutation = useSubmitContact();
   const {
     register,
     handleSubmit,
@@ -45,11 +48,21 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (values: FormValues) => {
-    // The site is frontend-only: this demonstrates the form and its validation.
-    // Nothing is transmitted, stored or delivered anywhere.
-    await new Promise((resolve) => window.setTimeout(resolve, 700));
-    setReviewed(values);
-    reset();
+    try {
+      await submitMutation.mutateAsync({
+        sender_name: values.name.trim(),
+        sender_email: values.email.trim(),
+        phone: values.where ? values.where.trim() : null,
+        subject: values.topic,
+        message: values.message.trim(),
+      });
+      toast.success('Your message has been delivered to the palace custodians.');
+      setReviewed(values);
+      reset();
+    } catch (err: any) {
+      console.error('Failed to submit message:', err);
+      toast.error('Failed to send message over the network. Please try again.');
+    }
   };
 
   if (reviewed) {

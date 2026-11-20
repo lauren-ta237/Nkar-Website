@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/sheet';
 
 export const UserProfileModal: React.FC = () => {
-  const { profileModalOpen, setProfileModalOpen, currentUser } = useAdminStore();
+  const { profileModalOpen, setProfileModalOpen, currentUser, setCurrentUser } = useAdminStore();
   const { updateProfileMutation } = useAdminUsersMutations();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -79,7 +79,16 @@ export const UserProfileModal: React.FC = () => {
         },
       },
       {
-        onSuccess: () => {
+        onSuccess: (updatedUser: any) => {
+          const updatedName = name.trim();
+          const updatedEmail = email.trim();
+          const updatedAvatar = avatar.trim() || null;
+          setCurrentUser({
+            ...currentUser,
+            name: updatedUser?.name || updatedName,
+            email: updatedUser?.email || updatedEmail,
+            avatar_url: updatedUser?.avatar_url !== undefined ? updatedUser.avatar_url : updatedAvatar,
+          });
           setSuccessMsg('Profile information updated and saved successfully.');
           setIsEditing(false);
           setTimeout(() => setSuccessMsg(null), 3500);

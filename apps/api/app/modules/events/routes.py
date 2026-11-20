@@ -10,6 +10,7 @@ from app.modules.events.service import (
     create_event,
     delete_event,
     get_event_by_id,
+    get_event_by_identifier,
     list_all_events,
     list_published_events,
     update_event,
@@ -41,12 +42,12 @@ async def get_published_events(
     return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
-@router.get("/{event_id}", response_model=Envelope[EventResponse])
+@router.get("/{identifier}", response_model=Envelope[EventResponse])
 async def get_event_detail(
-    event_id: UUID,
+    identifier: str,
     db: AsyncSession = Depends(get_db),
 ):
-    item = await get_event_by_id(db, event_id)
+    item = await get_event_by_identifier(db, identifier)
     if not item or item.status != EventStatus.PUBLISHED:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

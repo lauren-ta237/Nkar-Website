@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Image } from '@/components/ui/image';
-import SampleBadge from './SampleBadge';
-import type { GalleryItem } from '@/data/gallery';
+import type { Gallery } from '@/types/api.types';
 
 interface LightboxProps {
-  items: GalleryItem[];
+  items: Gallery[];
   index: number;
   onClose: () => void;
   onPrev: () => void;
@@ -51,7 +50,7 @@ export default function Lightbox({ items, index, onClose, onPrev, onNext }: Ligh
               event.stopPropagation();
               onPrev();
             }}
-            className="flex h-10 w-10 items-center justify-center border border-ivory/20 transition-colors hover:border-gold-400 hover:text-gold-300"
+            className="flex h-10 w-10 items-center justify-center border border-ivory/20 text-ivory transition-colors hover:border-gold-500 hover:text-gold-300"
           >
             <ChevronLeft className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -62,15 +61,15 @@ export default function Lightbox({ items, index, onClose, onPrev, onNext }: Ligh
               event.stopPropagation();
               onNext();
             }}
-            className="flex h-10 w-10 items-center justify-center border border-ivory/20 transition-colors hover:border-gold-400 hover:text-gold-300"
+            className="flex h-10 w-10 items-center justify-center border border-ivory/20 text-ivory transition-colors hover:border-gold-500 hover:text-gold-300"
           >
             <ChevronRight className="h-5 w-5" aria-hidden="true" />
           </button>
           <button
             type="button"
-            aria-label="Close gallery"
+            aria-label="Close dialog"
             onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center border border-ivory/20 transition-colors hover:border-gold-400 hover:text-gold-300"
+            className="flex h-10 w-10 items-center justify-center border border-ivory/20 text-ivory transition-colors hover:border-gold-500 hover:text-gold-300"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -78,25 +77,26 @@ export default function Lightbox({ items, index, onClose, onPrev, onNext }: Ligh
       </div>
 
       <div
-        className="mt-4 h-[52vh] w-full md:h-[62vh]"
+        className="relative my-auto flex max-h-[75vh] w-full items-center justify-center py-4"
         onClick={(event) => event.stopPropagation()}
       >
-        <Image
-          src={item.image}
-          alt={item.title}
-          className="h-full w-full"
-          fittingType="fit"
-          quality={90}
-        />
+        <div className="relative max-h-[70vh] max-w-4xl overflow-hidden border border-border">
+          <Image
+            src={item.media_url}
+            alt={item.alt_text || item.title}
+            className="max-h-[70vh] w-auto object-contain"
+            fittingType="fill"
+            quality={90}
+          />
+        </div>
       </div>
 
       <div
-        className="mx-auto mt-5 w-full max-w-3xl text-center text-ivory"
+        className="mx-auto w-full max-w-2xl text-center text-ivory"
         onClick={(event) => event.stopPropagation()}
       >
-        <h2 className="font-display text-2xl text-gold-200">{item.title}</h2>
-        <p className="mt-3 text-sm leading-relaxed text-ivory/75">{item.caption}</p>
-        
+        <h3 className="font-display text-xl text-ivory md:text-2xl">{item.title}</h3>
+        <p className="mt-2 text-sm text-ivory/70">{item.description || item.alt_text}</p>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { UserProfileModal } from './components/layout/UserProfileModal';
 import { PublicSitePreviewModal } from './components/layout/PublicSitePreviewModal';
 import { LogoutModal } from './components/layout/LogoutModal';
 import { AuthGuard } from './components/auth/AuthGuard';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Module Views
 import { DashboardView } from './components/modules/dashboard/DashboardView';
@@ -40,11 +41,13 @@ export default function App() {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthGuard>
-        <AdminPortalContent />
-      </AuthGuard>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthGuard>
+          <AdminPortalContent />
+        </AuthGuard>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
