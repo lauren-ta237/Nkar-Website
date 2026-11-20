@@ -1,4 +1,5 @@
-import { CalendarDays, MapPin, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, CalendarDays, MapPin, Users } from 'lucide-react';
 import { formatDate, formatDay, formatMonth, formatWeekday } from '@/lib/format';
 import type { EventItem } from '@/types/api.types';
 
@@ -38,7 +39,9 @@ export default function EventCard({ event, past = false }: EventCardProps) {
         </div>
 
         <h3 className="mt-3 font-display text-2xl leading-snug text-forest-700">
-          {event.title}
+          <Link to={`/events/${event.slug}`} className="hover:text-gold-600 transition-colors">
+            {event.title}
+          </Link>
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           {event.content}
@@ -58,6 +61,16 @@ export default function EventCard({ event, past = false }: EventCardProps) {
             {formatDate(dateStr)}
           </li>
         </ul>
+
+        <div className="mt-5 border-t border-border pt-4">
+          <Link
+            to={`/events/${event.slug}`}
+            className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-gold-600 hover:text-forest-700 transition-colors"
+          >
+            Event Details
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </article>
   );

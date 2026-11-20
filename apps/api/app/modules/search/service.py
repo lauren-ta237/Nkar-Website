@@ -45,7 +45,7 @@ async def search_public_portal(
                     type="News",
                     category=str(row.category),
                     subtitle=row.summary,
-                    url=f"/news#{row.slug}",
+                    url=f"/news/{row.slug}",
                 )
             )
 
@@ -67,7 +67,7 @@ async def search_public_portal(
                     type="Event",
                     category="Events",
                     subtitle=row.location,
-                    url=f"/news#{row.slug}",
+                    url=f"/events/{row.slug}",
                 )
             )
 
@@ -89,7 +89,7 @@ async def search_public_portal(
                     type="Heritage",
                     category=str(row.category),
                     subtitle=None,
-                    url=f"/about#{row.slug}",
+                    url=f"/heritage/{row.slug}",
                 )
             )
 
@@ -132,7 +132,7 @@ async def search_public_portal(
                     type="Project",
                     category="Development",
                     subtitle=row.location,
-                    url="/projects",
+                    url=f"/projects/{row.id}",
                 )
             )
 

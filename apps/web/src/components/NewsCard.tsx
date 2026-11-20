@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 import type { News } from '@/types/api.types';
 
@@ -38,7 +39,9 @@ export default function NewsCard({ item, featured = false }: NewsCardProps) {
           featured ? 'text-3xl md:text-4xl' : 'text-2xl'
         }`}
       >
-        {item.title}
+        <Link to={`/news/${item.slug}`} className="hover:text-gold-600 transition-colors">
+          {item.title}
+        </Link>
       </h3>
 
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -53,19 +56,27 @@ export default function NewsCard({ item, featured = false }: NewsCardProps) {
         </div>
       )}
 
-      <div className="mt-auto pt-5">
+      <div className="mt-auto pt-5 flex items-center justify-between gap-4">
         <button
           type="button"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
-          className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.26em] text-forest-600 transition-colors hover:text-gold-600"
+          className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-forest-600 transition-colors hover:text-gold-600"
         >
-          {open ? 'Close' : 'Read more'}
+          {open ? 'Collapse' : 'Quick preview'}
           <ChevronDown
             className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-180' : ''}`}
             aria-hidden="true"
           />
         </button>
+
+        <Link
+          to={`/news/${item.slug}`}
+          className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-gold-600 hover:text-forest-700 transition-colors"
+        >
+          Full Article
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+        </Link>
       </div>
     </article>
   );

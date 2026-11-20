@@ -81,7 +81,24 @@ This checklist tracks the step-by-step progress of connecting `apps/web` to the 
 
 ---
 
-## 5. Verification & QA
+## 5. Dynamic Detail Pages & SEO Permalinks
+- [x] Updated backend endpoints to resolve both UUID and slug:
+  - [x] `GET /api/v1/news/{identifier}` (by slug or UUID with views increment and session refresh)
+  - [x] `GET /api/v1/events/{identifier}` (by slug or UUID)
+  - [x] `GET /api/v1/heritage/{identifier}` (by slug or UUID)
+  - [x] `GET /api/v1/projects/{identifier}` (by ID)
+- [x] Updated `search_public_portal` URLs to point to direct permalinks (`/news/{slug}`, `/events/{slug}`, `/heritage/{slug}`, `/projects/{id}`)
+- [x] Implemented `fetchProjectById` & `useProjectDetail` in `apps/web/src/lib/api/projects.api.ts`
+- [x] Created `apps/web/src/pages/NewsDetail.tsx` (`/news/:slug`)
+- [x] Created `apps/web/src/pages/EventDetail.tsx` (`/events/:slug`)
+- [x] Created `apps/web/src/pages/HeritageDetail.tsx` (`/heritage/:slug`)
+- [x] Created `apps/web/src/pages/ProjectDetail.tsx` (`/projects/:id`)
+- [x] Registered detail routes in `apps/web/src/App.tsx`
+- [x] Updated `NewsCard.tsx`, `EventCard.tsx`, `ProjectCard.tsx`, and `AboutSection.tsx` with links to detail pages
+
+---
+
+## 6. Verification & QA
 - [x] Production compilation of `apps/web`: `npm run build` completed with 0 errors
 - [x] Production compilation of `apps/admin`: `npm run build` completed with 0 errors
-- [x] All 20 backend tests passing in `apps/api`: `pytest tests/test_api.py` (20 passed)
+- [x] All 24 backend tests passing in `apps/api`: `pytest tests/test_api.py` (24 passed)

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CalendarDays, Check, MapPin } from 'lucide-react';
+import { ArrowRight, CalendarDays, Check, MapPin } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import { formatShortDate } from '@/lib/format';
 import type { DevelopmentProject } from '@/types/api.types';
@@ -60,7 +60,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
 
         <h3 className="mt-5 font-display text-3xl leading-tight text-forest-700">
-          {project.title}
+          <Link to={`/projects/${project.id}`} className="hover:text-gold-600 transition-colors">
+            {project.title}
+          </Link>
         </h3>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
           {project.description}
@@ -107,9 +109,16 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
 
-        <div className="mt-8 border-t border-border pt-6">
+        <div className="mt-8 border-t border-border pt-6 flex flex-wrap items-center justify-between gap-4">
           <Link
-            to="/contact"
+            to={`/projects/${project.id}`}
+            className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-gold-600 hover:text-forest-700 transition-colors"
+          >
+            Full Dossier &amp; Milestones
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+          <Link
+            to={`/contact?subject=Inquiry%20regarding%20${encodeURIComponent(project.title)}`}
             className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-forest-600 transition-colors hover:text-gold-600"
           >
             Ask about this project

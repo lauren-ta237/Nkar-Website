@@ -64,6 +64,16 @@ async def get_news_by_id(db: AsyncSession, news_id: UUID) -> News | None:
     return await db.get(News, news_id)
 
 
+async def get_news_by_identifier(db: AsyncSession, identifier: str) -> News | None:
+    try:
+        val_uuid = UUID(identifier)
+        return await db.get(News, val_uuid)
+    except ValueError:
+        pass
+    stmt = select(News).where(News.slug == identifier)
+    return await db.scalar(stmt)
+
+
 async def create_news(db: AsyncSession, payload: NewsCreate, author_id: UUID) -> News:
     data = payload.model_dump(exclude_unset=True)
     if data.get("status") == ContentStatus.PUBLISHED:
@@ -110,6 +120,7 @@ async def update_news(db: AsyncSession, news_item: News, payload: NewsUpdate) ->
 async def increment_news_views(db: AsyncSession, news_item: News) -> None:
     news_item.views += 1
     await db.commit()
+    await db.refresh(news_item)
 
 
 async def delete_news(db: AsyncSession, news_item: News) -> None:

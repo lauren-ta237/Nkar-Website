@@ -10,6 +10,7 @@ from app.modules.heritage.service import (
     create_heritage,
     delete_heritage,
     get_heritage_by_id,
+    get_heritage_by_identifier,
     list_all_heritage,
     list_published_heritage,
     update_heritage,
@@ -41,12 +42,12 @@ async def get_published_heritage(
     return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
-@router.get("/{item_id}", response_model=Envelope[HeritageResponse])
+@router.get("/{identifier}", response_model=Envelope[HeritageResponse])
 async def get_heritage_detail(
-    item_id: UUID,
+    identifier: str,
     db: AsyncSession = Depends(get_db),
 ):
-    item = await get_heritage_by_id(db, item_id)
+    item = await get_heritage_by_identifier(db, identifier)
     if not item or item.status != ContentStatus.PUBLISHED:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -10,6 +10,7 @@ from app.modules.news.service import (
     create_news,
     delete_news,
     get_news_by_id,
+    get_news_by_identifier,
     increment_news_views,
     list_all_news,
     list_published_news,
@@ -42,12 +43,12 @@ async def get_published_news(
     return {"success": True, "data": rows, "meta": meta.model_dump()}
 
 
-@router.get("/{news_id}", response_model=Envelope[NewsResponse])
+@router.get("/{identifier}", response_model=Envelope[NewsResponse])
 async def get_news_detail(
-    news_id: UUID,
+    identifier: str,
     db: AsyncSession = Depends(get_db),
 ):
-    item = await get_news_by_id(db, news_id)
+    item = await get_news_by_identifier(db, identifier)
     if not item or item.status != ContentStatus.PUBLISHED:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
