@@ -136,7 +136,7 @@ export default function About() {
             description="From the founding lineages to the digital heritage archive: key periods in the story of the village."
           />
           <div className="mt-12">
-            <Timeline entries={timeline} />
+            <Timeline items={timeline} />
           </div>
 
           <div className="mt-16 border-t border-border pt-10 text-center">
