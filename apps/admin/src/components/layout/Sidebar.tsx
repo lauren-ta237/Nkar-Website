@@ -66,6 +66,11 @@ export const Sidebar: React.FC = () => {
   } = useAdminStore();
   const { data: stats } = useAdminDashboardStats();
 
+  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173';
+  const handleOpenPublicSite = () => {
+    window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const navItems: NavItem[] = [
     { page: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { page: 'news', label: 'News & Announcements', icon: Newspaper, badgeKey: 'pendingReviews' },
@@ -86,7 +91,7 @@ export const Sidebar: React.FC = () => {
       {navItems.map((item) => {
         const isActive = currentPage === item.page;
         const Icon = item.icon;
-        const isRestricted = item.superAdminOnly && currentUser.role !== 'SUPER_ADMIN';
+        const isRestricted = item.superAdminOnly && currentUser?.role !== 'SUPER_ADMIN';
 
         let badgeCount = 0;
         if (item.badgeKey === 'pendingReviews') {
@@ -172,7 +177,7 @@ export const Sidebar: React.FC = () => {
 
         <div className="space-y-1.5">
           {INITIAL_USERS.map((user) => {
-            const isCurrent = currentUser.id === user.id;
+            const isCurrent = currentUser?.id === user.id;
             return (
               <div
                 key={user.id}
@@ -239,7 +244,7 @@ export const Sidebar: React.FC = () => {
                 <span>My Profile</span>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setPublicPreviewOpen(true)}
+                onClick={handleOpenPublicSite}
                 className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
               >
                 <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />
@@ -265,7 +270,7 @@ export const Sidebar: React.FC = () => {
 
           {/* Quick Icon: Public Site */}
           <button
-            onClick={() => setPublicPreviewOpen(true)}
+            onClick={handleOpenPublicSite}
             className="p-2 text-stone-500 dark:text-stone-400 hover:text-[#153E2E] dark:hover:text-[#D4AF37] hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
             title="Visit Public Website"
           >
@@ -292,8 +297,8 @@ export const Sidebar: React.FC = () => {
             <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 hover:border-[#D4AF37] dark:hover:border-[#D4AF37] transition-all cursor-pointer shadow-2xs">
               <div className="relative shrink-0">
                 <img
-                  src={currentUser.avatar_url || ''}
-                  alt={currentUser.name}
+                  src={currentUser?.avatar_url || ''}
+                  alt={currentUser?.name || 'Administrator'}
                   className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]"
                   referrerPolicy="no-referrer"
                 />
@@ -301,10 +306,10 @@ export const Sidebar: React.FC = () => {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate leading-tight">
-                  {currentUser.name}
+                  {currentUser?.name || 'Administrator'}
                 </p>
                 <p className="text-[10px] text-stone-400 dark:text-stone-500 truncate leading-tight">
-                  {currentUser.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser.role === 'CONTENT_REVIEWER' ? 'Content Reviewer' : 'Content Editor'}
+                  {currentUser?.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser?.role === 'CONTENT_REVIEWER' ? 'Content Reviewer' : 'Content Editor'}
                 </p>
               </div>
               <ChevronRight className="w-3.5 h-3.5 text-stone-400 shrink-0" />
@@ -313,10 +318,10 @@ export const Sidebar: React.FC = () => {
 
           <DropdownMenuContent side="top" align="start" className="w-60 bg-white dark:bg-stone-900 border border-[#E5E0D5] dark:border-stone-800 rounded-xl shadow-xl p-1.5 mb-1">
             <div className="p-2 border-b border-stone-100 dark:border-stone-800 mb-1">
-              <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">{currentUser.name}</p>
-              <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">{currentUser.email}</p>
+              <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">{currentUser?.name || 'Administrator'}</p>
+              <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">{currentUser?.email || ''}</p>
               <span className="inline-block mt-1 px-1.5 py-0.5 text-[9px] font-bold bg-[#153E2E] dark:bg-emerald-800 text-white rounded">
-                {currentUser.role.replace('_', ' ')}
+                {(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}
               </span>
             </div>
 
@@ -333,7 +338,7 @@ export const Sidebar: React.FC = () => {
 
             <DropdownMenuItem
               onClick={() => {
-                setPublicPreviewOpen(true);
+                handleOpenPublicSite();
                 if (isMobile) setMobileSidebarOpen(false);
               }}
               className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
@@ -379,7 +384,7 @@ export const Sidebar: React.FC = () => {
         <div className="grid grid-cols-2 gap-2 pt-1">
           <button
             onClick={() => {
-              setPublicPreviewOpen(true);
+              handleOpenPublicSite();
               if (isMobile) setMobileSidebarOpen(false);
             }}
             className="py-1.5 px-2 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-800 rounded-lg text-[11px] font-semibold text-stone-700 dark:text-stone-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"

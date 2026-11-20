@@ -98,7 +98,13 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   switchRole: (role) => {
     const found = INITIAL_USERS.find((u) => u.role === role);
     if (found) {
-      set({ currentUser: found });
+      const state = get();
+      const superAdminOnlyPages: AdminPage[] = ['users', 'audit'];
+      const nextPage =
+        found.role !== 'SUPER_ADMIN' && superAdminOnlyPages.includes(state.currentPage)
+          ? 'dashboard'
+          : state.currentPage;
+      set({ currentUser: found, currentPage: nextPage });
     }
   },
   

@@ -47,6 +47,11 @@ export const Header: React.FC = () => {
 
   const { data: stats } = useAdminDashboardStats();
 
+  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173';
+  const handleOpenPublicSite = () => {
+    window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const totalNotifications = (stats?.pendingReviews || 0) + (stats?.unreadMessages || 0);
 
   const topTabs: { label: string; page: AdminPage }[] = [
@@ -123,9 +128,9 @@ export const Header: React.FC = () => {
       <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
         {/* Visit Public Website Button */}
         <button
-          onClick={() => setPublicPreviewOpen(true)}
+          onClick={handleOpenPublicSite}
           className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-[#FAF7F2] dark:bg-stone-800 hover:bg-[#F4EFE6] dark:hover:bg-stone-700 text-[#153E2E] dark:text-emerald-300 border border-[#E2DBD0] dark:border-stone-700 rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-xs"
-          title="Visit Public Website"
+          title="Visit Public Website directly in a new tab"
         >
           <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />
           <span>Public Portal</span>
@@ -153,17 +158,17 @@ export const Header: React.FC = () => {
               <span className="text-[11px] text-stone-500 dark:text-stone-400 uppercase tracking-wider font-medium hidden sm:inline">Role:</span>
               <span
                 className={`font-semibold inline-flex items-center gap-1 ${
-                  currentUser.role === 'SUPER_ADMIN'
+                  currentUser?.role === 'SUPER_ADMIN'
                     ? 'text-[#153E2E] dark:text-emerald-400'
-                    : currentUser.role === 'CONTENT_REVIEWER'
+                    : currentUser?.role === 'CONTENT_REVIEWER'
                     ? 'text-[#A07010] dark:text-amber-400'
                     : 'text-stone-700 dark:text-stone-300'
                 }`}
               >
-                {currentUser.role === 'SUPER_ADMIN' && <Shield className="w-3.5 h-3.5 text-[#153E2E] dark:text-emerald-400" />}
-                {currentUser.role === 'CONTENT_REVIEWER' && <UserCheck className="w-3.5 h-3.5 text-[#C69214] dark:text-amber-400" />}
-                {currentUser.role === 'CONTENT_EDITOR' && <Edit3 className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />}
-                <span className="hidden sm:inline">{currentUser.role.replace('_', ' ')}</span>
+                {currentUser?.role === 'SUPER_ADMIN' && <Shield className="w-3.5 h-3.5 text-[#153E2E] dark:text-emerald-400" />}
+                {currentUser?.role === 'CONTENT_REVIEWER' && <UserCheck className="w-3.5 h-3.5 text-[#C69214] dark:text-amber-400" />}
+                {currentUser?.role === 'CONTENT_EDITOR' && <Edit3 className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />}
+                <span className="hidden sm:inline">{(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}</span>
               </span>
               <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
             </div>
@@ -180,7 +185,7 @@ export const Header: React.FC = () => {
                 key={user.id}
                 onClick={() => switchRole(user.role)}
                 className={`p-2 rounded-lg flex items-center gap-2.5 text-xs transition-colors cursor-pointer outline-none ${
-                  currentUser.role === user.role
+                  currentUser?.role === user.role
                     ? 'bg-[#EAF2EE] dark:bg-[#153E2E]/40 text-[#153E2E] dark:text-emerald-300 font-medium'
                     : 'hover:bg-stone-50 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
                 }`}
@@ -195,7 +200,7 @@ export const Header: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <span className="font-semibold truncate">{user.name}</span>
                   </div>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate">{user.role.replace('_', ' ')}</span>
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate">{(user?.role || '').replace('_', ' ')}</span>
                 </div>
               </DropdownMenuItem>
             ))}
@@ -223,17 +228,17 @@ export const Header: React.FC = () => {
               title="Administrator Account"
             >
               <img
-                src={currentUser.avatar_url || ''}
-                alt={currentUser.name}
+                src={currentUser?.avatar_url || ''}
+                alt={currentUser?.name || 'Administrator'}
                 className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37] shrink-0"
                 referrerPolicy="no-referrer"
               />
               <div className="hidden md:block">
                 <span className="text-xs font-semibold text-stone-900 dark:text-stone-100 block leading-tight truncate max-w-[110px]">
-                  {currentUser.name}
+                  {currentUser?.name || 'Administrator'}
                 </span>
                 <span className="text-[10px] text-stone-500 dark:text-stone-400 block leading-tight">
-                  {currentUser.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser.role === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
+                  {currentUser?.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser?.role === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
                 </span>
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden md:block" />
@@ -242,10 +247,10 @@ export const Header: React.FC = () => {
 
           <DropdownMenuContent align="end" className="w-60 bg-white dark:bg-stone-900 border border-[#E5E0D5] dark:border-stone-800 rounded-xl shadow-xl p-1.5">
             <div className="p-2 border-b border-stone-100 dark:border-stone-800 mb-1">
-              <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">{currentUser.name}</p>
-              <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">{currentUser.email}</p>
+              <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">{currentUser?.name || 'Administrator'}</p>
+              <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">{currentUser?.email || ''}</p>
               <span className="inline-block mt-1 px-1.5 py-0.5 text-[9px] font-bold bg-[#153E2E] dark:bg-emerald-800 text-white rounded">
-                {currentUser.role.replace('_', ' ')}
+                {(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}
               </span>
             </div>
 
@@ -258,7 +263,7 @@ export const Header: React.FC = () => {
             </DropdownMenuItem>
 
             <DropdownMenuItem
-              onClick={() => setPublicPreviewOpen(true)}
+              onClick={handleOpenPublicSite}
               className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
             >
               <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />

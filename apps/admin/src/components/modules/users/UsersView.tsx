@@ -13,6 +13,7 @@ import {
   Mail,
   Phone,
   AlertTriangle,
+  Trash2,
 } from 'lucide-react';
 import { useAdminUsersList, useAdminUsersMutations } from '@/lib/api/users.api';
 import { User, Role } from '../../../types';
@@ -25,7 +26,7 @@ import { UserFormModal } from './UserFormModal';
 export const UsersView: React.FC = () => {
   const { currentUser, switchRole } = useAdminStore();
   const { data: users = [], isLoading } = useAdminUsersList();
-  const { createMutation, updateMutation, toggleStatusMutation } = useAdminUsersMutations();
+  const { createMutation, updateMutation, toggleStatusMutation, deleteMutation } = useAdminUsersMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('ALL');
@@ -33,8 +34,9 @@ export const UsersView: React.FC = () => {
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [suspendConfirmUser, setSuspendConfirmUser] = useState<User | null>(null);
+  const [deleteConfirmUser, setDeleteConfirmUser] = useState<User | null>(null);
 
-  const isSuperAdmin = currentUser.role === 'SUPER_ADMIN';
+  const isSuperAdmin = currentUser?.role === 'SUPER_ADMIN';
 
   const filtered = users.filter((u) => {
     const matchesSearch =
@@ -67,6 +69,12 @@ export const UsersView: React.FC = () => {
   const handleToggleStatus = (target: User) => {
     toggleStatusMutation.mutate(target.id, {
       onSuccess: () => setSuspendConfirmUser(null),
+    });
+  };
+
+  const handleDeleteUser = (target: User) => {
+    deleteMutation.mutate(target.id, {
+      onSuccess: () => setDeleteConfirmUser(null),
     });
   };
 
@@ -166,7 +174,7 @@ export const UsersView: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-stone-100">
               {filtered.map((user) => {
-                const isSelf = user.id === currentUser.id;
+                const isSelf = user.id === currentUser?.id;
                 return (
                   <tr key={user.id} className="hover:bg-[#FAF9F6] transition-colors">
                     <td className="py-3.5 px-4">
@@ -243,16 +251,26 @@ export const UsersView: React.FC = () => {
                             </button>
 
                             {!isSelf && (
-                              <button
-                                onClick={() => setSuspendConfirmUser(user)}
-                                className={`px-2 py-1 text-[11px] font-semibold rounded-lg transition-colors cursor-pointer ${
-                                  user.status === 'ACTIVE'
-                                    ? 'text-red-700 bg-red-50 hover:bg-red-100'
-                                    : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
-                                }`}
-                              >
-                                {user.status === 'ACTIVE' ? 'Suspend' : 'Activate'}
-                              </button>
+                              <>
+                                <button
+                                  onClick={() => setSuspendConfirmUser(user)}
+                                  className={`px-2 py-1 text-[11px] font-semibold rounded-lg transition-colors cursor-pointer ${
+                                    user.status === 'ACTIVE'
+                                      ? 'text-red-700 bg-red-50 hover:bg-red-100'
+                                      : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
+                                  }`}
+                                >
+                                  {user.status === 'ACTIVE' ? 'Suspend' : 'Activate'}
+                                </button>
+
+                                <button
+                                  onClick={() => setDeleteConfirmUser(user)}
+                                  className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                                  title="Remove Administrator Account"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </>
                             )}
                           </>
                         ) : (
@@ -301,6 +319,20 @@ export const UsersView: React.FC = () => {
           onConfirm={() => handleToggleStatus(suspendConfirmUser)}
           onCancel={() => setSuspendConfirmUser(null)}
           isLoading={toggleStatusMutation.isPending}
+        />
+      )}
+
+      {/* Delete Confirmation */}
+      {deleteConfirmUser && (
+        <ConfirmModal
+          isOpen={true}
+          title={`Remove Administrator: ${deleteConfirmUser.name}`}
+          message={`Are you sure you want to permanently remove ${deleteConfirmUser.name} (${deleteConfirmUser.email})? This action cannot be undone and will revoke all administrative access to the platform.`}
+          confirmLabel={deleteMutation.isPending ? 'Removing...' : 'Remove Administrator'}
+          isDestructive={true}
+          onConfirm={() => handleDeleteUser(deleteConfirmUser)}
+          onCancel={() => setDeleteConfirmUser(null)}
+          isLoading={deleteMutation.isPending}
         />
       )}
     </div>

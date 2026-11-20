@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Users, AlertCircle, Shield, Lock } from 'lucide-react';
+import { X, Users, AlertCircle, Shield, Lock, Eye, EyeOff } from 'lucide-react';
 import { User, Role, UserStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { FileUpload } from '../../common/FileUpload';
@@ -27,12 +27,13 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
   isLoading = false,
 }) => {
   const { currentUser } = useAdminStore();
-  const isSelf = initialData?.id === currentUser.id;
-  const isSuperAdmin = currentUser.role === 'SUPER_ADMIN';
+  const isSelf = initialData?.id === currentUser?.id;
+  const isSuperAdmin = currentUser?.role === 'SUPER_ADMIN';
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState<Role>('CONTENT_EDITOR');
   const [status, setStatus] = useState<UserStatus>('ACTIVE');
   const [avatarUrl, setAvatarUrl] = useState('');
@@ -164,14 +165,25 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
           {!initialData && (
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">Temporary Password *</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 8 characters"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="At least 8 characters"
+                  className="w-full text-xs p-2.5 pr-10 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-stone-400 hover:text-stone-700 rounded transition-colors cursor-pointer"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
           )}
 

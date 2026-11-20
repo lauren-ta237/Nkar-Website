@@ -48,8 +48,8 @@ export const AuditLogsView: React.FC = () => {
     const matchesSearch =
       searchQuery === '' ||
       (log.details || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.resource_type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.resource_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (log.resource_type || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (log.resource_id || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       (log.actor_id || '').toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesAction = actionFilter === 'ALL' || log.action === actionFilter;
