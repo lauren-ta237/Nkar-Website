@@ -294,3 +294,18 @@ async def test_update_news_with_extra_fields_ignored(client: AsyncClient, admin_
     data = update_res.json()
     assert data["success"] is True
     assert data["data"]["id"] == target_id
+
+
+@pytest.mark.asyncio
+async def test_public_search(client: AsyncClient):
+    # Public unauthenticated search
+    res = await client.get("/api/v1/search?q=Nkar")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["success"] is True
+    assert isinstance(data["data"], list)
+    if data["data"]:
+        assert "id" in data["data"][0]
+        assert "title" in data["data"][0]
+        assert "type" in data["data"][0]
+        assert "url" in data["data"][0]

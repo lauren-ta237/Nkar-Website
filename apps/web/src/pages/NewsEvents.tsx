@@ -6,21 +6,36 @@ import FilterChips from '@/components/FilterChips';
 import NewsCard from '@/components/NewsCard';
 import EventCard from '@/components/EventCard';
 import LoadingState from '@/components/LoadingState';
-import { useEvents, useNews } from '@/hooks/useContent';
+import { useNewsList } from '@/lib/api/news.api';
+import { useEventsList } from '@/lib/api/events.api';
+
+const NEWS_CATEGORIES = [
+  'All',
+  'Announcements',
+  'Clan News',
+  'Culture',
+  'Celebrations',
+  'Education',
+  'Health',
+  'Obituaries',
+];
 
 export default function NewsEvents() {
   const [category, setCategory] = useState('All');
-  const newsQuery = useNews();
-  const eventsQuery = useEvents();
+  const categoryParam = category === 'All' ? undefined : category.toLowerCase().replace(/ /g, '_');
+  
+  const { data: news = [], isLoading: newsLoading } = useNewsList({ category: categoryParam });
+  const { data: events = [], isLoading: eventsLoading } = useEventsList();
 
-  const news = newsQuery.data || [];
-  const categories = useMemo(
-    () => ['All', ...Array.from(new Set(news.map((item) => item.category)))],
-    [news]
+  const now = new Date();
+  const upcoming = useMemo(
+    () => events.filter((e) => new Date(e.start_datetime) >= now),
+    [events, now]
   );
-  const filteredNews = category === 'All' ? news : news.filter((item) => item.category === category);
-  const upcoming = eventsQuery.data?.upcoming || [];
-  const past = eventsQuery.data?.past || [];
+  const past = useMemo(
+    () => events.filter((e) => new Date(e.start_datetime) < now),
+    [events, now]
+  );
 
   return (
     <>
@@ -28,14 +43,14 @@ export default function NewsEvents() {
         eyebrow="News & events"
         title="The village year, as it is lived"
         description="Announcements, community meetings, progress reports, and the cultural celebrations of Nkar, all in one place."
-        note="Dates, venues, and figures are published as drafts until confirmed by the palace council and organizing committees."
+        note="Dates, venues, and figures are published after confirmation by the palace council and organizing committees."
       />
 
       <section className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
           <ContentNotice>
-            Community notices and upcoming dates are published as drafts pending final confirmation by
-            the palace council and organizing committees. Confirmed official notices will be published here.
+            Official notices, cultural bulletins, and upcoming community calendar entries published directly
+            by the Nkar traditional council and development committees.
           </ContentNotice>
 
           <div className="mt-14 flex flex-wrap items-end justify-between gap-6">
@@ -44,18 +59,24 @@ export default function NewsEvents() {
               title="Announcements & community reports"
             />
             <FilterChips
-              options={categories}
+              options={NEWS_CATEGORIES}
               value={category}
               onChange={setCategory}
               label="Filter news by category"
             />
           </div>
 
-          {newsQuery.isLoading ? (
+          {newsLoading ? (
             <LoadingState />
+          ) : news.length === 0 ? (
+            <div className="mt-12 p-8 text-center border border-border bg-card">
+              <p className="text-sm text-muted-foreground italic">
+                No news articles currently published in this category.
+              </p>
+            </div>
           ) : (
             <div className="mt-12 grid gap-10 md:grid-cols-2">
-              {filteredNews.map((item, index) => (
+              {news.map((item, index) => (
                 <NewsCard key={item.id} item={item} featured={index === 0} />
               ))}
             </div>
@@ -70,8 +91,14 @@ export default function NewsEvents() {
             title="Events, meetings & celebrations"
             description="What the village has ahead of it: assemblies, town halls, the diaspora dialogue and the cultural festival."
           />
-          {eventsQuery.isLoading ? (
+          {eventsLoading ? (
             <LoadingState />
+          ) : upcoming.length === 0 ? (
+            <div className="mt-12 p-8 text-center border border-border bg-card">
+              <p className="text-sm text-muted-foreground italic">
+                No upcoming events currently scheduled on the calendar.
+              </p>
+            </div>
           ) : (
             <div className="mt-12 grid gap-5 md:grid-cols-2">
               {upcoming.map((event) => (
@@ -82,24 +109,22 @@ export default function NewsEvents() {
         </div>
       </section>
 
-      <section className="bg-ivory py-16 md:py-20">
-        <div className="mx-auto w-full max-w-6xl px-6">
-          <SectionHeading
-            eyebrow="Past events"
-            title="Recently held in Nkar"
-            description="Ceremonies, sports and gatherings the village has already held."
-          />
-          {eventsQuery.isLoading ? (
-            <LoadingState />
-          ) : (
+      {past.length > 0 && (
+        <section className="bg-ivory py-16 md:py-20">
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <SectionHeading
+              eyebrow="Past events"
+              title="Recently held in Nkar"
+              description="Ceremonies, sports and gatherings the village has already held."
+            />
             <div className="mt-12 grid gap-5 md:grid-cols-2">
               {past.map((event) => (
                 <EventCard key={event.id} event={event} past />
               ))}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
     </>
   );
 }

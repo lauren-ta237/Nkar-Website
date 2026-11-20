@@ -1,11 +1,8 @@
 import { Image } from '@/components/ui/image';
-import SampleBadge from './SampleBadge';
-import type { GalleryItem } from '@/data/gallery';
-
-const aspectClass: Record<string, string> = { wide: 'aspect-[3/2]', square: 'aspect-square' };
+import type { Gallery } from '@/types/api.types';
 
 interface GalleryGridProps {
-  items: GalleryItem[];
+  items: Gallery[];
   onOpen: (index: number) => void;
 }
 
@@ -18,13 +15,11 @@ export default function GalleryGrid({ items, onOpen }: GalleryGridProps) {
           type="button"
           onClick={() => onOpen(index)}
           aria-label={`Open image: ${item.title}`}
-          className={`group relative overflow-hidden border border-border ${
-            aspectClass[item.aspect] || aspectClass.wide
-          }`}
+          className="group relative aspect-[3/2] overflow-hidden border border-border bg-stone-900"
         >
           <Image
-            src={item.image}
-            alt={`${item.title}`}
+            src={item.media_url}
+            alt={item.alt_text || item.title}
             className="absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-[1.04]"
             fittingType="fill"
             quality={80}
@@ -39,7 +34,6 @@ export default function GalleryGrid({ items, onOpen }: GalleryGridProps) {
             </span>
             <span className="mt-2 block font-display text-xl text-ivory">{item.title}</span>
           </span>
-          
         </button>
       ))}
     </div>

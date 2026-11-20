@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import PageHero from '@/components/PageHero';
@@ -10,15 +10,25 @@ import AboutSection from '@/components/about/AboutSection';
 import TraditionsGrid from '@/components/about/TraditionsGrid';
 import { site } from '@/data/site';
 import { images } from '@/data/images';
-import { aboutLead } from '@/data/culture';
-import { useAboutContent } from '@/hooks/useContent';
+import { aboutLead, traditions as staticTraditions, timeline, aboutSections as staticAboutSections } from '@/data/culture';
+import { useHeritageList } from '@/lib/api/heritage.api';
 
 export default function About() {
   const { hash } = useLocation();
-  const { data, isLoading } = useAboutContent();
-  const sections = data?.aboutSections || [];
-  const traditions = data?.traditions || [];
-  const timeline = data?.timeline || [];
+  const { data: heritageItems = [], isLoading } = useHeritageList();
+
+  const sections = useMemo(() => {
+    if (heritageItems.length > 0) {
+      return heritageItems.map((h) => ({
+        id: h.slug || h.id,
+        eyebrow: h.category ? h.category.replace(/_/g, ' ') : 'Heritage',
+        title: h.title,
+        image: h.images && h.images.length > 0 ? h.images[0] : null,
+        paragraphs: (h.content || '').split('\n\n').filter(Boolean),
+      }));
+    }
+    return staticAboutSections;
+  }, [heritageItems]);
 
   useEffect(() => {
     if (!hash) return;
@@ -34,7 +44,6 @@ export default function About() {
         description="The history, origins, royal leadership, and vibrant cultural traditions of the Nkar Fondom."
         image={images.highlands}
         imageAlt="Nkar Kingdom/Fondom landscape in the Cameroon Grassfields"
-        
       />
 
       <section className="bg-ivory py-16 md:py-20">
@@ -57,7 +66,7 @@ export default function About() {
                   <li key={section.id}>
                     <a
                       href={`#${section.id}`}
-                      className="text-forest-700 transition-colors hover:text-gold-600"
+                      className="text-forest-700 transition-colors hover:text-gold-600 capitalize"
                     >
                       {section.eyebrow}
                     </a>
@@ -86,56 +95,53 @@ export default function About() {
       </section>
 
       {isLoading ? (
-        <LoadingState label="Gathering the record…" />
+        <div className="py-20 text-center">
+          <LoadingState label="Loading heritage archives…" />
+        </div>
       ) : (
         sections.map((section, index) => (
-          <AboutSection key={section.id} section={section} index={index} />
+          <AboutSection
+            key={section.id}
+            section={section}
+            flipped={index % 2 === 1}
+            dark={index % 2 === 1}
+          />
         ))
       )}
 
-      <section
-        id="traditions"
-        className="scroll-mt-28 border-t border-border bg-cream/60 py-16 md:py-20"
-      >
+      <section id="traditions" className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
           <SectionHeading
-            eyebrow="Culture & traditions"
-            title="What a Nkar life is made of"
-            description="The shared customs of the Grassfields, including traditional cloth, ceremony, drums, dance, and highland hospitality."
+            eyebrow="Culture & customs"
+            title="Traditions that hold Nkar together"
+            description="The rites, celebrations and customary laws handed down across generations and observed in the village today."
           />
-          {isLoading ? <LoadingState /> : <TraditionsGrid traditions={traditions} />}
-
-          <ContentNotice className="mt-10" tone="cream" title="To be confirmed for Nkar">
-            Each custom is described in general terms. Specific Nkar traditions, songs,
-            regalia, and family observances will be added in collaboration with the elders,
-            palace, and traditional council.
-          </ContentNotice>
+          <div className="mt-12">
+            <TraditionsGrid traditions={staticTraditions} />
+          </div>
         </div>
       </section>
 
-      <section
-        id="timeline"
-        className="scroll-mt-28 border-t border-border bg-ivory py-16 md:py-20"
-      >
+      <section id="timeline" className="border-t border-border bg-cream/60 py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
           <SectionHeading
-            eyebrow="Timeline"
-            title="A timeline still to be written"
-            description="Nkar’s story will be dated here milestone by milestone. The frame is ready; the verified dates and names will fill it."
+            eyebrow="Chronology"
+            title="A timeline of Nkar"
+            description="From the founding lineages to the digital heritage archive: key periods in the story of the village."
           />
-          {isLoading ? <LoadingState /> : <Timeline items={timeline} />}
+          <div className="mt-12">
+            <Timeline entries={timeline} />
+          </div>
 
-          <div className="mt-12 border border-gold-500/40 bg-gold-50/70 p-8">
-            <p className="font-display text-2xl text-forest-700">Do you hold a piece of it?</p>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-forest-800">
-              Whether a photograph, a place name, or an account your elders shared, every contribution helps
-              the custodians record and preserve our history with family permission.
+          <div className="mt-16 border-t border-border pt-10 text-center">
+            <p className="text-sm text-muted-foreground">
+              Have a historical document, photograph or lineage account to contribute to this archive?
             </p>
             <Link
               to="/contact"
-              className="mt-6 inline-flex items-center gap-2 bg-forest-700 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-ivory transition-colors hover:bg-gold-600"
+              className="mt-4 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-forest-700 transition-colors hover:text-gold-700"
             >
-              Share what you hold
+              Write to the custodians
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>

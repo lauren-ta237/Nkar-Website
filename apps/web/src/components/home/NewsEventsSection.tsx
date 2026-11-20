@@ -4,13 +4,12 @@ import SectionHeading from '@/components/SectionHeading';
 import NewsCard from '@/components/NewsCard';
 import EventCard from '@/components/EventCard';
 import LoadingState from '@/components/LoadingState';
-import { useEvents, useNews } from '@/hooks/useContent';
+import { useNewsList } from '@/lib/api/news.api';
+import { useEventsList } from '@/lib/api/events.api';
 
 export default function NewsEventsSection() {
-  const newsQuery = useNews();
-  const eventsQuery = useEvents();
-  const latestNews = (newsQuery.data || []).slice(0, 3);
-  const upcoming = (eventsQuery.data?.upcoming || []).slice(0, 3);
+  const { data: news = [], isLoading: newsLoading } = useNewsList({ limit: 3 });
+  const { data: events = [], isLoading: eventsLoading } = useEventsList({ limit: 3 });
 
   return (
     <section className="bg-ivory py-20">
@@ -35,11 +34,13 @@ export default function NewsEventsSection() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-gold-600">
               Latest news
             </p>
-            {newsQuery.isLoading ? (
+            {newsLoading ? (
               <LoadingState />
+            ) : news.length === 0 ? (
+              <p className="mt-7 text-xs text-muted-foreground italic">No news published yet.</p>
             ) : (
               <div className="mt-7 space-y-10">
-                {latestNews.map((item, index) => (
+                {news.map((item, index) => (
                   <NewsCard key={item.id} item={item} featured={index === 0} />
                 ))}
               </div>
@@ -50,11 +51,13 @@ export default function NewsEventsSection() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-gold-600">
               Upcoming events
             </p>
-            {eventsQuery.isLoading ? (
+            {eventsLoading ? (
               <LoadingState />
+            ) : events.length === 0 ? (
+              <p className="mt-7 text-xs text-muted-foreground italic">No upcoming events scheduled.</p>
             ) : (
               <div className="mt-7 space-y-5">
-                {upcoming.map((event) => (
+                {events.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>

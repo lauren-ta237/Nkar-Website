@@ -13,62 +13,75 @@ This checklist tracks the step-by-step progress of connecting `apps/web` to the 
 ---
 
 ## 2. API Services & TanStack Query Hooks Setup (`apps/web/src/lib/api/`)
-- [ ] **News & Announcements** (`src/lib/api/news.api.ts`):
-  - [ ] `fetchNewsList(params?: { category?, search?, limit?, skip? })`
-  - [ ] `fetchNewsBySlug(slug: string)`
-  - [ ] Hooks: `useNewsList`, `useNewsDetail`
-- [ ] **Events & Calendar** (`src/lib/api/events.api.ts`):
-  - [ ] `fetchEventsList(params?: { status?, search? })`
-  - [ ] `fetchEventBySlug(slug: string)`
-  - [ ] Hooks: `useEventsList`, `useEventDetail`
-- [ ] **Cultural Heritage** (`src/lib/api/heritage.api.ts`):
-  - [ ] `fetchHeritageList(params?: { category? })`
-  - [ ] `fetchHeritageBySlug(slug: string)`
-  - [ ] Hooks: `useHeritageList`, `useHeritageDetail`
-- [ ] **Royal Leadership** (`src/lib/api/leadership.api.ts`):
-  - [ ] `fetchLeadershipList()`
-  - [ ] Hook: `useLeadershipList`
-- [ ] **Gallery & Media** (`src/lib/api/gallery.api.ts`):
-  - [ ] `fetchGalleryList(params?: { media_type?, category? })`
-  - [ ] Hook: `useGalleryList`
-- [ ] **Development Projects** (`src/lib/api/projects.api.ts`):
-  - [ ] `fetchProjectsList(params?: { status? })`
-  - [ ] Hook: `useProjectsList`
-- [ ] **Publications & Documents** (`src/lib/api/publications.api.ts`):
-  - [ ] `fetchPublicationsList()`
-  - [ ] Hook: `usePublicationsList`
-- [ ] **Citizen Contact & Inquiries** (`src/lib/api/contacts.api.ts`):
-  - [ ] `submitContactForm(payload: ContactCreate)`
-  - [ ] Mutation Hook: `useSubmitContact`
+- [x] **News & Announcements** (`src/lib/api/news.api.ts`):
+  - [x] `fetchNewsList(params?: { category?, search?, limit?, skip? })`
+  - [x] `fetchNewsBySlug(slug: string)`
+  - [x] Hooks: `useNewsList`, `useNewsDetail`
+- [x] **Events & Calendar** (`src/lib/api/events.api.ts`):
+  - [x] `fetchEventsList(params?: { search?, limit?, skip? })`
+  - [x] `fetchEventBySlug(slug: string)`
+  - [x] Hooks: `useEventsList`, `useEventDetail`
+- [x] **Cultural Heritage** (`src/lib/api/heritage.api.ts`):
+  - [x] `fetchHeritageList(category?: string)`
+  - [x] `fetchHeritageBySlug(slug: string)`
+  - [x] Hooks: `useHeritageList`, `useHeritageDetail`
+- [x] **Royal Leadership** (`src/lib/api/leadership.api.ts`):
+  - [x] `fetchLeadershipList()`
+  - [x] Hook: `useLeadershipList`
+- [x] **Gallery & Media** (`src/lib/api/gallery.api.ts`):
+  - [x] `fetchGalleryList(params?: { media_type?, category? })`
+  - [x] Hook: `useGalleryList`
+- [x] **Development Projects** (`src/lib/api/projects.api.ts`):
+  - [x] `fetchProjectsList(status?: string)`
+  - [x] Hook: `useProjectsList`
+- [x] **Publications & Documents** (`src/lib/api/publications.api.ts`):
+  - [x] `fetchPublicationsList()`
+  - [x] Hook: `usePublicationsList`
+- [x] **Citizen Contact & Inquiries** (`src/lib/api/contacts.api.ts`):
+  - [x] `submitContactForm(payload: ContactCreatePayload)`
+  - [x] Mutation Hook: `useSubmitContact`
 
 ---
 
 ## 3. Page & Component Integration
-- [ ] **Home Page (`apps/web/src/pages/`)**:
-  - [ ] Connect Featured News & Bulletins
-  - [ ] Connect Upcoming Events
-  - [ ] Connect Highlights / Gallery
-- [ ] **News Page & News Article Detail**:
-  - [ ] Wire `useNewsList` with category filter
-  - [ ] Wire `useNewsDetail` by slug
-- [ ] **Events Page & Event Detail**:
-  - [ ] Wire `useEventsList`
-  - [ ] Wire `useEventDetail`
-- [ ] **Heritage Page & Heritage Detail**:
-  - [ ] Wire `useHeritageList`
-  - [ ] Wire `useHeritageDetail`
-- [ ] **Leadership / Royalty Page**:
-  - [ ] Wire `useLeadershipList`
-- [ ] **Gallery Page**:
-  - [ ] Wire `useGalleryList` with filter tabs
-- [ ] **Projects Page**:
-  - [ ] Wire `useProjectsList` with status filters
-- [ ] **Contact Page**:
-  - [ ] Connect contact form submission to `useSubmitContact` with toast feedback
+- [x] **Home Page (`apps/web/src/pages/Home.tsx`)**:
+  - [x] Connect Featured News & Bulletins
+  - [x] Connect Upcoming Events
+  - [x] Connect Highlights / Gallery
+  - [x] Connect Projects Preview
+- [x] **News & Events Page (`apps/web/src/pages/NewsEvents.tsx`)**:
+  - [x] Wire `useNews` with live backend query and category filter
+  - [x] Wire `useEvents` for upcoming & past community events
+- [x] **About & Cultural Heritage (`apps/web/src/pages/About.tsx`)**:
+  - [x] Wire `useAboutContent` connecting to live `fetchHeritageList`
+- [x] **Leadership / Royalty Page (`apps/web/src/pages/Leadership.tsx`)**:
+  - [x] Wire `useLeadershipContent` connecting to live `fetchLeadershipList`
+- [x] **Gallery Page (`apps/web/src/pages/Gallery.tsx`)**:
+  - [x] Wire `useGallery` connecting to live `fetchGalleryList`
+- [x] **Projects Page (`apps/web/src/pages/Projects.tsx`)**:
+  - [x] Wire `useProjects` connecting to live `fetchProjectsList` with ongoing/planned/completed counters
+- [x] **Books & Publications Page (`apps/web/src/pages/Books.tsx`)**:
+  - [x] Wire `useBooks` connecting to live `fetchPublicationsList`
+- [x] **Search Page (`apps/web/src/pages/Search.tsx`)**:
+  - [x] Connect live search indexer across all live modules (`useSearchIndex`, `searchContent`)
+- [x] **Contact Page (`apps/web/src/pages/Contact.tsx` & `ContactForm.tsx`)**:
+  - [x] Connect contact form submission to `useSubmitContact` mutation
+  - [x] Added `react-hot-toast` notifications on message delivery
 
 ---
 
-## 4. Verification & QA
-- [ ] Verify zero TypeScript errors (`npm run typecheck` or `npm run build`)
-- [ ] Verify error states and empty states across pages
-- [ ] End-to-end audit with live backend running
+## 4. Pure API Refactoring & Dummy Data Purge
+- [x] Implemented dedicated backend search endpoint: `GET /api/v1/search` in `apps/api/app/modules/search/`
+- [x] Created `src/types/api.types.ts` strictly mirroring FastAPI schemas
+- [x] Directly wired pages and components to `src/lib/api/<entity>.api.ts`
+- [x] Completely deleted transitional `src/hooks/useContent.ts`
+- [x] Completely deleted `src/components/SampleBadge.tsx`
+- [x] Completely purged dummy mock data files: `news.ts`, `projects.ts`, `books.ts`, `gallery.ts`
+- [x] Updated all card components (`NewsCard`, `EventCard`, `ProjectCard`, `BookCard`, `GalleryGrid`, `LeadershipRecord`) to backend entity types
+
+---
+
+## 5. Verification & QA
+- [x] Production compilation of `apps/web`: `npm run build` completed with 0 errors
+- [x] Production compilation of `apps/admin`: `npm run build` completed with 0 errors
+- [x] All 20 backend tests passing in `apps/api`: `pytest tests/test_api.py` (20 passed)

@@ -12,12 +12,14 @@ from app.modules.media.routes import router as media_router
 from app.modules.news.routes import router as news_router
 from app.modules.projects.routes import router as projects_router
 from app.modules.publications.routes import router as publications_router
+from app.modules.search.routes import router as search_router
 from app.modules.users.routes import router as users_router
 
 api_router = APIRouter()
 
 api_router.include_router(auth_router)
 api_router.include_router(dashboard_router)
+api_router.include_router(search_router)
 api_router.include_router(users_router)
 api_router.include_router(news_router)
 api_router.include_router(events_router)

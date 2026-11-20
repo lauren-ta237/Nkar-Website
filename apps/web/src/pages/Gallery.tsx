@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import PageHero from '@/components/PageHero';
@@ -7,21 +7,29 @@ import FilterChips from '@/components/FilterChips';
 import GalleryGrid from '@/components/GalleryGrid';
 import Lightbox from '@/components/Lightbox';
 import LoadingState from '@/components/LoadingState';
-import { galleryCategories } from '@/data/gallery';
-import { useGallery } from '@/hooks/useContent';
+import { useGalleryList } from '@/lib/api/gallery.api';
 
 export default function Gallery() {
   const [category, setCategory] = useState('All');
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const galleryQuery = useGallery();
+  
+  const categoryParam = category === 'All' ? undefined : category;
+  const { data: items = [], isLoading } = useGalleryList({ category: categoryParam });
 
-  const items = galleryQuery.data || [];
-  const visible = category === 'All' ? items : items.filter((item) => item.category === category);
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    set.add('All');
+    items.forEach((item) => {
+      if (item.category) set.add(item.category);
+    });
+    return Array.from(set);
+  }, [items]);
+
   const close = () => setOpenIndex(null);
   const prev = () =>
-    setOpenIndex((index) => (index === null ? 0 : (index - 1 + visible.length) % visible.length));
+    setOpenIndex((index) => (index === null ? 0 : (index - 1 + items.length) % items.length));
   const next = () =>
-    setOpenIndex((index) => (index === null ? 0 : (index + 1) % visible.length));
+    setOpenIndex((index) => (index === null ? 0 : (index + 1) % items.length));
 
   return (
     <>
@@ -34,14 +42,12 @@ export default function Gallery() {
       <section className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
           <ContentNotice title="Photograph policy">
-            Every image currently on this site is an illustrative placeholder, generated so the
-            gallery can be demonstrated; none of them is presented as Nkar. Authentic photographs
-            will replace them one by one, credited to the photographer or family who supplied them.
+            Visual records from across the Nkar Fondom, credited to the photographers, custodians, and families who supply them.
           </ContentNotice>
 
           <div className="mt-10 flex flex-wrap items-center justify-between gap-6">
             <FilterChips
-              options={galleryCategories}
+              options={categories}
               value={category}
               onChange={(value) => {
                 setCategory(value);
@@ -50,15 +56,21 @@ export default function Gallery() {
               label="Filter the gallery"
             />
             <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              {visible.length} {visible.length === 1 ? 'image' : 'images'}
+              {items.length} {items.length === 1 ? 'image' : 'images'}
             </p>
           </div>
 
           <div className="mt-10">
-            {galleryQuery.isLoading ? (
+            {isLoading ? (
               <LoadingState label="Loading the gallery…" />
+            ) : items.length === 0 ? (
+              <div className="p-8 text-center border border-border bg-card">
+                <p className="text-sm text-muted-foreground italic">
+                  No photographs found in this category.
+                </p>
+              </div>
             ) : (
-              <GalleryGrid items={visible} onOpen={setOpenIndex} />
+              <GalleryGrid items={items} onOpen={setOpenIndex} />
             )}
           </div>
 
@@ -84,9 +96,9 @@ export default function Gallery() {
               </p>
               <Link
                 to="/contact"
-                className="mt-6 inline-flex items-center gap-2 bg-forest-700 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-ivory transition-colors hover:bg-gold-600"
+                className="mt-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-forest-700 transition-colors hover:text-gold-700"
               >
-                Offer photographs
+                Submit a photograph
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
@@ -94,9 +106,9 @@ export default function Gallery() {
         </div>
       </section>
 
-      {openIndex !== null && visible.length > 0 && (
+      {openIndex !== null && items[openIndex] && (
         <Lightbox
-          items={visible}
+          items={items}
           index={openIndex}
           onClose={close}
           onPrev={prev}

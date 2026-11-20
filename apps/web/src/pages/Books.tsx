@@ -6,13 +6,26 @@ import SectionHeading from '@/components/SectionHeading';
 import ContentNotice from '@/components/ContentNotice';
 import BookCard from '@/components/BookCard';
 import LoadingState from '@/components/LoadingState';
-import { booksIntro, booksNote, publicationsPolicy } from '@/data/books';
 import { images } from '@/data/images';
-import { useBooks } from '@/hooks/useContent';
+import { usePublicationsList } from '@/lib/api/publications.api';
+
+const publicationsPolicy = [
+  {
+    title: 'Kept with author attribution',
+    text: 'Every publication acknowledges the original author, researcher, or institution that produced it.'
+  },
+  {
+    title: 'Open community access',
+    text: 'Digital manuscripts and documents are preserved for direct reading and download by community members worldwide.'
+  },
+  {
+    title: 'Continuous preservation',
+    text: 'Contributions of books, articles, theses, and essays on Nkar culture and history are welcomed and indexed.'
+  }
+];
 
 export default function Books() {
-  const booksQuery = useBooks();
-  const books = booksQuery.data || [];
+  const { data: publications = [], isLoading } = usePublicationsList();
 
   return (
     <>
@@ -24,7 +37,9 @@ export default function Books() {
 
       <section className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
-          <ContentNotice>{booksNote}</ContentNotice>
+          <ContentNotice>
+            Titles, historical records, and scholarly contributions by Nkar researchers and elders, preserved for present and future generations.
+          </ContentNotice>
 
           <div className="mt-12 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
@@ -32,7 +47,7 @@ export default function Books() {
                 A shelf for the works of Nkar
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-forest-800/90">
-                {booksIntro}
+                Nkar sons and daughters have written about their history, their language, and their culture. This shelf gathers those works in one place, so that what has been written is not lost and can be found by the next generation.
               </p>
             </div>
             <div>
@@ -57,11 +72,17 @@ export default function Books() {
             title="Titles in the archive"
             description="Each entry carries the author’s own details, the year, the language and where the work can be found."
           />
-          {booksQuery.isLoading ? (
+          {isLoading ? (
             <LoadingState label="Opening the shelf…" />
+          ) : publications.length === 0 ? (
+            <div className="mt-12 p-8 text-center border border-border bg-card">
+              <p className="text-sm text-muted-foreground italic">
+                No publications currently uploaded to the public archive.
+              </p>
+            </div>
           ) : (
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {books.map((book) => (
+              {publications.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
             </div>
@@ -86,19 +107,12 @@ export default function Books() {
             ))}
           </div>
 
-          <div className="mt-12 border border-gold-500/40 bg-gold-50/70 p-8">
-            <p className="font-display text-2xl text-forest-700">
-              Have you written about Nkar?
-            </p>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-forest-800">
-              Send the title, your name, the year and where the work can be found. Academic work,
-              memoirs, language books and histories are all welcome.
-            </p>
+          <div className="mt-16 text-center">
             <Link
               to="/contact"
-              className="mt-6 inline-flex items-center gap-2 bg-forest-700 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-ivory transition-colors hover:bg-gold-600"
+              className="inline-flex items-center gap-2 rounded-sm bg-forest-700 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-ivory transition-colors hover:bg-gold-600"
             >
-              Submit a publication
+              Submit a publication to the shelf
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>

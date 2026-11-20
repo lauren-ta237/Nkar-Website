@@ -1,22 +1,27 @@
 import { Image } from '@/components/ui/image';
 import { images } from '@/data/images';
-import type { LeadershipRecord } from '@/data/culture';
+import type { Leadership } from '@/types/api.types';
 
 interface LeadershipRecordProps {
-  record: LeadershipRecord;
+  record: Leadership;
   index: number;
 }
 
 export default function LeadershipRecord({ record, index }: LeadershipRecordProps) {
-  const portrait = record.image || images.fonSit;
-  const altText = record.imageAlt || `${record.name} of Nkar`;
+  const portrait = record.portrait_url || images.fonSit;
+  const fullName = record.traditional_title
+    ? `${record.traditional_title} ${record.name}`
+    : record.name;
+  const era = record.start_year
+    ? `${record.start_year} – ${record.end_year || 'Present'}`
+    : record.period_label || 'Historical Reign';
 
   return (
     <article className="grid gap-6 border border-border bg-card p-6 md:grid-cols-[180px_1fr] md:p-8 md:items-center">
       <div className="relative aspect-[4/5] w-full overflow-hidden border border-gold-500/30 bg-forest-900 shadow-md">
         <Image
           src={portrait}
-          alt={altText}
+          alt={`${fullName} of Nkar`}
           className="h-full w-full object-cover"
           fittingType="fill"
           quality={85}
@@ -32,17 +37,17 @@ export default function LeadershipRecord({ record, index }: LeadershipRecordProp
         </p>
 
         <h3 className="font-display text-3xl text-forest-700">
-          {record.name}
+          {fullName}
         </h3>
 
         <div className="inline-flex items-center gap-2 border-y border-gold-500/20 py-2 text-xs font-medium uppercase tracking-[0.2em] text-forest-800">
           <span className="text-muted-foreground">Period of Rule:</span>
-          <span className="font-semibold text-gold-700">{record.era}</span>
+          <span className="font-semibold text-gold-700">{era}</span>
         </div>
 
-        {record.summary && (
+        {(record.biography || record.historical_notes) && (
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            {record.summary}
+            {record.biography || record.historical_notes}
           </p>
         )}
       </div>

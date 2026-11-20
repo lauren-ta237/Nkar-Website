@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Image } from '@/components/ui/image';
@@ -9,14 +10,16 @@ import LeadershipRecord from '@/components/LeadershipRecord';
 import RolesGrid from '@/components/leadership/RolesGrid';
 import CeremonialYear from '@/components/leadership/CeremonialYear';
 import { images } from '@/data/images';
-import { leadershipLead } from '@/data/culture';
-import { useLeadershipContent } from '@/hooks/useContent';
+import { leadershipLead, leadershipRoles, ceremonialYear } from '@/data/culture';
+import { useLeadershipList } from '@/lib/api/leadership.api';
 
 export default function Leadership() {
-  const { data, isLoading } = useLeadershipContent();
-  const roles = data?.roles || [];
-  const records = data?.records || [];
-  const ceremonialYear = data?.ceremonialYear || [];
+  const { data: leaders = [], isLoading } = useLeadershipList();
+
+  const sortedLeaders = useMemo(
+    () => [...leaders].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0)),
+    [leaders]
+  );
 
   return (
     <>
@@ -60,7 +63,7 @@ export default function Leadership() {
               title="The Traditional Institutions of Nkar"
               description="The traditional administrative and governing bodies that maintain sovereignty, law, cultural continuity, and community harmony across the Fondom."
             />
-            {isLoading ? <LoadingState /> : <RolesGrid roles={roles} />}
+            <RolesGrid roles={leadershipRoles} />
           </div>
 
           <div className="mt-16">
@@ -69,7 +72,7 @@ export default function Leadership() {
               title="Nkar Sites and Traditional Sacrifices"
               description="Hallowed ancestral sites, highland sanctuaries, and customary rites observed by the palace and lineage custodians to preserve peace, fertility, and divine blessing."
             />
-            {isLoading ? <LoadingState /> : <CeremonialYear items={ceremonialYear} />}
+            <CeremonialYear items={ceremonialYear} />
           </div>
         </div>
       </section>
@@ -83,29 +86,30 @@ export default function Leadership() {
           />
 
           {isLoading ? (
-            <LoadingState label="Opening the register…" />
+            <LoadingState label="Consulting the royal register…" />
+          ) : sortedLeaders.length === 0 ? (
+            <div className="mt-12 p-8 text-center border border-border bg-card">
+              <p className="text-sm text-muted-foreground italic">
+                No leadership records currently indexed in the public register.
+              </p>
+            </div>
           ) : (
-            <div className="mt-12 space-y-5">
-              {records.map((record, index) => (
+            <div className="mt-12 space-y-6">
+              {sortedLeaders.map((record, index) => (
                 <LeadershipRecord key={record.id} record={record} index={index} />
               ))}
             </div>
           )}
 
-          <div className="mt-12 border border-gold-500/40 bg-gold-50/70 p-8">
-            <p className="font-display text-2xl text-forest-700">
-              Do you hold palace records or photographs?
-            </p>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-forest-800">
-              Family photographs, documents, regalia and accounts of past reigns help the
-              custodians complete this register accurately. They will be handled with respect and
-              returned.
+          <div className="mt-16 border-t border-border pt-10 text-center">
+            <p className="text-sm text-muted-foreground">
+              Have confirmed dates, photographs or historical notes to add to this register?
             </p>
             <Link
               to="/contact"
-              className="mt-6 inline-flex items-center gap-2 bg-forest-700 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-ivory transition-colors hover:bg-gold-600"
+              className="mt-4 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-forest-700 transition-colors hover:text-gold-700"
             >
-              Offer a record to the archive
+              Write to the heritage custodians
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>

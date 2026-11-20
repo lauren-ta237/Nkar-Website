@@ -3,11 +3,11 @@ import { ArrowRight } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 import ProjectCard from '@/components/ProjectCard';
 import LoadingState from '@/components/LoadingState';
-import { useProjects } from '@/hooks/useContent';
+import { useProjectsList } from '@/lib/api/projects.api';
 
 export default function ProjectsPreview() {
-  const projectsQuery = useProjects();
-  const featured = (projectsQuery.data || []).slice(0, 2);
+  const { data: projects = [], isLoading } = useProjectsList();
+  const featured = projects.slice(0, 2);
 
   return (
     <section className="bg-ivory py-20">
@@ -27,8 +27,10 @@ export default function ProjectsPreview() {
           </Link>
         </div>
 
-        {projectsQuery.isLoading ? (
+        {isLoading ? (
           <LoadingState />
+        ) : featured.length === 0 ? (
+          <p className="mt-12 text-xs text-muted-foreground italic">No projects registered yet.</p>
         ) : (
           <div className="mt-12 space-y-8">
             {featured.map((project) => (

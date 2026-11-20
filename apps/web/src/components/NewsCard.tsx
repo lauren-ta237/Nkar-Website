@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { formatDate } from '@/lib/format';
-import SampleBadge from './SampleBadge';
-import type { NewsItem } from '@/data/news';
+import type { News } from '@/types/api.types';
 
 interface NewsCardProps {
-  item: NewsItem;
+  item: News;
   featured?: boolean;
+}
+
+function formatCategoryLabel(cat?: string): string {
+  if (!cat) return 'Announcements';
+  const clean = cat.toLowerCase().replace(/_/g, ' ');
+  return clean.charAt(0).toUpperCase() + clean.slice(1);
 }
 
 export default function NewsCard({ item, featured = false }: NewsCardProps) {
   const [open, setOpen] = useState(false);
+  const displayDate = item.published_at || item.created_at;
+  const paragraphs = (item.content || '').split('\n\n').filter(Boolean);
 
   return (
     <article
@@ -21,10 +28,9 @@ export default function NewsCard({ item, featured = false }: NewsCardProps) {
       }`}
     >
       <div className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-[0.26em] text-muted-foreground">
-        <span className="text-gold-600">{item.category}</span>
+        <span className="text-gold-600">{formatCategoryLabel(item.category)}</span>
         <span className="h-1 w-1 rotate-45 bg-gold-500/60" aria-hidden="true" />
-        <time dateTime={item.date}>{formatDate(item.date)}</time>
-        
+        <time dateTime={displayDate}>{formatDate(displayDate)}</time>
       </div>
 
       <h3
@@ -35,12 +41,14 @@ export default function NewsCard({ item, featured = false }: NewsCardProps) {
         {item.title}
       </h3>
 
-      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.excerpt}</p>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        {item.summary || (paragraphs[0] ? paragraphs[0].slice(0, 180) + '...' : '')}
+      </p>
 
       {open && (
         <div className="mt-5 space-y-4 border-l-2 border-gold-500/40 pl-5 text-sm leading-relaxed text-forest-800">
-          {item.body.map((paragraph) => (
-            <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+          {paragraphs.map((paragraph, idx) => (
+            <p key={idx}>{paragraph}</p>
           ))}
         </div>
       )}

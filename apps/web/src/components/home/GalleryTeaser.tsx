@@ -3,12 +3,11 @@ import { ArrowRight } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import SectionHeading from '@/components/SectionHeading';
 import LoadingState from '@/components/LoadingState';
-import SampleBadge from '@/components/SampleBadge';
-import { useGallery } from '@/hooks/useContent';
+import { useGalleryList } from '@/lib/api/gallery.api';
 
 export default function GalleryTeaser() {
-  const galleryQuery = useGallery();
-  const featured = (galleryQuery.data || []).slice(0, 3);
+  const { data: gallery = [], isLoading } = useGalleryList();
+  const featured = gallery.slice(0, 3);
 
   return (
     <section className="border-y border-border bg-cream/60 py-20">
@@ -28,19 +27,21 @@ export default function GalleryTeaser() {
           </Link>
         </div>
 
-        {galleryQuery.isLoading ? (
+        {isLoading ? (
           <LoadingState />
+        ) : featured.length === 0 ? (
+          <p className="mt-12 text-xs text-muted-foreground italic">No gallery photographs published yet.</p>
         ) : (
           <div className="mt-12 grid gap-4 md:grid-cols-3">
             {featured.map((item) => (
               <Link
                 key={item.id}
                 to="/gallery"
-                className="group relative aspect-[4/3] overflow-hidden border border-border"
+                className="group relative aspect-[4/3] overflow-hidden border border-border bg-stone-900"
               >
                 <Image
-                  src={item.image}
-                  alt={`${item.title}`}
+                  src={item.media_url}
+                  alt={item.alt_text || item.title}
                   className="absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-[1.04]"
                   fittingType="fill"
                   quality={80}
@@ -55,7 +56,6 @@ export default function GalleryTeaser() {
                   </span>
                   <span className="mt-2 block font-display text-lg text-ivory">{item.title}</span>
                 </span>
-                
               </Link>
             ))}
           </div>
