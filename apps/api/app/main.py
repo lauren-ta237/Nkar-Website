@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from urllib.parse import urlsplit
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
@@ -15,7 +15,7 @@ async def lifespan(_: FastAPI):
     await close_database()
 
 
-app = FastAPI(
+fastapi_app = FastAPI(
     title="Nkar Woo Lan API",
     summary="Digital community heritage and administration API",
     description=(
@@ -37,7 +37,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.add_middleware(
+fastapi_app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
     allow_credentials=True,
@@ -45,30 +45,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.middleware("http")
-async def restore_vercel_path(request: Request, call_next):
-    # Registered after CORSMiddleware so it runs first and restores the original path
-    if request.scope.get("path") in {"/api/index", "/api/index.py", "/app/main.py"}:
-        original = (
-            request.headers.get("x-vercel-original-url")
-            or request.headers.get("x-invoke-path")
-            or request.headers.get("x-forwarded-uri")
-            or request.headers.get("x-matched-path")
-        )
-        if original:
-            parsed = urlsplit(original)
-            restored_path = parsed.path or "/"
-            request.scope["path"] = restored_path
-            request.scope["raw_path"] = restored_path.encode("latin-1")
-            if parsed.query:
-                request.scope["query_string"] = parsed.query.encode("latin-1")
-    return await call_next(request)
+fastapi_app.include_router(api_router, prefix="/api/v1")
 
 
-app.include_router(api_router, prefix="/api/v1")
-
-
-@app.get("/health", tags=["system"])
+@fastapi_app.get("/health", tags=["system"])
 async def health() -> dict[str, str]:
     return {"status": "ok", "service": "nkar-woo-lan-api"}
+
+
+class VercelPathFixMiddleware:
+    def __init__(self, inner_app):
+        self.inner_app = inner_app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            headers = dict(scope.get("headers", []))
+            for header_name in (
+                b"x-vercel-original-url",
+                b"x-invoke-path",
+                b"x-forwarded-uri",
+                b"x-matched-path",
+                b"x-now-route-matches",
+            ):
+                raw_val = headers.get(header_name)
+                if raw_val:
+                    decoded = raw_val.decode("latin-1")
+                    if decoded.startswith("/"):
+                        parsed = urlsplit(decoded)
+                        if parsed.path and parsed.path not in {"/api/index", "/api/index.py", "/app/main.py"}:
+                            scope["path"] = parsed.path
+                            scope["raw_path"] = parsed.path.encode("latin-1")
+                            if parsed.query:
+                                scope["query_string"] = parsed.query.encode("latin-1")
+                            break
+        await self.inner_app(scope, receive, send)
+
+
+app = VercelPathFixMiddleware(fastapi_app)
