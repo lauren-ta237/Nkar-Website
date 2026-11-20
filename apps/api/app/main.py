@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
+from urllib.parse import urlsplit
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
@@ -35,6 +36,7 @@ app = FastAPI(
     ],
     lifespan=lifespan,
 )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -42,6 +44,28 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def restore_vercel_path(request: Request, call_next):
+    # Registered after CORSMiddleware so it runs first and restores the original path
+    if request.scope.get("path") in {"/api/index", "/api/index.py", "/app/main.py"}:
+        original = (
+            request.headers.get("x-vercel-original-url")
+            or request.headers.get("x-invoke-path")
+            or request.headers.get("x-forwarded-uri")
+            or request.headers.get("x-matched-path")
+        )
+        if original:
+            parsed = urlsplit(original)
+            restored_path = parsed.path or "/"
+            request.scope["path"] = restored_path
+            request.scope["raw_path"] = restored_path.encode("latin-1")
+            if parsed.query:
+                request.scope["query_string"] = parsed.query.encode("latin-1")
+    return await call_next(request)
+
+
 app.include_router(api_router, prefix="/api/v1")
 
 
