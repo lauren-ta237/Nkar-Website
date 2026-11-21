@@ -11,16 +11,21 @@ export const LEADERSHIP_QUERY_KEYS = {
   LIST: ['public', 'leadership', 'list'] as const,
 };
 
-export async function fetchLeadershipList(): Promise<Leadership[]> {
-  const { data } = await api.get<ApiResponse<Leadership[]>>('/leadership');
+export async function fetchLeadershipList(pageSize = 100): Promise<Leadership[]> {
+  const { data } = await api.get<ApiResponse<Leadership[]>>('/leadership', {
+    params: { page_size: pageSize },
+  });
   return data.data || [];
 }
 
-export function useLeadershipList(options: { enabled?: boolean } = {}) {
+export function useLeadershipList(options: { enabled?: boolean; pageSize?: number } = {}) {
+  const { enabled, pageSize = 100, ...queryOptions } = options;
+
   return useQuery({
-    queryKey: LEADERSHIP_QUERY_KEYS.LIST,
-    queryFn: fetchLeadershipList,
+    queryKey: [...LEADERSHIP_QUERY_KEYS.LIST, pageSize],
+    queryFn: () => fetchLeadershipList(pageSize),
     staleTime: 1000 * 60 * 10,
-    ...options,
+    enabled,
+    ...queryOptions,
   });
 }
