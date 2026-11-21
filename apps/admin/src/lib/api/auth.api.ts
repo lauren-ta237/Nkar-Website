@@ -1,9 +1,9 @@
-// auth.api.ts
+﻿// auth.api.ts
 //
 // Demo authentication API route module + TanStack Query hooks.
 //
 // Every function here is a thin wrapper around the shared axios instance in
-// axios-client.js. Nothing auth-specific lives in the interceptor — the token
+// axios-client.js. Nothing auth-specific lives in the interceptor â€” the token
 // is attached by auth-token.js, so this file only describes the routes.
 //
 // These are DEMO endpoints: the project has no backend, so they will 404
@@ -56,7 +56,7 @@ export function normalizeAuthUser(raw: AuthUser | any): User {
     email: raw.email,
     role,
     status: (raw.status?.toUpperCase() || 'ACTIVE') as UserStatus,
-    avatar_url: raw.avatar_url || null,
+    avatar_url: raw.avatar_url ? String(raw.avatar_url).trim().replace(/^http:\/\//i, 'https://') : null,
     created_at: raw.created_at || new Date().toISOString(),
     updated_at: raw.updated_at || new Date().toISOString(),
   };
@@ -134,7 +134,7 @@ export async function logout(): Promise<void> {
   try {
     await api.post("/auth/logout");
   } catch {
-    // ignore errors – logout should succeed even if the server is unreachable
+    // ignore errors â€“ logout should succeed even if the server is unreachable
   } finally {
     clearToken();
   }
