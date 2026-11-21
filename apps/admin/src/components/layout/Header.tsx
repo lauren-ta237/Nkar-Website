@@ -17,6 +17,7 @@
 } from 'lucide-react';
 import { useAdminStore, INITIAL_USERS, AdminPage } from '../../store/useAdminStore';
 import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
+import { useAdminUsersList } from '@/lib/api/users.api';
 import { Role } from '../../types';
 import {
   DropdownMenu,
@@ -48,6 +49,11 @@ export const Header: React.FC = () => {
   const { data: stats } = useAdminDashboardStats();
 
   const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'https://nkar-website.vercel.app';
+  const toHttpsHeaderAvatar = (url?: string | null): string => (url ? url.trim().replace(/^http:\/\//i, 'https://') : '');
+  const { data: liveHeaderUsers = [] } = useAdminUsersList();
+  const matchedHeaderUser = liveHeaderUsers.find((u: any) => (currentUser?.id && u.id === currentUser.id) || (currentUser?.email && u.email?.toLowerCase() === currentUser.email?.toLowerCase()));
+  const effectiveHeaderAvatar = toHttpsHeaderAvatar(currentUser?.avatar_url || matchedHeaderUser?.avatar_url);
+
   const handleOpenPublicSite = () => {
     window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
   };
@@ -191,9 +197,9 @@ export const Header: React.FC = () => {
                 }`}
               >
                 <img
-                  src={user.avatar_url || ''}
+                  src={toHttpsHeaderAvatar(user.avatar_url)}
                   alt={user.name}
-                  className="w-7 h-7 rounded-full object-cover border border-[#D4AF37]/30 shrink-0"
+                  className="w-7 h-7 rounded-full object-cover object-top border border-[#D4AF37]/30 shrink-0"
                   referrerPolicy="no-referrer"
                 />
                 <div className="flex-1 min-w-0">
@@ -228,9 +234,9 @@ export const Header: React.FC = () => {
               title="Administrator Account"
             >
               <img
-                src={currentUser?.avatar_url || ''}
+                src={effectiveHeaderAvatar}
                 alt={currentUser?.name || 'Administrator'}
-                className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37] shrink-0"
+                className="w-8 h-8 rounded-full object-cover object-top border-2 border-[#D4AF37] shrink-0"
                 referrerPolicy="no-referrer"
               />
               <div className="hidden md:block">
@@ -311,4 +317,5 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+
 

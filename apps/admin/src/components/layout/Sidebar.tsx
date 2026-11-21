@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { useAdminStore, AdminPage, INITIAL_USERS } from '../../store/useAdminStore';
 import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
+import { useAdminUsersList } from '@/lib/api/users.api';
 import {
   Sheet,
   SheetContent,
@@ -67,6 +68,15 @@ export const Sidebar: React.FC = () => {
   const { data: stats } = useAdminDashboardStats();
 
   const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'https://nkar-website.vercel.app';
+  const toHttpsAvatar = (url?: string | null): string => {
+  if (!url) return '';
+  return url.trim().replace(/^http:\/\//i, 'https://');
+};
+  const { data: liveUsers = [] } = useAdminUsersList();
+  const councilUsers = liveUsers.length > 0 ? liveUsers : INITIAL_USERS;
+  const matchedCurrentUser = liveUsers.find((u: any) => (currentUser?.id && u.id === currentUser.id) || (currentUser?.email && u.email?.toLowerCase() === currentUser.email?.toLowerCase()));
+  const effectiveAvatarUrl = toHttpsAvatar(currentUser?.avatar_url || matchedCurrentUser?.avatar_url);
+
   const handleOpenPublicSite = () => {
     window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
   };
@@ -176,7 +186,7 @@ export const Sidebar: React.FC = () => {
         </div>
 
         <div className="space-y-1.5">
-          {INITIAL_USERS.map((user) => {
+          {councilUsers.map((user: any) => {
             const isCurrent = currentUser?.id === user.id;
             return (
               <div
@@ -189,9 +199,9 @@ export const Sidebar: React.FC = () => {
               >
                 <div className="relative shrink-0">
                   <img
-                    src={user.avatar_url || ''}
+                    src={toHttpsAvatar(user.avatar_url)}
                     alt={user.name}
-                    className="w-6 h-6 rounded-full object-cover"
+                    className="w-6 h-6 rounded-full object-cover object-top"
                     referrerPolicy="no-referrer"
                   />
                   <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-stone-900" />
@@ -223,9 +233,9 @@ export const Sidebar: React.FC = () => {
             <DropdownMenuTrigger className="outline-none">
               <div className="relative cursor-pointer p-0.5 rounded-full hover:ring-2 hover:ring-[#D4AF37] transition-all">
                 <img
-                  src={currentUser.avatar_url || ''}
+                  src={effectiveAvatarUrl}
                   alt={currentUser.name}
-                  className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]"
+                  className="w-8 h-8 rounded-full object-cover object-top border-2 border-[#D4AF37]"
                   referrerPolicy="no-referrer"
                 />
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-stone-900" />
@@ -297,9 +307,9 @@ export const Sidebar: React.FC = () => {
             <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 hover:border-[#D4AF37] dark:hover:border-[#D4AF37] transition-all cursor-pointer shadow-2xs">
               <div className="relative shrink-0">
                 <img
-                  src={currentUser?.avatar_url || ''}
+                  src={effectiveAvatarUrl}
                   alt={currentUser?.name || 'Administrator'}
-                  className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]"
+                  className="w-8 h-8 rounded-full object-cover object-top border-2 border-[#D4AF37]"
                   referrerPolicy="no-referrer"
                 />
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-stone-900" />
@@ -500,4 +510,5 @@ export const Sidebar: React.FC = () => {
     </>
   );
 };
+
 
