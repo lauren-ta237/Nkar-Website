@@ -8,6 +8,7 @@ import {
   Menu,
   User as UserIcon,
   Settings,
+  Sparkles,
   Globe,
   Sun,
   Moon,
@@ -16,11 +17,11 @@ import {
 } from 'lucide-react';
 import { useAdminStore, INITIAL_USERS, AdminPage } from '../../store/useAdminStore';
 import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
+import { Role } from '../../types';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -36,9 +37,11 @@ export const Header: React.FC = () => {
     notificationDrawerOpen,
     setNotificationDrawerOpen,
     setProfileModalOpen,
+    mobileSidebarOpen,
     setMobileSidebarOpen,
     theme,
     toggleTheme,
+    setPublicPreviewOpen,
     setLogoutConfirmOpen,
   } = useAdminStore();
 
@@ -150,64 +153,57 @@ export const Header: React.FC = () => {
 
         {/* Role Simulator Dropdown (shadcn Base UI) */}
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <button
-                type="button"
-                className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 bg-[#FAF7F2] dark:bg-stone-800 hover:bg-[#F4EFE6] dark:hover:bg-stone-700 border border-[#E2DBD0] dark:border-stone-700 rounded-lg text-xs cursor-pointer transition-colors outline-none"
-              />
-            }
-          >
-            <span className="text-[11px] text-stone-500 dark:text-stone-400 uppercase tracking-wider font-medium hidden sm:inline">Role:</span>
-            <span
-              className={`font-semibold inline-flex items-center gap-1 ${
-                currentUser?.role === 'SUPER_ADMIN'
-                  ? 'text-[#153E2E] dark:text-emerald-400'
-                  : currentUser?.role === 'CONTENT_REVIEWER'
-                  ? 'text-[#A07010] dark:text-amber-400'
-                  : 'text-stone-700 dark:text-stone-300'
-              }`}
-            >
-              {currentUser?.role === 'SUPER_ADMIN' && <Shield className="w-3.5 h-3.5 text-[#153E2E] dark:text-emerald-400" />}
-              {currentUser?.role === 'CONTENT_REVIEWER' && <UserCheck className="w-3.5 h-3.5 text-[#C69214] dark:text-amber-400" />}
-              {currentUser?.role === 'CONTENT_EDITOR' && <Edit3 className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />}
-              <span className="hidden sm:inline">{(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}</span>
-            </span>
-            <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
+          <DropdownMenuTrigger className="outline-none">
+            <div className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 bg-[#FAF7F2] dark:bg-stone-800 hover:bg-[#F4EFE6] dark:hover:bg-stone-700 border border-[#E2DBD0] dark:border-stone-700 rounded-lg text-xs cursor-pointer transition-colors">
+              <span className="text-[11px] text-stone-500 dark:text-stone-400 uppercase tracking-wider font-medium hidden sm:inline">Role:</span>
+              <span
+                className={`font-semibold inline-flex items-center gap-1 ${
+                  currentUser?.role === 'SUPER_ADMIN'
+                    ? 'text-[#153E2E] dark:text-emerald-400'
+                    : currentUser?.role === 'CONTENT_REVIEWER'
+                    ? 'text-[#A07010] dark:text-amber-400'
+                    : 'text-stone-700 dark:text-stone-300'
+                }`}
+              >
+                {currentUser?.role === 'SUPER_ADMIN' && <Shield className="w-3.5 h-3.5 text-[#153E2E] dark:text-emerald-400" />}
+                {currentUser?.role === 'CONTENT_REVIEWER' && <UserCheck className="w-3.5 h-3.5 text-[#C69214] dark:text-amber-400" />}
+                {currentUser?.role === 'CONTENT_EDITOR' && <Edit3 className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />}
+                <span className="hidden sm:inline">{(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}</span>
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
+            </div>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-64 bg-white dark:bg-stone-900 border border-[#E5E0D5] dark:border-stone-800 rounded-xl shadow-xl p-1.5">
-            <DropdownMenuGroup>
-              <DropdownMenuLabel className="px-2 py-1">
-                <p className="text-[11px] font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider">Switch Council Role</p>
-                <p className="text-[10px] text-stone-500 dark:text-stone-400 font-normal">Test RBAC enforcement across all views</p>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator className="my-1 bg-[#E8E4DA] dark:bg-stone-800" />
-              {INITIAL_USERS.map((user) => (
-                <DropdownMenuItem
-                  key={user.id}
-                  onClick={() => switchRole(user.role)}
-                  className={`p-2 rounded-lg flex items-center gap-2.5 text-xs transition-colors cursor-pointer outline-none ${
-                    currentUser?.role === user.role
-                      ? 'bg-[#EAF2EE] dark:bg-[#153E2E]/40 text-[#153E2E] dark:text-emerald-300 font-medium'
-                      : 'hover:bg-stone-50 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
-                  }`}
-                >
-                  <img
-                    src={user.avatar_url || ''}
-                    alt={user.name}
-                    className="w-7 h-7 rounded-full object-cover border border-[#D4AF37]/30 shrink-0"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold truncate">{user.name}</span>
-                    </div>
-                    <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate">{(user?.role || '').replace('_', ' ')}</span>
+            <DropdownMenuLabel className="px-2 py-1">
+              <p className="text-[11px] font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider">Switch Council Role</p>
+              <p className="text-[10px] text-stone-500 dark:text-stone-400 font-normal">Test RBAC enforcement across all views</p>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator className="my-1 bg-[#E8E4DA] dark:bg-stone-800" />
+            {INITIAL_USERS.map((user) => (
+              <DropdownMenuItem
+                key={user.id}
+                onClick={() => switchRole(user.role)}
+                className={`p-2 rounded-lg flex items-center gap-2.5 text-xs transition-colors cursor-pointer outline-none ${
+                  currentUser?.role === user.role
+                    ? 'bg-[#EAF2EE] dark:bg-[#153E2E]/40 text-[#153E2E] dark:text-emerald-300 font-medium'
+                    : 'hover:bg-stone-50 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
+                }`}
+              >
+                <img
+                  src={user.avatar_url || ''}
+                  alt={user.name}
+                  className="w-7 h-7 rounded-full object-cover border border-[#D4AF37]/30 shrink-0"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold truncate">{user.name}</span>
                   </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuGroup>
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate">{(user?.role || '').replace('_', ' ')}</span>
+                </div>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -226,96 +222,89 @@ export const Header: React.FC = () => {
 
         {/* User Profile Menu (shadcn DropdownMenu) */}
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <button
-                type="button"
-                title="Administrator Account"
-                className="flex items-center gap-2 pl-1.5 pr-1 py-1 rounded-lg hover:bg-stone-100/80 dark:hover:bg-stone-800 transition-colors cursor-pointer text-left outline-none"
+          <DropdownMenuTrigger className="outline-none">
+            <div
+              className="flex items-center gap-2 pl-1.5 pr-1 py-1 rounded-lg hover:bg-stone-100/80 dark:hover:bg-stone-800 transition-colors cursor-pointer text-left"
+              title="Administrator Account"
+            >
+              <img
+                src={currentUser?.avatar_url || ''}
+                alt={currentUser?.name || 'Administrator'}
+                className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37] shrink-0"
+                referrerPolicy="no-referrer"
               />
-            }
-          >
-            <img
-              src={currentUser?.avatar_url || ''}
-              alt={currentUser?.name || 'Administrator'}
-              className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37] shrink-0"
-              referrerPolicy="no-referrer"
-            />
-            <div className="hidden md:block">
-              <span className="text-xs font-semibold text-stone-900 dark:text-stone-100 block leading-tight truncate max-w-[110px]">
-                {currentUser?.name || 'Administrator'}
-              </span>
-              <span className="text-[10px] text-stone-500 dark:text-stone-400 block leading-tight">
-                {currentUser?.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser?.role === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
-              </span>
+              <div className="hidden md:block">
+                <span className="text-xs font-semibold text-stone-900 dark:text-stone-100 block leading-tight truncate max-w-[110px]">
+                  {currentUser?.name || 'Administrator'}
+                </span>
+                <span className="text-[10px] text-stone-500 dark:text-stone-400 block leading-tight">
+                  {currentUser?.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser?.role === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
+                </span>
+              </div>
+              <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden md:block" />
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden md:block" />
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-60 bg-white dark:bg-stone-900 border border-[#E5E0D5] dark:border-stone-800 rounded-xl shadow-xl p-1.5">
-            <DropdownMenuGroup>
-              <DropdownMenuLabel className="p-2 border-b border-stone-100 dark:border-stone-800 mb-1 font-normal">
-                <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">{currentUser?.name || 'Administrator'}</p>
-                <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">{currentUser?.email || ''}</p>
-                <span className="inline-block mt-1 px-1.5 py-0.5 text-[9px] font-bold bg-[#153E2E] dark:bg-emerald-800 text-white rounded">
-                  {(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}
-                </span>
-              </DropdownMenuLabel>
+            <div className="p-2 border-b border-stone-100 dark:border-stone-800 mb-1">
+              <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">{currentUser?.name || 'Administrator'}</p>
+              <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">{currentUser?.email || ''}</p>
+              <span className="inline-block mt-1 px-1.5 py-0.5 text-[9px] font-bold bg-[#153E2E] dark:bg-emerald-800 text-white rounded">
+                {(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}
+              </span>
+            </div>
 
-              <DropdownMenuItem
-                onClick={() => setProfileModalOpen(true)}
-                className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
-              >
-                <UserIcon className="w-3.5 h-3.5 text-stone-500" />
-                <span>Edit Profile & Avatar</span>
-              </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setProfileModalOpen(true)}
+              className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
+            >
+              <UserIcon className="w-3.5 h-3.5 text-stone-500" />
+              <span>Edit Profile & Avatar</span>
+            </DropdownMenuItem>
 
-              <DropdownMenuItem
-                onClick={handleOpenPublicSite}
-                className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
-              >
-                <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>Visit Public Website</span>
-                <ExternalLink className="w-3 h-3 text-stone-400 ml-auto" />
-              </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleOpenPublicSite}
+              className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
+            >
+              <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span>Visit Public Website</span>
+              <ExternalLink className="w-3 h-3 text-stone-400 ml-auto" />
+            </DropdownMenuItem>
 
-              <DropdownMenuItem
-                onClick={toggleTheme}
-                className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
-              >
-                {theme === 'dark' ? (
-                  <>
-                    <Sun className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>Switch to Light Theme</span>
-                  </>
-                ) : (
-                  <>
-                    <Moon className="w-3.5 h-3.5 text-stone-500" />
-                    <span>Switch to Dark Theme</span>
-                  </>
-                )}
-              </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={toggleTheme}
+              className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-[#D4AF37]" />
+                  <span>Switch to Light Theme</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-stone-500" />
+                  <span>Switch to Dark Theme</span>
+                </>
+              )}
+            </DropdownMenuItem>
 
-              <DropdownMenuItem
-                onClick={() => setCurrentPage('settings')}
-                className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
-              >
-                <Settings className="w-3.5 h-3.5 text-stone-500" />
-                <span>Council Portal Settings</span>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem
+              onClick={() => setCurrentPage('settings')}
+              className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
+            >
+              <Settings className="w-3.5 h-3.5 text-stone-500" />
+              <span>Council Portal Settings</span>
+            </DropdownMenuItem>
 
             <DropdownMenuSeparator className="my-1 bg-[#E8E4DA] dark:bg-stone-800" />
 
-            <DropdownMenuGroup>
-              <DropdownMenuItem
-                onClick={() => setLogoutConfirmOpen(true)}
-                className="p-2 rounded-lg text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer flex items-center gap-2 outline-none"
-              >
-                <LogOut className="w-3.5 h-3.5 text-red-500" />
-                <span className="font-medium">Log Out</span>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuItem
+              onClick={() => setLogoutConfirmOpen(true)}
+              className="p-2 rounded-lg text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer flex items-center gap-2 outline-none"
+            >
+              <LogOut className="w-3.5 h-3.5 text-red-500" />
+              <span className="font-medium">Log Out</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
