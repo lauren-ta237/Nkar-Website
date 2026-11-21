@@ -17,7 +17,10 @@ import { EmptyState } from '../../common/EmptyState';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { LeadershipFormModal } from './LeadershipFormModal';
 
-export const LeadershipView: React.FC = () => {
+const toHttpsLeaderPortrait = (url?: string | null): string => {
+  if (!url) return '';
+  return url.trim().replace(/^http:\/\//i, 'https://');
+};export const LeadershipView: React.FC = () => {
   const { currentUser } = useAdminStore();
   const { data: leadership = [], isLoading } = useAdminLeadershipList();
   const { createMutation, updateMutation, deleteMutation } = useAdminLeadershipMutations();
@@ -129,9 +132,9 @@ export const LeadershipView: React.FC = () => {
                 <div className="flex items-start gap-4">
                   <div className="relative shrink-0">
                     <img
-                      src={leader.portrait_url || ''}
+                      src={toHttpsLeaderPortrait(leader.portrait_url)}
                       alt={leader.name}
-                      className="w-16 h-16 rounded-2xl object-cover border-2 border-[#D4AF37] shadow-sm"
+                      className="w-16 h-16 rounded-2xl object-cover object-top border-2 border-[#D4AF37] shadow-sm"
                       referrerPolicy="no-referrer"
                     />
                     <span className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-[#153E2E] text-[#D4AF37] font-bold text-[11px] flex items-center justify-center border border-white">
