@@ -1,10 +1,7 @@
-﻿import {
+import {
   Search,
   Bell,
   ChevronDown,
-  Shield,
-  UserCheck,
-  Edit3,
   Menu,
   User as UserIcon,
   Settings,
@@ -15,7 +12,7 @@
   LogOut,
   ExternalLink,
 } from 'lucide-react';
-import { useAdminStore, INITIAL_USERS, AdminPage } from '../../store/useAdminStore';
+import { useAdminStore, AdminPage } from '../../store/useAdminStore';
 import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
 import { useAdminUsersList } from '@/lib/api/users.api';
 import { Role } from '../../types';
@@ -24,7 +21,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 
@@ -33,7 +29,6 @@ export const Header: React.FC = () => {
     currentPage,
     setCurrentPage,
     currentUser,
-    switchRole,
     setSearchModalOpen,
     notificationDrawerOpen,
     setNotificationDrawerOpen,
@@ -157,61 +152,6 @@ export const Header: React.FC = () => {
           )}
         </button>
 
-        {/* Role Simulator Dropdown (shadcn Base UI) */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="outline-none">
-            <div className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 bg-[#FAF7F2] dark:bg-stone-800 hover:bg-[#F4EFE6] dark:hover:bg-stone-700 border border-[#E2DBD0] dark:border-stone-700 rounded-lg text-xs cursor-pointer transition-colors">
-              <span className="text-[11px] text-stone-500 dark:text-stone-400 uppercase tracking-wider font-medium hidden sm:inline">Role:</span>
-              <span
-                className={`font-semibold inline-flex items-center gap-1 ${
-                  currentUser?.role === 'SUPER_ADMIN'
-                    ? 'text-[#153E2E] dark:text-emerald-400'
-                    : currentUser?.role === 'CONTENT_REVIEWER'
-                    ? 'text-[#A07010] dark:text-amber-400'
-                    : 'text-stone-700 dark:text-stone-300'
-                }`}
-              >
-                {currentUser?.role === 'SUPER_ADMIN' && <Shield className="w-3.5 h-3.5 text-[#153E2E] dark:text-emerald-400" />}
-                {currentUser?.role === 'CONTENT_REVIEWER' && <UserCheck className="w-3.5 h-3.5 text-[#C69214] dark:text-amber-400" />}
-                {currentUser?.role === 'CONTENT_EDITOR' && <Edit3 className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />}
-                <span className="hidden sm:inline">{(currentUser?.role || 'SUPER_ADMIN').replace('_', ' ')}</span>
-              </span>
-              <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
-            </div>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-64 bg-white dark:bg-stone-900 border border-[#E5E0D5] dark:border-stone-800 rounded-xl shadow-xl p-1.5">
-            <DropdownMenuLabel className="px-2 py-1">
-              <p className="text-[11px] font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider">Switch Council Role</p>
-              <p className="text-[10px] text-stone-500 dark:text-stone-400 font-normal">Test RBAC enforcement across all views</p>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator className="my-1 bg-[#E8E4DA] dark:bg-stone-800" />
-            {INITIAL_USERS.map((user) => (
-              <DropdownMenuItem
-                key={user.id}
-                onClick={() => switchRole(user.role)}
-                className={`p-2 rounded-lg flex items-center gap-2.5 text-xs transition-colors cursor-pointer outline-none ${
-                  currentUser?.role === user.role
-                    ? 'bg-[#EAF2EE] dark:bg-[#153E2E]/40 text-[#153E2E] dark:text-emerald-300 font-medium'
-                    : 'hover:bg-stone-50 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
-                }`}
-              >
-                <img
-                  src={toHttpsHeaderAvatar(user.avatar_url)}
-                  alt={user.name}
-                  className="w-7 h-7 rounded-full object-cover object-top border border-[#D4AF37]/30 shrink-0"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold truncate">{user.name}</span>
-                  </div>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate">{(user?.role || '').replace('_', ' ')}</span>
-                </div>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
 
         {/* Notifications Bell */}
         <button
