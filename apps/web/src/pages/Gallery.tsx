@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import PageHero from '@/components/PageHero';
@@ -12,7 +12,7 @@ import { useGalleryList } from '@/lib/api/gallery.api';
 export default function Gallery() {
   const [category, setCategory] = useState('All');
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  
+
   const categoryParam = category === 'All' ? undefined : category;
   const { data: items = [], isLoading } = useGalleryList({ category: categoryParam });
 
@@ -36,13 +36,13 @@ export default function Gallery() {
       <PageHero
         eyebrow="Gallery"
         title="Nkar, seen and remembered"
-        description="Photographs of the land, the crafts, the ceremonies, and the daily life of the village, gathered here for the people who live it and those across the diaspora."
+        description="Photographs and films of the land, the crafts, the ceremonies, and the daily life of the village, gathered here for the people who live it and those across the diaspora."
       />
 
       <section className="bg-ivory py-16 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-6">
-          <ContentNotice title="Photograph policy">
-            Visual records from across the Nkar Fondom, credited to the photographers, custodians, and families who supply them.
+          <ContentNotice title="Media policy">
+            Visual and recorded records from across the Nkar Fondom, credited to the photographers, filmmakers, custodians, and families who supply them.
           </ContentNotice>
 
           <div className="mt-10 flex flex-wrap items-center justify-between gap-6">
@@ -56,7 +56,7 @@ export default function Gallery() {
               label="Filter the gallery"
             />
             <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              {items.length} {items.length === 1 ? 'image' : 'images'}
+              {items.length} {items.length === 1 ? 'item' : 'items'}
             </p>
           </div>
 
@@ -66,7 +66,7 @@ export default function Gallery() {
             ) : items.length === 0 ? (
               <div className="p-8 text-center border border-border bg-card">
                 <p className="text-sm text-muted-foreground italic">
-                  No photographs found in this category.
+                  No gallery items found in this category.
                 </p>
               </div>
             ) : (
@@ -80,25 +80,25 @@ export default function Gallery() {
                 Films & recordings
               </p>
               <h2 className="mt-4 font-display text-3xl text-forest-700">
-                Recorded heritage, to come
+                Recorded heritage
               </h2>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
                 Ceremonies, drumming and dance, and the accounts of elders recorded in their own
-                voices will be published here as film and audio, with the permission of the palace
-                and the families involved.
+                voices are published here as film and audio with the permission of the palace and
+                the families involved.
               </p>
             </div>
             <div className="border border-gold-500/40 bg-gold-50/70 p-8">
-              <p className="font-display text-2xl text-forest-700">Send your photographs</p>
+              <p className="font-display text-2xl text-forest-700">Send your media</p>
               <p className="mt-3 text-sm leading-relaxed text-forest-800">
-                Old prints, family photographs and recent pictures all have a place here. Tell us
-                who is in them and when they were taken, where you know.
+                Old prints, family photographs, recorded clips, and recent pictures all have a place
+                here. Tell us who is in them and when they were taken, where you know.
               </p>
               <Link
                 to="/contact"
                 className="mt-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-forest-700 transition-colors hover:text-gold-700"
               >
-                Submit a photograph
+                Submit media
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
