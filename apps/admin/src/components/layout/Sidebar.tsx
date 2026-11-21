@@ -431,11 +431,11 @@ export const Sidebar: React.FC = () => {
         {/* Brand Header */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-[#E8E4DA] dark:border-stone-800 shrink-0">
           <div className="flex items-center gap-3 overflow-hidden">
-            {/* Official Nkar Woo LÃ n Emblem Logo */}
+            {/* Official Nkar Woo Làn Emblem Logo */}
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
               <img
                 src="/assets/logo.jpeg"
-                alt="Nkar Woo LÃ n Official Logo"
+                alt="Nkar Woo Làn Official Logo"
                 className="w-full h-full object-contain"
                 referrerPolicy="no-referrer"
               />
@@ -443,7 +443,7 @@ export const Sidebar: React.FC = () => {
             {!sidebarCollapsed && (
               <div className="min-w-0">
                 <h1 className="font-heritage text-sm font-bold text-[#153E2E] dark:text-emerald-400 tracking-wide truncate">
-                  NKAR WOO LÃ€N
+                  NKAR WOO LÀN
                 </h1>
                 <p className="text-[10px] text-stone-500 dark:text-stone-400 uppercase tracking-widest truncate font-medium">
                   Heritage Admin Portal
@@ -481,14 +481,14 @@ export const Sidebar: React.FC = () => {
               <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
                 <img
                   src="/assets/logo.jpeg"
-                  alt="Nkar Woo LÃ n Official Logo"
+                  alt="Nkar Woo Làn Official Logo"
                   className="w-full h-full object-contain"
                   referrerPolicy="no-referrer"
                 />
               </div>
               <div className="min-w-0">
                 <SheetTitle className="font-heritage text-sm font-bold text-[#153E2E] dark:text-emerald-400 tracking-wide truncate">
-                  NKAR WOO LÃ€N
+                  NKAR WOO LÀN
                 </SheetTitle>
                 <p className="text-[10px] text-stone-500 dark:text-stone-400 uppercase tracking-widest truncate font-medium">
                   Heritage Admin Portal

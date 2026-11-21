@@ -83,7 +83,7 @@ export const Header: React.FC = () => {
           <div className="w-8 h-8 rounded-full overflow-hidden border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
             <img
               src="/assets/logo.jpeg"
-              alt="Nkar Woo LÃ n"
+              alt="Nkar Woo Làn"
               className="w-full h-full object-contain"
               referrerPolicy="no-referrer"
             />
