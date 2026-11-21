@@ -8,6 +8,7 @@ interface LeadershipRecordProps {
 }
 
 export default function LeadershipRecord({ record, index }: LeadershipRecordProps) {
+  const sequenceNumber = index + 1;
   const portrait = record.portrait_url || images.fonSit;
   const fullName = record.traditional_title
     ? `${record.traditional_title} ${record.name}`
@@ -27,14 +28,22 @@ export default function LeadershipRecord({ record, index }: LeadershipRecordProp
           quality={85}
         />
         <div className="absolute bottom-2 left-2 bg-forest-950/80 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-gold-300">
-          Reign #{String(index + 1).padStart(2, '0')}
+          Reign #{String(sequenceNumber).padStart(2, '0')}
         </div>
       </div>
 
       <div className="space-y-3">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold-600">
-          Traditional Ruler of Nkar
-        </p>
+        <div className="flex items-center justify-between gap-4 border-b border-gold-500/20 pb-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold-600">
+            Traditional Ruler of Nkar
+          </p>
+          <span
+            aria-label={`Ruler ${sequenceNumber}`}
+            className="inline-flex h-7 min-w-7 items-center justify-center border border-gold-500/40 bg-forest-900 px-2 text-xs font-semibold text-gold-200"
+          >
+            {sequenceNumber}
+          </span>
+        </div>
 
         <h3 className="font-display text-3xl text-forest-700">
           {fullName}

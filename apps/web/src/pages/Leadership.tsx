@@ -17,7 +17,12 @@ export default function Leadership() {
   const { data: leaders = [], isLoading } = useLeadershipList();
 
   const sortedLeaders = useMemo(
-    () => [...leaders].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0)),
+    () =>
+      [...leaders].sort((a, b) => {
+        const orderDiff = (a.order_index ?? 999) - (b.order_index ?? 999);
+        if (orderDiff !== 0) return orderDiff;
+        return (a.start_year ?? 0) - (b.start_year ?? 0);
+      }),
     [leaders]
   );
 
