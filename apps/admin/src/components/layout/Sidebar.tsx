@@ -185,8 +185,7 @@ export const Sidebar: React.FC = () => {
           <span className="w-2 h-2 rounded-full bg-emerald-500" title="System Online" />
         </div>
 
-        <div className="space-y-1.5">
-          {councilUsers.map((user: any) => {
+        <div className="space-y-1.5 max-h-[84px] overflow-y-auto pr-0.5">`r`n          {councilUsers.map((user: any) => {
             const isCurrent = currentUser?.id === user.id;
             return (
               <div
@@ -510,5 +509,6 @@ export const Sidebar: React.FC = () => {
     </>
   );
 };
+
 
 
