@@ -6,7 +6,6 @@ import {
   nextImageLoadMode,
   parseWixMediaUrl,
   type ImageLoadMode,
-  type ParsedWixMediaUrl,
 } from "../../lib/image-helpers"
 
 const FALLBACK_IMAGE_URL =
@@ -30,14 +29,6 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   onError?: (event: React.SyntheticEvent<HTMLImageElement>) => void;
 }
 
-/**
- * Image with built-in Wix Media Platform support: canonical public images on
- * media.base44.com and static.wixstatic.com/media are resized to the rendered
- * container per device pixel ratio and served as AVIF/WebP when supported; `fittingType="fill"`
- * crops server-side, optionally anchored at a focal point. Other URLs render
- * as a plain <img>. Failed transforms retry the original URL; only a broken
- * original swaps to the generic fallback image.
- */
 const Image = React.forwardRef<HTMLImageElement, ImageProps>(
   (
     {
@@ -49,6 +40,7 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       focalPointY,
       quality = 90,
       onError,
+      className,
       ...props
     },
     ref
@@ -56,12 +48,12 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
     const [previewSource, setPreviewSource] = React.useState<PreviewSource | null>(null)
     const preview = previewSource?.source === source ? previewSource : null
     const src = preview ? preview.value : source
-    const replaceSource = (value: string, className: string) =>
+    const replaceSource = (value: string, nextClassName: string) =>
       setPreviewSource({
         source,
         value,
-        className,
-        sourceClassName: props.className as string,
+        className: nextClassName,
+        sourceClassName: className as string,
       })
     React.useEffect(() => setPreviewSource(null), [source])
     const parsedSource = src && src !== FALLBACK_IMAGE_URL ? parseWixMediaUrl(src) : null
@@ -83,25 +75,19 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       if (nextMode === IMAGE_LOAD_MODE.FALLBACK) onError?.(event)
     }
 
+    const activeClassName =
+      preview && preview.sourceClassName === className ? preview.className : className
+
     const imageProps = {
       ...props,
-      className:
-        preview && preview.sourceClassName === props.className
-          ? preview.className
-          : props.className,
+      className: ["object-top", activeClassName].filter(Boolean).join(" "),
       onError: handleError,
     }
 
     if (!src) {
-      // Renders as a real <img> (not a <div>) — the visual editor's
-      // click-to-edit toolbar keys its "Replace Image" action off the DOM
-      // tag being `img`, so a placeholder div would be unrecoverable in the
-      // editor. FALLBACK_IMAGE_URL doubles as the "no image chosen" graphic.
       return <img ref={ref} src={FALLBACK_IMAGE_URL} {...imageProps} data-empty-image />
     }
 
-    // A failed transform retries the underlying original as a plain image.
-    // Only a failure of that original advances to the generic fallback.
     const parsed = mode === IMAGE_LOAD_MODE.OPTIMIZED ? parsedSource : null
 
     if (!parsed) {
@@ -121,8 +107,6 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       typeof focalPointX === "number" && typeof focalPointY === "number"
         ? { x: focalPointX, y: focalPointY }
         : undefined
-    // Origin dimensions are optional — when known they stabilize layout via
-    // the wrapper's aspect-ratio before the image loads.
     const aspectRatio =
       originWidth && originHeight ? `${originWidth} / ${originHeight}` : undefined
 

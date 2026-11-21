@@ -50,22 +50,25 @@ export default function AboutSection({ section, index }: AboutSectionProps) {
 
         <Reveal delay={0.1} className={flipped ? 'lg:order-1' : ''}>
           {section.image ? (
-            <>
-              <div className="relative aspect-[4/3] overflow-hidden border border-border">
+            <figure className="group rounded-sm border border-gold-500/25 bg-cream/60 p-2.5 shadow-sm">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-forest-950/5">
                 <Image
                   src={section.image}
                   alt={section.imageAlt || section.title}
-                  className="absolute inset-0 h-full w-full"
+                  className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
                   fittingType="fill"
-                  quality={80}
+                  quality={85}
                 />
               </div>
-            </>
+              <figcaption className="mt-2.5 px-1 text-[11px] tracking-wide text-muted-foreground">
+                {section.imageAlt || section.title}
+              </figcaption>
+            </figure>
           ) : (
-            <div className="flex min-h-[260px] flex-col items-center justify-center border border-gold-500/30 bg-forest-900 p-8 text-center text-ivory pattern-toghu">
+            <div className="flex min-h-[260px] flex-col items-center justify-center rounded-sm border border-gold-500/30 bg-forest-900 p-8 text-center text-ivory pattern-toghu">
               <span className="font-display text-2xl text-gold-300">NKAR WOO LÀN</span>
               <p className="mt-2 text-xs uppercase tracking-[0.2em] text-ivory/70">
-                Indigenous Kingdom & Fondom
+                Indigenous Kingdom &amp; Fondom
               </p>
             </div>
           )}

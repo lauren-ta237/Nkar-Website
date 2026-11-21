@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, Share2, Copy, Check } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Copy, Check } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import LoadingState from '@/components/LoadingState';
 import { Image } from '@/components/ui/image';
@@ -93,13 +93,20 @@ export default function HeritageDetail() {
             <article className="space-y-6">
               {/* Optional Heritage Image Gallery */}
               {item.images && item.images.length > 0 && (
-                <div className="overflow-hidden border border-border shadow-sm mb-8">
-                  <Image
-                    src={item.images[0]}
-                    alt={item.title}
-                    className="w-full h-auto max-h-[500px] object-cover"
-                  />
-                </div>
+                <figure className="mb-8 rounded-sm border border-gold-500/25 bg-cream/60 p-2.5 shadow-sm">
+                  <div className="overflow-hidden rounded-sm bg-forest-950/5">
+                    <Image
+                      src={item.images[0]}
+                      alt={item.title}
+                      className="w-full h-auto max-h-[500px] object-cover object-top"
+                      fittingType="fill"
+                      quality={85}
+                    />
+                  </div>
+                  <figcaption className="mt-2.5 px-1 text-[11px] tracking-wide text-muted-foreground">
+                    {item.title}
+                  </figcaption>
+                </figure>
               )}
 
               <div className="prose max-w-none space-y-5 text-base leading-relaxed text-forest-800">
@@ -116,14 +123,18 @@ export default function HeritageDetail() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-gold-600 mb-4">
                     Photographic Records
                   </p>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {item.images.slice(1).map((img, idx) => (
-                      <div key={idx} className="overflow-hidden border border-border bg-card">
-                        <Image
-                          src={img}
-                          alt={`${item.title} - photo ${idx + 2}`}
-                          className="w-full h-48 object-cover"
-                        />
+                      <div key={idx} className="overflow-hidden rounded-sm border border-gold-500/25 bg-cream/60 p-1.5 shadow-sm">
+                        <div className="overflow-hidden rounded-sm bg-card">
+                          <Image
+                            src={img}
+                            alt={`${item.title} - photo ${idx + 2}`}
+                            className="h-48 w-full object-cover object-top"
+                            fittingType="fill"
+                            quality={85}
+                          />
+                        </div>
                       </div>
                     ))}
                   </div>
