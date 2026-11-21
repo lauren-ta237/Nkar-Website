@@ -3,16 +3,12 @@ import {
   Landmark,
   Plus,
   Search,
-  BookOpen,
   Edit,
   Trash2,
   Eye,
-  CheckCircle,
-  Clock,
-  ScrollText,
 } from 'lucide-react';
 import { useAdminHeritageList, useAdminHeritageMutations } from '@/lib/api/heritage.api';
-import { Heritage, HeritageCategory } from '../../../types';
+import { Heritage } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
 import { EmptyState } from '../../common/EmptyState';
@@ -25,6 +21,18 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
+
+const HIDDEN_ABOUT_HERITAGE_IDS = new Set([
+  '71435526-0c25-4a4d-91ea-2cc51a65d862',
+  'bdcbcb8f-aabf-4186-b5d3-f6b94d936a27',
+  '7f91f538-7051-488d-8b53-0d0dc9cb930f',
+]);
+
+const HIDDEN_ABOUT_HERITAGE_TITLES = new Set([
+  'the sacred royal throne and regalia of the paramount fon',
+  'brief history and migration routes of the nkar people',
+  'the 11 traditional institutions and governance of the fondom',
+]);
 
 const CATEGORY_NAMES: Record<string, string> = {
   history: 'Village History',
@@ -56,7 +64,13 @@ export const HeritageView: React.FC = () => {
   const [viewHeritage, setViewHeritage] = useState<Heritage | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  const filtered = heritage.filter((h) => {
+  const visibleHeritage = heritage.filter(
+    (h) =>
+      !HIDDEN_ABOUT_HERITAGE_IDS.has(h.id) &&
+      !HIDDEN_ABOUT_HERITAGE_TITLES.has(h.title.trim().toLowerCase())
+  );
+
+  const filtered = visibleHeritage.filter((h) => {
     const matchesSearch =
       searchQuery === '' ||
       h.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
