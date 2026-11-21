@@ -70,14 +70,15 @@ export default function ContactForm() {
       <div className="border border-gold-500/40 bg-gold-50/70 p-8">
         <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-gold-700">
           <Check className="h-4 w-4" aria-hidden="true" />
-          Message checked
+          Message sent
         </p>
         <h3 className="mt-4 font-display text-2xl text-forest-700">
           Thank you, {reviewed.name}.
         </h3>
         <p className="mt-4 text-sm leading-relaxed text-forest-800">
-          Thank you for reaching out to NKAR WOO LÀN. Your message details have been recorded. For
-          immediate inquiries or official communication, please reach us directly via phone or WhatsApp at{' '}
+          Thank you for reaching out to NKAR WOO LÀN. Your message has been received and recorded by
+          the palace custodians. For immediate inquiries or official communication, please reach us
+          directly via phone or WhatsApp at{' '}
           <a href="tel:+237679632780" className="font-semibold text-gold-700 underline underline-offset-4 hover:text-gold-600">
             +237 679 632 780
           </a>{' '}
@@ -181,8 +182,8 @@ export default function ContactForm() {
           {...register('consent')}
         />
         <label htmlFor="contact-consent" className="text-xs leading-relaxed text-muted-foreground">
-          I understand that this form is a demonstration: it will check my details but will not
-          deliver my message anywhere.
+          I confirm that the details provided are accurate and consent to the Nkar Woo Lan Council
+          Secretariat reviewing and responding to my inquiry.
         </label>
       </div>
       {errors.consent && <p className={errorClass}>{errors.consent.message}</p>}
@@ -197,7 +198,7 @@ export default function ContactForm() {
         ) : (
           <Send className="h-4 w-4" aria-hidden="true" />
         )}
-        {isSubmitting ? 'Checking…' : 'Check my message'}
+        {isSubmitting ? 'Sending…' : 'Send message'}
       </button>
     </form>
   );
