@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   LayoutDashboard,
   Newspaper,
@@ -185,7 +185,8 @@ export const Sidebar: React.FC = () => {
           <span className="w-2 h-2 rounded-full bg-emerald-500" title="System Online" />
         </div>
 
-        <div className="space-y-1.5 max-h-[84px] overflow-y-auto pr-0.5">`r`n          {councilUsers.map((user: any) => {
+        <div className="space-y-1.5 max-h-[84px] overflow-y-auto pr-0.5">
+          {councilUsers.map((user: any) => {
             const isCurrent = currentUser?.id === user.id;
             return (
               <div
@@ -210,7 +211,7 @@ export const Sidebar: React.FC = () => {
                     {user.name.split(' ')[0]} {user.name.split(' ')[1] || ''}
                   </p>
                   <p className="text-[10px] text-stone-400 dark:text-stone-500 truncate leading-tight">
-                    {user.role === 'SUPER_ADMIN' ? 'Super Admin' : user.role === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
+                    {String(user.role || '').toUpperCase() === 'SUPER_ADMIN' ? 'Super Admin' : String(user.role || '').toUpperCase() === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
                   </p>
                 </div>
               </div>
@@ -509,6 +510,7 @@ export const Sidebar: React.FC = () => {
     </>
   );
 };
+
 
 
 
