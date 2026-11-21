@@ -1,10 +1,10 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 
 const envSchema = z.object({
   ENV: z.enum(["development", "production", "test"]).default("development"),
   API_URL: z.string().default("http://localhost:8000"),
   USE_MOCK_STORAGE: z.string().optional().default("true"),
-  SITE_URL: z.string().optional().default("http://localhost:5173"),
+  SITE_URL: z.string().optional().default("https://nkar-website.vercel.app"),
 });
 
 export const env = envSchema.parse({
@@ -15,3 +15,4 @@ export const env = envSchema.parse({
 });
 
 export const __DEV__ = env.ENV === "development";
+

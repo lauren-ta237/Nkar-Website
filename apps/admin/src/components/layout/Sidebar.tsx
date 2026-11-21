@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   LayoutDashboard,
   Newspaper,
@@ -66,7 +66,7 @@ export const Sidebar: React.FC = () => {
   } = useAdminStore();
   const { data: stats } = useAdminDashboardStats();
 
-  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173';
+  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'https://nkar-website.vercel.app';
   const handleOpenPublicSite = () => {
     window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
   };
@@ -421,11 +421,11 @@ export const Sidebar: React.FC = () => {
         {/* Brand Header */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-[#E8E4DA] dark:border-stone-800 shrink-0">
           <div className="flex items-center gap-3 overflow-hidden">
-            {/* Official Nkar Woo Làn Emblem Logo */}
+            {/* Official Nkar Woo LÃ n Emblem Logo */}
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
               <img
                 src="/assets/logo.jpeg"
-                alt="Nkar Woo Làn Official Logo"
+                alt="Nkar Woo LÃ n Official Logo"
                 className="w-full h-full object-contain"
                 referrerPolicy="no-referrer"
               />
@@ -433,7 +433,7 @@ export const Sidebar: React.FC = () => {
             {!sidebarCollapsed && (
               <div className="min-w-0">
                 <h1 className="font-heritage text-sm font-bold text-[#153E2E] dark:text-emerald-400 tracking-wide truncate">
-                  NKAR WOO LÀN
+                  NKAR WOO LÃ€N
                 </h1>
                 <p className="text-[10px] text-stone-500 dark:text-stone-400 uppercase tracking-widest truncate font-medium">
                   Heritage Admin Portal
@@ -471,14 +471,14 @@ export const Sidebar: React.FC = () => {
               <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
                 <img
                   src="/assets/logo.jpeg"
-                  alt="Nkar Woo Làn Official Logo"
+                  alt="Nkar Woo LÃ n Official Logo"
                   className="w-full h-full object-contain"
                   referrerPolicy="no-referrer"
                 />
               </div>
               <div className="min-w-0">
                 <SheetTitle className="font-heritage text-sm font-bold text-[#153E2E] dark:text-emerald-400 tracking-wide truncate">
-                  NKAR WOO LÀN
+                  NKAR WOO LÃ€N
                 </SheetTitle>
                 <p className="text-[10px] text-stone-500 dark:text-stone-400 uppercase tracking-widest truncate font-medium">
                   Heritage Admin Portal
@@ -500,3 +500,4 @@ export const Sidebar: React.FC = () => {
     </>
   );
 };
+

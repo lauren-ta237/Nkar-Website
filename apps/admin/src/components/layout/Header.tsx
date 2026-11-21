@@ -1,4 +1,4 @@
-import {
+﻿import {
   Search,
   Bell,
   ChevronDown,
@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
 
   const { data: stats } = useAdminDashboardStats();
 
-  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173';
+  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'https://nkar-website.vercel.app';
   const handleOpenPublicSite = () => {
     window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
   };
@@ -82,7 +82,7 @@ export const Header: React.FC = () => {
           <div className="w-8 h-8 rounded-full overflow-hidden border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
             <img
               src="/assets/logo.jpeg"
-              alt="Nkar Woo Làn"
+              alt="Nkar Woo LÃ n"
               className="w-full h-full object-contain"
               referrerPolicy="no-referrer"
             />
@@ -99,7 +99,7 @@ export const Header: React.FC = () => {
           <span className="truncate hidden xs:inline sm:inline">Search articles, events, archives...</span>
           <span className="truncate inline xs:hidden sm:hidden">Search...</span>
           <kbd className="ml-auto hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono font-medium text-stone-500 dark:text-stone-400 bg-white dark:bg-stone-900 border border-[#DDD6C8] dark:border-stone-700 rounded">
-            ⌘K
+            âŒ˜K
           </kbd>
         </button>
 
@@ -311,3 +311,4 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+
