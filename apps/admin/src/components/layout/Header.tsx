@@ -156,13 +156,13 @@ export const Header: React.FC = () => {
         {/* Notifications Bell */}
         <button
           onClick={() => setNotificationDrawerOpen(!notificationDrawerOpen)}
-          className="relative p-2 rounded-lg text-stone-600 dark:text-stone-300 hover:text-[#153E2E] dark:hover:text-emerald-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+          className="relative p-2 rounded-lg text-stone-600 dark:text-stone-300 hover:text-[#153E2E] dark:hover:text-emerald-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer shrink-0"
           title="Notifications & Review Queue"
           aria-label="Notifications"
         >
           <Bell className="w-4 h-4" />
           {totalNotifications > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#D4AF37] rounded-full ring-2 ring-white dark:ring-stone-900 animate-pulse" />
+            <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 bg-[#D4AF37] text-stone-950 text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-stone-900">{totalNotifications > 99 ? "99+" : totalNotifications}</span>
           )}
         </button>
 

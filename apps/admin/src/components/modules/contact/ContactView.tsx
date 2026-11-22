@@ -31,7 +31,8 @@ export const ContactView: React.FC = () => {
   const [internalNoteText, setInternalNoteText] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  const filtered = contacts.filter((c) => {
+  const sortedContacts = [...contacts].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
+  const filtered = sortedContacts.filter((c) => {
     const matchesSearch =
       searchQuery === '' ||
       c.sender_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -92,7 +93,7 @@ export const ContactView: React.FC = () => {
             Total: {contacts.length}
           </span>
           <span className="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg font-semibold">
-            Unread: {contacts.filter((c) => c.status === 'UNREAD').length}
+            Unread: {contacts.filter((c) => c.status === 'UNREAD').length} · Read/Active: {contacts.filter((c) => c.status !== 'UNREAD').length}
           </span>
         </div>
       </div>
@@ -170,7 +171,7 @@ export const ContactView: React.FC = () => {
                     </p>
 
                     <div className="mt-2 flex items-center justify-between">
-                      <StatusBadge status={msg.status} />
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${msg.status === "UNREAD" ? "bg-amber-100 text-amber-900" : "bg-emerald-100 text-emerald-900"}`}>{msg.status === "UNREAD" ? "Unread" : "Read"}</span> <StatusBadge status={msg.status} />
                       {msg.assigned_to_id && (
                         <span className="text-[10px] text-stone-400">Assigned</span>
                       )}

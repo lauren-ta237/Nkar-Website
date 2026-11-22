@@ -33,7 +33,7 @@ async def list_published_events(
     query = (
         select(Event)
         .where(*conditions)
-        .order_by(Event.start_datetime.asc() if upcoming_only else Event.start_datetime.desc())
+        .order_by(Event.created_at.desc(), Event.start_datetime.desc())
         .offset(skip)
         .limit(limit)
     )
@@ -55,7 +55,7 @@ async def list_all_events(
     query = (
         select(Event)
         .where(*conditions)
-        .order_by(Event.start_datetime.desc())
+        .order_by(Event.created_at.desc(), Event.start_datetime.desc())
         .offset(skip)
         .limit(limit)
     )
