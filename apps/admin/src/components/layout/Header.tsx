@@ -1,3 +1,5 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Search,
   Bell,
@@ -5,17 +7,15 @@ import {
   Menu,
   User as UserIcon,
   Settings,
-  Sparkles,
   Globe,
   Sun,
   Moon,
   LogOut,
   ExternalLink,
 } from 'lucide-react';
-import { useAdminStore, AdminPage } from '../../store/useAdminStore';
+import { useAdminStore } from '@/store/useAdminStore';
 import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
 import { useAdminUsersList } from '@/lib/api/users.api';
-import { Role } from '../../types';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -25,29 +25,34 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
   const {
-    currentPage,
-    setCurrentPage,
     currentUser,
     setSearchModalOpen,
     notificationDrawerOpen,
     setNotificationDrawerOpen,
     setProfileModalOpen,
-    mobileSidebarOpen,
     setMobileSidebarOpen,
     theme,
     toggleTheme,
-    setPublicPreviewOpen,
     setLogoutConfirmOpen,
   } = useAdminStore();
 
   const { data: stats } = useAdminDashboardStats();
 
-  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'https://nkar-website.vercel.app';
-  const toHttpsHeaderAvatar = (url?: string | null): string => (url ? url.trim().replace(/^http:\/\//i, 'https://') : '');
+  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173';
+  const toHttpsHeaderAvatar = (url?: string | null): string =>
+    url ? url.trim().replace(/^http:\/\//i, 'https://') : '';
+
   const { data: liveHeaderUsers = [] } = useAdminUsersList();
-  const matchedHeaderUser = liveHeaderUsers.find((u: any) => (currentUser?.id && u.id === currentUser.id) || (currentUser?.email && u.email?.toLowerCase() === currentUser.email?.toLowerCase()));
-  const effectiveHeaderAvatar = toHttpsHeaderAvatar(currentUser?.avatar_url || matchedHeaderUser?.avatar_url);
+  const matchedHeaderUser = liveHeaderUsers.find(
+    (u: any) =>
+      (currentUser?.id && u.id === currentUser.id) ||
+      (currentUser?.email && u.email?.toLowerCase() === currentUser.email?.toLowerCase())
+  );
+  const effectiveHeaderAvatar = toHttpsHeaderAvatar(
+    currentUser?.avatar_url || matchedHeaderUser?.avatar_url
+  );
 
   const handleOpenPublicSite = () => {
     window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
@@ -55,19 +60,10 @@ export const Header: React.FC = () => {
 
   const totalNotifications = (stats?.pendingReviews || 0) + (stats?.unreadMessages || 0);
 
-  const topTabs: { label: string; page: AdminPage }[] = [
-    { label: 'Dashboard', page: 'dashboard' },
-    { label: 'News & Media', page: 'news' },
-    { label: 'Heritage', page: 'heritage' },
-    { label: 'Development', page: 'projects' },
-    { label: 'Inquiries', page: 'contact' },
-    { label: 'Users', page: 'users' },
-  ];
-
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-[#E8E4DA] dark:border-stone-800 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 transition-colors">
-      {/* Left: Mobile Toggle, Brand & Global Search */}
-      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 max-w-xl">
+    <header className="sticky top-0 z-30 h-16 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-[#E8E4DA] dark:border-stone-800 px-4 sm:px-6 flex items-center justify-between gap-4 transition-colors">
+      {/* Left: Mobile Toggle & Emblem */}
+      <div className="flex items-center gap-3 min-w-0">
         {/* Mobile Hamburger Navigation Button */}
         <button
           onClick={() => setMobileSidebarOpen(true)}
@@ -79,7 +75,7 @@ export const Header: React.FC = () => {
         </button>
 
         {/* Mobile Mini Emblem */}
-        <div className="lg:hidden flex items-center gap-1.5 shrink-0">
+        <div className="lg:hidden flex items-center gap-2 shrink-0">
           <div className="w-8 h-8 rounded-full overflow-hidden border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
             <img
               src="/assets/logo.jpeg"
@@ -88,107 +84,93 @@ export const Header: React.FC = () => {
               referrerPolicy="no-referrer"
             />
           </div>
+          <span className="font-bold text-xs tracking-wider text-[#153E2E] dark:text-emerald-400 uppercase hidden xs:inline">
+            Nkar Woo Làn
+          </span>
         </div>
 
-        {/* Search trigger */}
+        {/* Global Search trigger */}
         <button
           onClick={() => setSearchModalOpen(true)}
-          className="flex items-center gap-2 sm:gap-2.5 w-full max-w-sm px-2.5 sm:px-3.5 py-2 text-xs text-stone-500 dark:text-stone-400 bg-[#F9F8F5] dark:bg-stone-800/80 hover:bg-[#F2EFE9] dark:hover:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-lg transition-colors group cursor-pointer text-left truncate"
+          className="flex items-center gap-2.5 w-48 sm:w-72 md:w-80 px-3 py-1.5 text-xs text-stone-500 dark:text-stone-400 bg-[#F9F8F5] dark:bg-stone-800/80 hover:bg-[#F2EFE9] dark:hover:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-lg transition-colors group cursor-pointer text-left truncate"
           title="Press Command+K or click to search"
         >
-          <Search className="w-4 h-4 text-[#8C8270] dark:text-stone-400 group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors shrink-0" />
-          <span className="truncate hidden xs:inline sm:inline">Search articles, events, archives...</span>
-          <span className="truncate inline xs:hidden sm:hidden">Search...</span>
-          <kbd className="ml-auto hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono font-medium text-stone-500 dark:text-stone-400 bg-white dark:bg-stone-900 border border-[#DDD6C8] dark:border-stone-700 rounded">
-            âŒ˜K
+          <Search className="w-3.5 h-3.5 text-[#8C8270] dark:text-stone-400 group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors shrink-0" />
+          <span className="truncate hidden sm:inline">Search articles, events, archives...</span>
+          <span className="truncate sm:hidden">Search...</span>
+          <kbd className="hidden md:inline-block ml-auto text-[10px] font-mono bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 px-1.5 py-0.5 rounded text-stone-400">
+            ⌘K
           </kbd>
         </button>
-
-        {/* Quick Horizontal Nav Tabs (Desktop only) */}
-        <nav className="hidden xl:flex items-center gap-1 border-l border-[#E8E4DA] dark:border-stone-800 pl-3">
-          {topTabs.map((tab) => {
-            const isActive = currentPage === tab.page;
-            return (
-              <button
-                key={tab.page}
-                onClick={() => setCurrentPage(tab.page)}
-                className={`px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
-                  isActive
-                    ? 'text-[#153E2E] dark:text-emerald-300 bg-[#EAF2EE] dark:bg-[#153E2E]/40 font-semibold'
-                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-100/70 dark:hover:bg-stone-800'
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </nav>
       </div>
 
-      {/* Right Controls: Public Site Button, Theme Toggle, Role Simulator, Notifications, Profile */}
-      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-        {/* Visit Public Website Button */}
+      {/* Right: Actions, Theme, Live Site & Profile */}
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* View Public Portal */}
         <button
           onClick={handleOpenPublicSite}
-          className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-[#FAF7F2] dark:bg-stone-800 hover:bg-[#F4EFE6] dark:hover:bg-stone-700 text-[#153E2E] dark:text-emerald-300 border border-[#E2DBD0] dark:border-stone-700 rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-xs"
-          title="Visit Public Website directly in a new tab"
+          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#153E2E] dark:text-emerald-400 bg-[#EAF2EE] dark:bg-emerald-950/40 hover:bg-[#D5E5DC] dark:hover:bg-emerald-900/50 border border-[#153E2E]/20 dark:border-emerald-800/40 rounded-lg transition-colors cursor-pointer"
+          title="Open live public portal in new tab"
         >
-          <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />
-          <span>Public Portal</span>
-          <ExternalLink className="w-3 h-3 text-stone-400" />
+          <span>Live Site</span>
+          <ExternalLink className="w-3.5 h-3.5" />
         </button>
 
-        {/* Theme Toggle Button (Light / Dark) */}
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-lg text-stone-600 dark:text-stone-300 hover:text-[#153E2E] dark:hover:text-[#D4AF37] hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
-          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          aria-label="Toggle Theme"
-        >
-          {theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-[#D4AF37]" />
-          ) : (
-            <Moon className="w-4 h-4 text-stone-600" />
-          )}
-        </button>
-
-
-        {/* Notifications Bell */}
+        {/* Notification Bell */}
         <button
           onClick={() => setNotificationDrawerOpen(!notificationDrawerOpen)}
-          className="relative p-2 rounded-lg text-stone-600 dark:text-stone-300 hover:text-[#153E2E] dark:hover:text-emerald-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+          className="relative p-2 text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
           title="Notifications & Review Queue"
           aria-label="Notifications"
         >
           <Bell className="w-4 h-4" />
           {totalNotifications > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#D4AF37] rounded-full ring-2 ring-white dark:ring-stone-900 animate-pulse" />
+            <span className="absolute top-1 right-1 w-4 h-4 bg-red-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
+              {totalNotifications > 9 ? '9+' : totalNotifications}
+            </span>
           )}
         </button>
 
-        {/* User Profile Menu (shadcn DropdownMenu) */}
+        {/* Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? (
+            <Sun className="w-4 h-4 text-amber-400" />
+          ) : (
+            <Moon className="w-4 h-4 text-stone-600" />
+          )}
+        </button>
+
+        {/* User Profile Avatar Dropdown */}
         <DropdownMenu>
-          <DropdownMenuTrigger className="outline-none">
-            <div
-              className="flex items-center gap-2 pl-1.5 pr-1 py-1 rounded-lg hover:bg-stone-100/80 dark:hover:bg-stone-800 transition-colors cursor-pointer text-left"
-              title="Administrator Account"
-            >
-              <img
-                src={effectiveHeaderAvatar}
-                alt={currentUser?.name || 'Administrator'}
-                className="w-8 h-8 rounded-full object-cover object-top border-2 border-[#D4AF37] shrink-0"
-                referrerPolicy="no-referrer"
-              />
-              <div className="hidden md:block">
-                <span className="text-xs font-semibold text-stone-900 dark:text-stone-100 block leading-tight truncate max-w-[110px]">
-                  {currentUser?.name || 'Administrator'}
-                </span>
-                <span className="text-[10px] text-stone-500 dark:text-stone-400 block leading-tight">
-                  {currentUser?.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser?.role === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
-                </span>
-              </div>
-              <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden md:block" />
+          <DropdownMenuTrigger className="flex items-center gap-2 p-1 sm:p-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer text-left border-0 bg-transparent outline-none">
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-[#153E2E] dark:bg-emerald-800 text-white flex items-center justify-center font-bold text-xs shrink-0 border border-[#D4AF37]/50 shadow-xs">
+              {effectiveHeaderAvatar ? (
+                <img
+                  src={effectiveHeaderAvatar}
+                  alt={currentUser?.name || 'Administrator'}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLElement).style.display = 'none';
+                  }}
+                />
+              ) : (
+                <span>{currentUser?.name?.charAt(0)?.toUpperCase() || 'A'}</span>
+              )}
             </div>
+            <div className="hidden md:block max-w-[120px]">
+              <p className="text-xs font-semibold text-stone-800 dark:text-stone-100 truncate">
+                {currentUser?.name || 'Administrator'}
+              </p>
+              <p className="text-[10px] text-stone-500 dark:text-stone-400 uppercase tracking-wider truncate">
+                {currentUser?.role?.replace(/_/g, ' ') || 'Admin'}
+              </p>
+            </div>
+            <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden md:block" />
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-60 bg-white dark:bg-stone-900 border border-[#E5E0D5] dark:border-stone-800 rounded-xl shadow-xl p-1.5">
@@ -235,21 +217,21 @@ export const Header: React.FC = () => {
             </DropdownMenuItem>
 
             <DropdownMenuItem
-              onClick={() => setCurrentPage('settings')}
+              onClick={() => navigate('/settings')}
               className="p-2 rounded-lg text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 cursor-pointer flex items-center gap-2 outline-none"
             >
               <Settings className="w-3.5 h-3.5 text-stone-500" />
               <span>Council Portal Settings</span>
             </DropdownMenuItem>
 
-            <DropdownMenuSeparator className="my-1 bg-[#E8E4DA] dark:bg-stone-800" />
+            <DropdownMenuSeparator className="my-1 bg-[#E8E4DA] dark:border-stone-800" />
 
             <DropdownMenuItem
               onClick={() => setLogoutConfirmOpen(true)}
               className="p-2 rounded-lg text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer flex items-center gap-2 outline-none"
             >
               <LogOut className="w-3.5 h-3.5 text-red-500" />
-              <span className="font-medium">Log Out</span>
+              <span className="font-medium">Sign Out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -257,5 +239,3 @@ export const Header: React.FC = () => {
     </header>
   );
 };
-
-

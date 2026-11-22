@@ -1,16 +1,9 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useAdminStore } from './store/useAdminStore';
-import { Header } from './components/layout/Header';
-import { Sidebar } from './components/layout/Sidebar';
-import { Breadcrumb } from './components/layout/Breadcrumb';
-import { GlobalSearchModal } from './components/layout/GlobalSearchModal';
-import { NotificationDrawer } from './components/layout/NotificationDrawer';
-import { UserProfileModal } from './components/layout/UserProfileModal';
-import { PublicSitePreviewModal } from './components/layout/PublicSitePreviewModal';
-import { LogoutModal } from './components/layout/LogoutModal';
 import { AuthGuard } from './components/auth/AuthGuard';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { AdminLayout } from './components/layout/AdminLayout';
 
 // Module Views
 import { DashboardView } from './components/modules/dashboard/DashboardView';
@@ -25,6 +18,22 @@ import { ContactView } from './components/modules/contact/ContactView';
 import { UsersView } from './components/modules/users/UsersView';
 import { AuditLogsView } from './components/modules/audit/AuditLogsView';
 import { SettingsView } from './components/modules/settings/SettingsView';
+
+import { useAdminStore } from './store/useAdminStore';
+
+// Dedicated Content Editors
+import { NewsEditorView } from './components/modules/news/NewsEditorView';
+import { EventEditorView } from './components/modules/events/EventEditorView';
+import { HeritageEditorView } from './components/modules/heritage/HeritageEditorView';
+import { ProjectEditorView } from './components/modules/projects/ProjectEditorView';
+
+function SuperAdminRoute({ children }: { children: React.ReactElement }) {
+  const { currentUser } = useAdminStore();
+  if (currentUser?.role !== 'SUPER_ADMIN') {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+}
 
 export default function App() {
   const queryClient = useMemo(
@@ -44,86 +53,62 @@ export default function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthGuard>
-          <AdminPortalContent />
+          <BrowserRouter>
+            <Routes>
+              <Route element={<AdminLayout />}>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<DashboardView />} />
+
+                {/* News & Announcements */}
+                <Route path="/news" element={<NewsView />} />
+                <Route path="/news/new" element={<NewsEditorView />} />
+                <Route path="/news/:id/edit" element={<NewsEditorView />} />
+
+                {/* Events */}
+                <Route path="/events" element={<EventsView />} />
+                <Route path="/events/new" element={<EventEditorView />} />
+                <Route path="/events/:id/edit" element={<EventEditorView />} />
+
+                {/* Cultural Heritage */}
+                <Route path="/heritage" element={<HeritageView />} />
+                <Route path="/heritage/new" element={<HeritageEditorView />} />
+                <Route path="/heritage/:id/edit" element={<HeritageEditorView />} />
+
+                {/* Development Projects */}
+                <Route path="/projects" element={<ProjectsView />} />
+                <Route path="/projects/new" element={<ProjectEditorView />} />
+                <Route path="/projects/:id/edit" element={<ProjectEditorView />} />
+
+                {/* Other Administrative Modules */}
+                <Route path="/leadership" element={<LeadershipView />} />
+                <Route path="/gallery" element={<GalleryView />} />
+                <Route path="/publications" element={<PublicationsView />} />
+                <Route path="/contact" element={<ContactView />} />
+                <Route
+                  path="/users"
+                  element={
+                    <SuperAdminRoute>
+                      <UsersView />
+                    </SuperAdminRoute>
+                  }
+                />
+                <Route
+                  path="/audit"
+                  element={
+                    <SuperAdminRoute>
+                      <AuditLogsView />
+                    </SuperAdminRoute>
+                  }
+                />
+                <Route path="/settings" element={<SettingsView />} />
+
+                {/* Catch-all route */}
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
         </AuthGuard>
       </QueryClientProvider>
     </ErrorBoundary>
-  );
-}
-
-function AdminPortalContent() {
-  const { currentPage, sidebarCollapsed, theme } = useAdminStore();
-
-  // Sync theme with document element
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
-  const renderActiveView = () => {
-    switch (currentPage) {
-      case 'dashboard':
-        return <DashboardView />;
-      case 'news':
-        return <NewsView />;
-      case 'events':
-        return <EventsView />;
-      case 'heritage':
-        return <HeritageView />;
-      case 'leadership':
-        return <LeadershipView />;
-      case 'gallery':
-        return <GalleryView />;
-      case 'publications':
-        return <PublicationsView />;
-      case 'projects':
-        return <ProjectsView />;
-      case 'contact':
-        return <ContactView />;
-      case 'users':
-        return <UsersView />;
-      case 'audit':
-        return <AuditLogsView />;
-      case 'settings':
-        return <SettingsView />;
-      default:
-        return <DashboardView />;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F8F6F0] dark:bg-stone-950 text-stone-900 dark:text-stone-100 flex transition-colors">
-      {/* 1. Left-Hand Collapsible Sidebar */}
-      <Sidebar />
-
-      {/* 2. Main Viewport Canvas with dynamic margin based on sidebar state */}
-      <div
-        className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ml-0 ${
-          sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'
-        }`}
-      >
-        {/* Top Header */}
-        <Header />
-
-        {/* Inner Content Area */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
-          {/* Breadcrumb Navigation Trail */}
-          <Breadcrumb />
-
-          {/* Active Module Screen */}
-          {renderActiveView()}
-        </main>
-      </div>
-
-      {/* Universal Floating Modals */}
-      <GlobalSearchModal />
-      <NotificationDrawer />
-      <UserProfileModal />
-      <PublicSitePreviewModal />
-      <LogoutModal />
-    </div>
   );
 }

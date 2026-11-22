@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Crown, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Leadership, ContentStatus } from '../../../types';
 import { FileUpload } from '../../common/FileUpload';
 import {
@@ -81,137 +81,122 @@ export const LeadershipFormModal: React.FC<LeadershipFormModalProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white border-l border-[#E5E0D5]">
-        <SheetHeader className="p-5 border-b border-[#E8E4DA] bg-[#FAF8F5] text-left">
-          <SheetTitle className="font-bold text-stone-900 text-sm">
+      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white dark:bg-stone-900 border-l border-[#E5E0D5] dark:border-stone-800 text-stone-900 dark:text-stone-100">
+        <SheetHeader className="p-5 border-b border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5] dark:bg-stone-950 text-left">
+          <SheetTitle className="font-bold text-stone-900 dark:text-stone-100 text-sm">
             {initialData ? 'Edit Traditional Leader Profile' : 'Enthrone / Add Traditional Leader'}
           </SheetTitle>
-          <SheetDescription className="text-xs text-stone-500">
+          <SheetDescription className="text-xs text-stone-500 dark:text-stone-400">
             Paramount Fon, Fais of Nkar, Queen Mothers (Yaa), and traditional council dignitaries
           </SheetDescription>
         </SheetHeader>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4 flex-1 overflow-y-auto">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 rounded-xl text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Leader Full Name *</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Leader Full Name *</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. His Royal Highness Fon Martin Fongang II"
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-900 font-semibold"
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-900 dark:text-stone-100 font-semibold"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Traditional Title *</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Traditional Title *</label>
             <input
               type="text"
               value={traditionalTitle}
               onChange={(e) => setTraditionalTitle(e.target.value)}
               placeholder="e.g. Paramount Fon of Nkar / Fai Woo (Prime Minister)"
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200 font-semibold"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Active Reign / Period *</label>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Active Era / Reign Period *</label>
               <input
                 type="text"
                 value={activePeriod}
                 onChange={(e) => setActivePeriod(e.target.value)}
-                placeholder="e.g. 1998 — Present or 1952 — 1998"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+                placeholder="e.g. 1985 – Present (or 1952 – 1984)"
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Hierarchy Display Order *</label>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Protocol Order Index *</label>
               <input
                 type="number"
-                min="1"
-                max="99"
+                min={1}
                 value={displayOrder}
                 onChange={(e) => setDisplayOrder(parseInt(e.target.value) || 1)}
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800 tabular-nums"
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200 font-mono"
                 required
               />
-              <span className="text-[10px] text-stone-400">1 = Paramount Fon, 2 = Senior Fais, etc.</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Dynastic Lineage / House</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Lineage & Traditional House</label>
             <input
               type="text"
               value={lineage}
               onChange={(e) => setLineage(e.target.value)}
-              placeholder="e.g. 24th Dynasty Sovereign of Nkar Royal Court"
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+              placeholder="e.g. Royal Dynasty of Nkar Fondom / Kingmaker of Nkar"
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Royal Biography & Historical Deeds *</label>
+            <textarea
+              rows={4}
+              value={biography}
+              onChange={(e) => setBiography(e.target.value)}
+              placeholder="Detailed biographical narrative, ascension history, customary contributions..."
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200 leading-relaxed"
+              required
             />
           </div>
 
           <FileUpload
-            label="Portrait Photograph *"
+            label="Official Portrait or Regalia Photography"
             value={portraitPhoto}
             onChange={setPortraitPhoto}
             accept="image/*"
             mediaTypeHint="image"
             folder="nkar_woo_lan/leadership"
-            helperText="Upload official photograph of the traditional leader (JPEG, PNG, WebP up to 15MB)"
+            helperText="Upload official traditional portrait (JPEG, PNG, WebP up to 10MB)"
           />
 
-          <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Biography & Royal Legacy *</label>
-            <textarea
-              value={biography}
-              onChange={(e) => setBiography(e.target.value)}
-              placeholder="Chieftaincy achievements, traditional duties, and historic reforms..."
-              rows={4}
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Status</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as ContentStatus)}
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-            >
-              <option value="PUBLISHED">Published (Official Archive)</option>
-              <option value="DRAFT">Draft</option>
-              <option value="ARCHIVED">Historical / Memoriam</option>
-            </select>
-          </div>
-
-          <div className="pt-4 border-t border-[#E8E4DA] flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-[#E8E4DA] dark:border-stone-800 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2 text-xs font-semibold text-stone-600 bg-white border border-stone-200 hover:bg-stone-50 rounded-xl"
+              className="px-4 py-2 text-xs font-semibold text-stone-600 dark:text-stone-300 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-700 rounded-xl transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-5 py-2 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0D291F] rounded-xl shadow-xs transition-colors"
+              className="px-5 py-2 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0D291F] rounded-xl shadow-xs transition-colors cursor-pointer"
             >
-              {isLoading ? 'Saving...' : initialData ? 'Update Profile' : 'Save Leader'}
+              {isLoading ? 'Saving...' : initialData ? 'Save Changes' : 'Add Leader'}
             </button>
           </div>
         </form>

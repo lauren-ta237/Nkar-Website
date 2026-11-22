@@ -1,35 +1,33 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
+  Newspaper,
   Plus,
   Search,
-  Filter,
-  Newspaper,
+  ChevronLeft,
+  ChevronRight,
   Eye,
   Edit,
   Trash2,
-  CheckCircle,
-  Archive,
   Star,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react';
-import { useAdminNewsList, useAdminNewsMutations } from '@/lib/api/news.api';
-import { News, ContentStatus } from '../../../types';
+import {
+  useAdminNewsList,
+  useAdminNewsMutations,
+} from '../../../lib/api/news.api';
+import { News } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
 import { EmptyState } from '../../common/EmptyState';
 import { ConfirmModal } from '../../common/ConfirmModal';
 import { ReviewActionModal } from '../../common/ReviewActionModal';
-import { NewsFormModal } from './NewsFormModal';
 import { NewsDetailModal } from './NewsDetailModal';
 
 export const NewsView: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser } = useAdminStore();
   const { data: news = [], isLoading } = useAdminNewsList();
   const {
-    createMutation,
-    updateMutation,
     approveMutation,
     rejectMutation,
     publishMutation,
@@ -45,8 +43,6 @@ export const NewsView: React.FC = () => {
   const itemsPerPage = 6;
 
   // Modals
-  const [formModalOpen, setFormModalOpen] = useState(false);
-  const [editingArticle, setEditingArticle] = useState<News | null>(null);
   const [detailArticle, setDetailArticle] = useState<News | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [reviewModalArticle, setReviewModalArticle] = useState<News | null>(null);
@@ -70,26 +66,6 @@ export const NewsView: React.FC = () => {
 
   const categories = Array.from(new Set(news.map((n) => n.category)));
 
-  const handleCreateOrUpdate = (data: Omit<News, 'id' | 'created_at' | 'updated_at' | 'views'>) => {
-    if (editingArticle) {
-      updateMutation.mutate(
-        { id: editingArticle.id, data },
-        {
-          onSuccess: () => {
-            setFormModalOpen(false);
-            setEditingArticle(null);
-          },
-        }
-      );
-    } else {
-      createMutation.mutate(data, {
-        onSuccess: () => {
-          setFormModalOpen(false);
-        },
-      });
-    }
-  };
-
   const handleDelete = () => {
     if (deleteConfirmId) {
       deleteMutation.mutate(deleteConfirmId, {
@@ -98,25 +74,31 @@ export const NewsView: React.FC = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-stone-200 dark:bg-stone-800 rounded w-1/4 animate-pulse" />
+        <div className="h-64 bg-stone-100 dark:bg-stone-900 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Top Header & Action */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
-            <Newspaper className="w-5 h-5 text-[#153E2E]" />
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
+            <Newspaper className="w-5 h-5 text-[#153E2E] dark:text-emerald-400" />
             News & Announcements Management
           </h2>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 dark:text-stone-400">
             Publish official announcements, project updates, and royal bulletins from Nkar Fondom
           </p>
         </div>
 
         <button
-          onClick={() => {
-            setEditingArticle(null);
-            setFormModalOpen(true);
-          }}
+          onClick={() => navigate('/news/new')}
           className="px-4 py-2 text-xs font-bold text-[#153E2E] bg-[#D4AF37] hover:bg-[#E5B83B] rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
@@ -125,7 +107,7 @@ export const NewsView: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl shadow-xs space-y-3">
+      <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Search */}
           <div className="relative">
@@ -138,7 +120,7 @@ export const NewsView: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setCurrentPageNum(1);
               }}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
             />
           </div>
 
@@ -150,7 +132,7 @@ export const NewsView: React.FC = () => {
                 setStatusFilter(e.target.value);
                 setCurrentPageNum(1);
               }}
-              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
+              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-700 dark:text-stone-200"
             >
               <option value="ALL">All Publication Statuses</option>
               <option value="PUBLISHED">Published (Live)</option>
@@ -170,7 +152,7 @@ export const NewsView: React.FC = () => {
                 setCategoryFilter(e.target.value);
                 setCurrentPageNum(1);
               }}
-              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
+              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-700 dark:text-stone-200"
             >
               <option value="ALL">All Categories</option>
               {categories.map((c) => (
@@ -190,17 +172,14 @@ export const NewsView: React.FC = () => {
           title="No News Articles Found"
           description="Try modifying your search keywords or filter settings, or compose a new announcement."
           actionLabel="Create Announcement"
-          onAction={() => {
-            setEditingArticle(null);
-            setFormModalOpen(true);
-          }}
+          onAction={() => navigate('/news/new')}
         />
       ) : (
-        <div className="bg-white border border-[#E8E4DA] rounded-2xl shadow-xs overflow-hidden">
+        <div className="bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#FAF8F5] border-b border-[#E8E4DA] text-stone-500 font-semibold uppercase text-[10px] tracking-wider">
+                <tr className="bg-[#FAF8F5] dark:bg-stone-950 border-b border-[#E8E4DA] dark:border-stone-800 text-stone-500 dark:text-stone-400 font-semibold uppercase text-[10px] tracking-wider">
                   <th className="py-3.5 px-4">Article Title & Slug</th>
                   <th className="py-3.5 px-4">Category</th>
                   <th className="py-3.5 px-4">Author</th>
@@ -210,7 +189,7 @@ export const NewsView: React.FC = () => {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-stone-100 dark:divide-stone-800">
                 {paginated.map((item) => {
                   const canEdit =
                     currentUser.role === 'SUPER_ADMIN' ||
@@ -228,18 +207,18 @@ export const NewsView: React.FC = () => {
                     (currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER');
 
                   return (
-                    <tr key={item.id} className="hover:bg-[#FAF9F6] transition-colors group">
+                    <tr key={item.id} className="hover:bg-[#FAF9F6] dark:hover:bg-stone-800/50 transition-colors group">
                       <td className="py-3 px-4 max-w-xs">
                         <div className="flex items-center gap-3">
                           {item.cover_image ? (
                             <img
                               src={item.cover_image}
                               alt=""
-                              className="w-10 h-10 rounded-lg object-cover border border-stone-200 shrink-0"
+                              className="w-10 h-10 rounded-lg object-cover border border-stone-200 dark:border-stone-700 shrink-0"
                               referrerPolicy="no-referrer"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center shrink-0">
+                            <div className="w-10 h-10 rounded-lg bg-stone-100 dark:bg-stone-800 flex items-center justify-center shrink-0">
                               <Newspaper className="w-4 h-4 text-stone-400" />
                             </div>
                           )}
@@ -248,7 +227,7 @@ export const NewsView: React.FC = () => {
                               {item.is_featured && (
                                 <Star className="w-3 h-3 text-[#D4AF37] fill-[#D4AF37] shrink-0" />
                               )}
-                              <span className="font-bold text-stone-900 truncate block group-hover:text-[#153E2E] transition-colors">
+                              <span className="font-bold text-stone-900 dark:text-stone-100 truncate block group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors">
                                 {item.title}
                               </span>
                             </div>
@@ -260,12 +239,12 @@ export const NewsView: React.FC = () => {
                       </td>
 
                       <td className="py-3 px-4 whitespace-nowrap">
-                        <span className="text-[11px] font-medium text-stone-700 bg-stone-100 px-2 py-0.5 rounded">
+                        <span className="text-[11px] font-medium text-stone-700 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded">
                           {item.category}
                         </span>
                       </td>
 
-                      <td className="py-3 px-4 whitespace-nowrap text-stone-600">
+                      <td className="py-3 px-4 whitespace-nowrap text-stone-600 dark:text-stone-400">
                         {item.author_id ? 'Editor' : 'Desk'}
                       </td>
 
@@ -273,11 +252,11 @@ export const NewsView: React.FC = () => {
                         <StatusBadge status={item.status} />
                       </td>
 
-                      <td className="py-3 px-4 whitespace-nowrap font-mono text-stone-500 text-[11px]">
+                      <td className="py-3 px-4 whitespace-nowrap font-mono text-stone-500 dark:text-stone-400 text-[11px]">
                         {new Date(item.created_at).toLocaleDateString()}
                       </td>
 
-                      <td className="py-3 px-4 text-center tabular-nums text-stone-600 font-medium">
+                      <td className="py-3 px-4 text-center tabular-nums text-stone-600 dark:text-stone-400 font-medium">
                         {item.views}
                       </td>
 
@@ -285,7 +264,7 @@ export const NewsView: React.FC = () => {
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => setDetailArticle(item)}
-                            className="p-1.5 text-stone-500 hover:text-[#153E2E] hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-stone-500 hover:text-[#153E2E] dark:hover:text-emerald-400 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
                             title="View Full Details"
                           >
                             <Eye className="w-4 h-4" />
@@ -293,11 +272,8 @@ export const NewsView: React.FC = () => {
 
                           {canEdit && (
                             <button
-                              onClick={() => {
-                                setEditingArticle(item);
-                                setFormModalOpen(true);
-                              }}
-                              className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                              onClick={() => navigate(`/news/${item.id}/edit`)}
+                              className="p-1.5 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
                               title="Edit Article"
                             >
                               <Edit className="w-4 h-4" />
@@ -327,7 +303,7 @@ export const NewsView: React.FC = () => {
                           {canDelete && (
                             <button
                               onClick={() => setDeleteConfirmId(item.id)}
-                              className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                              className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
                               title="Delete Article"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -343,7 +319,7 @@ export const NewsView: React.FC = () => {
           </div>
 
           {/* Pagination */}
-          <div className="p-3 border-t border-[#E8E4DA] bg-[#FAF8F5] flex items-center justify-between text-xs text-stone-500">
+          <div className="p-3 border-t border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5] dark:bg-stone-950 flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
             <span>
               Showing {(currentPageNum - 1) * itemsPerPage + 1} to{' '}
               {Math.min(currentPageNum * itemsPerPage, filtered.length)} of {filtered.length} entries
@@ -353,17 +329,17 @@ export const NewsView: React.FC = () => {
               <button
                 onClick={() => setCurrentPageNum((p) => Math.max(p - 1, 1))}
                 disabled={currentPageNum === 1}
-                className="p-1.5 rounded-lg border border-stone-200 bg-white hover:bg-stone-50 disabled:opacity-40 cursor-pointer"
+                className="p-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 disabled:opacity-40 cursor-pointer text-stone-700 dark:text-stone-300"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="font-semibold text-stone-800 px-2 tabular-nums">
+              <span className="font-semibold text-stone-800 dark:text-stone-200 px-2 tabular-nums">
                 Page {currentPageNum} of {totalPages}
               </span>
               <button
                 onClick={() => setCurrentPageNum((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPageNum === totalPages}
-                className="p-1.5 rounded-lg border border-stone-200 bg-white hover:bg-stone-50 disabled:opacity-40 cursor-pointer"
+                className="p-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 disabled:opacity-40 cursor-pointer text-stone-700 dark:text-stone-300"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -373,27 +349,13 @@ export const NewsView: React.FC = () => {
       )}
 
       {/* Modals */}
-      {formModalOpen && (
-        <NewsFormModal
-          isOpen={formModalOpen}
-          initialData={editingArticle}
-          onClose={() => {
-            setFormModalOpen(false);
-            setEditingArticle(null);
-          }}
-          onSubmit={handleCreateOrUpdate}
-          isLoading={createMutation.isPending || updateMutation.isPending}
-        />
-      )}
-
       {detailArticle && (
         <NewsDetailModal
           article={detailArticle}
           onClose={() => setDetailArticle(null)}
           onEdit={(art) => {
             setDetailArticle(null);
-            setEditingArticle(art);
-            setFormModalOpen(true);
+            navigate(`/news/${art.id}/edit`);
           }}
           onPublish={(id) => publishMutation.mutate(id)}
           onReview={(art) => {
@@ -420,15 +382,19 @@ export const NewsView: React.FC = () => {
           isOpen={true}
           itemTitle={reviewModalArticle.title}
           itemType="News Article"
+          onCancel={() => setReviewModalArticle(null)}
           onApprove={(notes) => {
-            approveMutation.mutate({ id: reviewModalArticle.id, review_notes: notes });
-            setReviewModalArticle(null);
+            approveMutation.mutate(
+              { id: reviewModalArticle.id, review_notes: notes },
+              { onSuccess: () => setReviewModalArticle(null) }
+            );
           }}
           onReject={(notes) => {
-            rejectMutation.mutate({ id: reviewModalArticle.id, review_notes: notes });
-            setReviewModalArticle(null);
+            rejectMutation.mutate(
+              { id: reviewModalArticle.id, review_notes: notes },
+              { onSuccess: () => setReviewModalArticle(null) }
+            );
           }}
-          onCancel={() => setReviewModalArticle(null)}
           isLoading={approveMutation.isPending || rejectMutation.isPending}
         />
       )}

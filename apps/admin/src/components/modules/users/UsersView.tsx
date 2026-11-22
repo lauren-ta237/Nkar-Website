@@ -3,16 +3,8 @@ import {
   Users,
   Plus,
   Search,
-  Shield,
   ShieldAlert,
-  UserCheck,
-  Edit3,
   Edit,
-  UserX,
-  CheckCircle,
-  Mail,
-  Phone,
-  AlertTriangle,
   Trash2,
 } from 'lucide-react';
 import { useAdminUsersList, useAdminUsersMutations } from '@/lib/api/users.api';
@@ -24,7 +16,7 @@ import { ConfirmModal } from '../../common/ConfirmModal';
 import { UserFormModal } from './UserFormModal';
 
 export const UsersView: React.FC = () => {
-  const { currentUser, switchRole } = useAdminStore();
+  const { currentUser } = useAdminStore();
   const { data: users = [], isLoading } = useAdminUsersList();
   const { createMutation, updateMutation, toggleStatusMutation, deleteMutation } = useAdminUsersMutations();
 
@@ -78,21 +70,30 @@ export const UsersView: React.FC = () => {
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-stone-200 dark:bg-stone-800 rounded w-1/4 animate-pulse" />
+        <div className="h-64 bg-stone-100 dark:bg-stone-900 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
-            <Users className="w-5 h-5 text-[#153E2E]" />
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
+            <Users className="w-5 h-5 text-[#153E2E] dark:text-emerald-400" />
             Administrator & Role Management
           </h2>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 dark:text-stone-400">
             Control access roles, assign permissions, and provision council officer accounts
           </p>
         </div>
 
-        {isSuperAdmin ? (
+        {isSuperAdmin && (
           <button
             onClick={() => {
               setEditingUser(null);
@@ -103,34 +104,26 @@ export const UsersView: React.FC = () => {
             <Plus className="w-4 h-4" />
             <span>Provision Administrator</span>
           </button>
-        ) : (
-          <button
-            onClick={() => switchRole('SUPER_ADMIN')}
-            className="px-3 py-1.5 text-xs font-semibold text-[#153E2E] bg-[#EAF2EE] border border-[#153E2E]/30 rounded-xl hover:bg-[#D5E7DD] transition-colors cursor-pointer self-start sm:self-auto"
-          >
-            Switch to Super Admin to Edit
-          </button>
         )}
       </div>
 
       {/* Security notice if not Super Admin */}
       {!isSuperAdmin && (
-        <div className="p-4 bg-amber-50 border border-amber-200/80 rounded-2xl flex items-start gap-3">
-          <ShieldAlert className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
-          <div className="text-xs text-amber-900">
+        <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 rounded-2xl flex items-start gap-3">
+          <ShieldAlert className="w-5 h-5 text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="text-xs text-amber-900 dark:text-amber-200">
             <p className="font-bold">Restricted Governance Scope</p>
-            <p className="mt-0.5 leading-relaxed text-amber-800">
+            <p className="mt-0.5 leading-relaxed text-amber-800 dark:text-amber-300">
               You are currently authenticated as <span className="font-semibold">{currentUser.name}</span> with role{' '}
               <span className="font-mono uppercase font-bold">{currentUser.role}</span>. Administrator management operations
-              (creating accounts, changing roles, suspending access) are strictly restricted to Super Admins. Use the Role
-              Simulator in the top bar to test Super Admin powers.
+              (creating accounts, changing roles, suspending access) are strictly restricted to Super Admins.
             </p>
           </div>
         </div>
       )}
 
       {/* Filter and Search */}
-      <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl shadow-xs">
+      <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="relative">
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -139,7 +132,7 @@ export const UsersView: React.FC = () => {
               placeholder="Search administrators by name, email, or role title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
             />
           </div>
 
@@ -147,7 +140,7 @@ export const UsersView: React.FC = () => {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
+              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-700 dark:text-stone-200"
             >
               <option value="ALL">All Roles</option>
               <option value="SUPER_ADMIN">Super Admins</option>
@@ -159,11 +152,11 @@ export const UsersView: React.FC = () => {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white border border-[#E8E4DA] rounded-2xl shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-[#FAF8F5] border-b border-[#E8E4DA] text-stone-500 font-semibold uppercase text-[10px] tracking-wider">
+              <tr className="bg-[#FAF8F5] dark:bg-stone-950 border-b border-[#E8E4DA] dark:border-stone-800 text-stone-500 dark:text-stone-400 font-semibold uppercase text-[10px] tracking-wider">
                 <th className="py-3.5 px-4">Administrator</th>
                 <th className="py-3.5 px-4">Role</th>
                 <th className="py-3.5 px-4">Account Status</th>
@@ -172,29 +165,38 @@ export const UsersView: React.FC = () => {
                 <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100">
+            <tbody className="divide-y divide-stone-100 dark:divide-stone-800">
               {filtered.map((user) => {
                 const isSelf = user.id === currentUser?.id;
+
                 return (
-                  <tr key={user.id} className="hover:bg-[#FAF9F6] transition-colors">
-                    <td className="py-3.5 px-4">
+                  <tr key={user.id} className="hover:bg-[#FAF9F6] dark:hover:bg-stone-800/40 transition-colors">
+                    <td className="py-3.5 px-4 max-w-xs">
                       <div className="flex items-center gap-3">
-                        <img
-                          src={user.avatar_url || ''}
-                          alt={user.name}
-                          className="w-9 h-9 rounded-full object-cover border border-[#D4AF37]/50 shrink-0"
-                          referrerPolicy="no-referrer"
-                        />
+                        {user.avatar_url ? (
+                          <img
+                            src={user.avatar_url}
+                            alt=""
+                            className="w-10 h-10 rounded-full object-cover border border-stone-200 dark:border-stone-700 shrink-0"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+                            {user.name.charAt(0)}
+                          </div>
+                        )}
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-bold text-stone-900 truncate">{user.name}</span>
+                            <span className="font-bold text-stone-900 dark:text-stone-100 truncate block">
+                              {user.name}
+                            </span>
                             {isSelf && (
-                              <span className="text-[9px] font-bold text-[#153E2E] bg-[#EAF2EE] px-1.5 py-0.2 rounded uppercase">
+                              <span className="text-[10px] font-bold text-[#153E2E] dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded shrink-0">
                                 You
                               </span>
                             )}
                           </div>
-                          <span className="text-[11px] text-stone-500 truncate block">
+                          <span className="text-[11px] text-stone-500 dark:text-stone-400 font-mono block truncate">
                             {user.email}
                           </span>
                         </div>
@@ -203,18 +205,15 @@ export const UsersView: React.FC = () => {
 
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <span
-                        className={`text-xs font-semibold px-2 py-0.5 rounded-md inline-flex items-center gap-1.5 ${
+                        className={`text-[11px] font-bold px-2 py-0.5 rounded font-mono ${
                           user.role === 'SUPER_ADMIN'
-                            ? 'bg-[#153E2E]/10 text-[#153E2E]'
+                            ? 'bg-[#153E2E] text-[#D4AF37]'
                             : user.role === 'CONTENT_REVIEWER'
-                            ? 'bg-amber-100 text-amber-900'
-                            : 'bg-stone-100 text-stone-700'
+                            ? 'bg-[#D4AF37]/20 text-[#8B6508] dark:text-amber-300'
+                            : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
                         }`}
                       >
-                        {user.role === 'SUPER_ADMIN' && <Shield className="w-3 h-3 text-[#153E2E]" />}
-                        {user.role === 'CONTENT_REVIEWER' && <UserCheck className="w-3 h-3 text-amber-700" />}
-                        {user.role === 'CONTENT_EDITOR' && <Edit3 className="w-3 h-3 text-stone-600" />}
-                        {user.role.replace('_', ' ')}
+                        {user.role}
                       </span>
                     </td>
 
@@ -222,59 +221,53 @@ export const UsersView: React.FC = () => {
                       <StatusBadge status={user.status} />
                     </td>
 
-                    <td className="py-3.5 px-4 text-stone-600">
-                      <div className="space-y-0.5">
-                        <p className="flex items-center gap-1 text-[11px]">
-                          <Mail className="w-3 h-3 text-stone-400" />
-                          <span>{user.email}</span>
-                        </p>
-                      </div>
+                    <td className="py-3.5 px-4 whitespace-nowrap text-stone-600 dark:text-stone-400">
+                      <span className="font-mono text-[11px]">{user.email}</span>
                     </td>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap font-mono text-stone-500 text-[11px]">
+                    <td className="py-3.5 px-4 whitespace-nowrap font-mono text-stone-500 dark:text-stone-400 text-[11px]">
                       {new Date(user.created_at).toLocaleDateString()}
                     </td>
 
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-1.5">
-                        {isSuperAdmin ? (
+                      <div className="flex items-center justify-end gap-1">
+                        {isSuperAdmin && (
                           <>
                             <button
                               onClick={() => {
                                 setEditingUser(user);
                                 setFormModalOpen(true);
                               }}
-                              className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
-                              title="Edit Administrator"
+                              className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg cursor-pointer transition-colors"
+                              title="Edit Permissions"
                             >
-                              <Edit className="w-4 h-4" />
+                              <Edit className="w-3.5 h-3.5" />
                             </button>
 
                             {!isSelf && (
                               <>
                                 <button
                                   onClick={() => setSuspendConfirmUser(user)}
-                                  className={`px-2 py-1 text-[11px] font-semibold rounded-lg transition-colors cursor-pointer ${
+                                  className={`px-2 py-1 text-[10px] font-bold rounded cursor-pointer transition-colors ${
                                     user.status === 'ACTIVE'
-                                      ? 'text-red-700 bg-red-50 hover:bg-red-100'
-                                      : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
+                                      ? 'text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40'
+                                      : 'text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
                                   }`}
+                                  title={user.status === 'ACTIVE' ? 'Suspend Access' : 'Activate Access'}
                                 >
                                   {user.status === 'ACTIVE' ? 'Suspend' : 'Activate'}
                                 </button>
 
                                 <button
                                   onClick={() => setDeleteConfirmUser(user)}
-                                  className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                                  title="Remove Administrator Account"
+                                  className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg cursor-pointer transition-colors"
+                                  title="Delete Administrator"
                                 >
-                                  <Trash2 className="w-4 h-4" />
+                                  <Trash2 className="w-3.5 h-3.5" />
                                 </button>
                               </>
                             )}
                           </>
-                        ) : (
-                          <span className="text-[11px] text-stone-400 italic">Read-Only</span>
                         )}
                       </div>
                     </td>
@@ -286,7 +279,7 @@ export const UsersView: React.FC = () => {
         </div>
       </div>
 
-      {/* Form Modal */}
+      {/* User Form Modal */}
       {formModalOpen && (
         <UserFormModal
           isOpen={formModalOpen}
@@ -300,36 +293,28 @@ export const UsersView: React.FC = () => {
         />
       )}
 
-      {/* Suspend Confirmation */}
+      {/* Suspend Confirmation Modal */}
       {suspendConfirmUser && (
         <ConfirmModal
           isOpen={true}
-          title={
-            suspendConfirmUser.status === 'ACTIVE'
-              ? `Suspend Administrator: ${suspendConfirmUser.name}`
-              : `Activate Administrator: ${suspendConfirmUser.name}`
-          }
-          message={
-            suspendConfirmUser.status === 'ACTIVE'
-              ? `Are you sure you want to suspend ${suspendConfirmUser.name}? They will immediately lose all administrative access to the platform.`
-              : `Are you sure you want to reactivate ${suspendConfirmUser.name}? Their portal credentials and permissions will be restored.`
-          }
-          confirmLabel={suspendConfirmUser.status === 'ACTIVE' ? 'Suspend Account' : 'Activate Account'}
-          isDestructive={suspendConfirmUser.status === 'ACTIVE'}
+          title={suspendConfirmUser.status === 'ACTIVE' ? 'Suspend Administrator Account' : 'Reactivate Administrator Account'}
+          message={`Are you sure you want to ${
+            suspendConfirmUser.status === 'ACTIVE' ? 'suspend' : 'reactivate'
+          } access for ${suspendConfirmUser.name}?`}
+          confirmLabel={suspendConfirmUser.status === 'ACTIVE' ? 'Suspend Access' : 'Activate Access'}
           onConfirm={() => handleToggleStatus(suspendConfirmUser)}
           onCancel={() => setSuspendConfirmUser(null)}
           isLoading={toggleStatusMutation.isPending}
         />
       )}
 
-      {/* Delete Confirmation */}
+      {/* Delete Confirmation Modal */}
       {deleteConfirmUser && (
         <ConfirmModal
           isOpen={true}
-          title={`Remove Administrator: ${deleteConfirmUser.name}`}
-          message={`Are you sure you want to permanently remove ${deleteConfirmUser.name} (${deleteConfirmUser.email})? This action cannot be undone and will revoke all administrative access to the platform.`}
-          confirmLabel={deleteMutation.isPending ? 'Removing...' : 'Remove Administrator'}
-          isDestructive={true}
+          title="Delete Administrator Account"
+          message={`Are you sure you want to permanently delete the administrator profile for ${deleteConfirmUser.name}? This action cannot be reversed.`}
+          confirmLabel="Delete Account"
           onConfirm={() => handleDeleteUser(deleteConfirmUser)}
           onCancel={() => setDeleteConfirmUser(null)}
           isLoading={deleteMutation.isPending}

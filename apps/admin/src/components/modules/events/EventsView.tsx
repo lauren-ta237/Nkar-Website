@@ -1,39 +1,33 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   CalendarDays,
   Plus,
   Search,
   MapPin,
   Clock,
-  Eye,
   Edit,
   Trash2,
   Calendar,
-  Star,
   LayoutGrid,
   List,
 } from 'lucide-react';
 import { useAdminEventsList, useAdminEventsMutations } from '@/lib/api/events.api';
-import { EventItem } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
 import { EmptyState } from '../../common/EmptyState';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { EventsFormModal } from './EventsFormModal';
 import { InteractiveCalendar } from './InteractiveCalendar';
 
 export const EventsView: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser } = useAdminStore();
   const { data: events = [], isLoading } = useAdminEventsList();
-  const { createMutation, updateMutation, publishMutation, archiveMutation, deleteMutation } =
-    useAdminEventsMutations();
+  const { publishMutation, deleteMutation } = useAdminEventsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [viewMode, setViewMode] = useState<'calendar' | 'cards' | 'table'>('calendar');
-
-  const [formModalOpen, setFormModalOpen] = useState(false);
-  const [editingEvent, setEditingEvent] = useState<Partial<EventItem> | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const canManage =
@@ -52,24 +46,6 @@ export const EventsView: React.FC = () => {
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreateOrUpdate = (data: Omit<EventItem, 'id' | 'created_at' | 'updated_at'>) => {
-    if (editingEvent && editingEvent.id) {
-      updateMutation.mutate(
-        { id: editingEvent.id, data },
-        {
-          onSuccess: () => {
-            setFormModalOpen(false);
-            setEditingEvent(null);
-          },
-        }
-      );
-    } else {
-      createMutation.mutate(data, {
-        onSuccess: () => setFormModalOpen(false),
-      });
-    }
-  };
-
   const handleDelete = () => {
     if (deleteConfirmId) {
       deleteMutation.mutate(deleteConfirmId, {
@@ -77,6 +53,15 @@ export const EventsView: React.FC = () => {
       });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-stone-200 dark:bg-stone-800 rounded w-1/4 animate-pulse" />
+        <div className="h-64 bg-stone-100 dark:bg-stone-900 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -136,10 +121,7 @@ export const EventsView: React.FC = () => {
           </div>
 
           <button
-            onClick={() => {
-              setEditingEvent(null);
-              setFormModalOpen(true);
-            }}
+            onClick={() => navigate('/events/new')}
             className="px-4 py-2 text-xs font-bold text-[#153E2E] bg-[#D4AF37] hover:bg-[#E5B83B] rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
           >
             <Plus className="w-4 h-4" />
@@ -149,7 +131,7 @@ export const EventsView: React.FC = () => {
       </div>
 
       {/* Filter and Search */}
-      <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl shadow-xs">
+      <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="relative">
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -158,7 +140,7 @@ export const EventsView: React.FC = () => {
               placeholder="Search by title, location or organizer..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
             />
           </div>
 
@@ -166,7 +148,7 @@ export const EventsView: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
+              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-700 dark:text-stone-200"
             >
               <option value="ALL">All Event Statuses</option>
               <option value="PUBLISHED">Published (Official)</option>
@@ -184,16 +166,10 @@ export const EventsView: React.FC = () => {
         <InteractiveCalendar
           events={events}
           onSelectEvent={(evt) => {
-            setEditingEvent(evt);
-            setFormModalOpen(true);
+            navigate(`/events/${evt.id}/edit`);
           }}
-          onScheduleForDate={(dateStr) => {
-            setEditingEvent({
-              start_datetime: `${dateStr}T09:00:00Z`,
-              end_datetime: `${dateStr}T17:00:00Z`,
-              location: 'Nkar Royal Palace Grand Courtyard',
-            });
-            setFormModalOpen(true);
+          onScheduleForDate={() => {
+            navigate('/events/new');
           }}
           canManage={canManage}
         />
@@ -204,8 +180,7 @@ export const EventsView: React.FC = () => {
           description="Schedule an event for Nkar Woo Làn to inform the community and diaspora."
           actionLabel="Schedule Event"
           onAction={() => {
-            setEditingEvent(null);
-            setFormModalOpen(true);
+            navigate('/events/new');
           }}
         />
       ) : viewMode === 'cards' ? (
@@ -235,16 +210,18 @@ export const EventsView: React.FC = () => {
                       <div className="absolute top-2.5 right-2.5">
                         <StatusBadge status={event.status} />
                       </div>
-                      {event.is_featured && (
-                        <div className="absolute bottom-2.5 left-2.5 bg-[#153E2E]/90 text-[#D4AF37] text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 backdrop-blur-xs">
-                          <Star className="w-3 h-3 fill-[#D4AF37]" /> Featured
-                        </div>
-                      )}
                     </div>
                   )}
 
-                  <div className="p-4 space-y-3">
-                    <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
+                  <div className="p-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-semibold tracking-wider uppercase text-[#D4AF37]">
+                        Palace & Community Event
+                      </span>
+                      {!event.cover_image && <StatusBadge status={event.status} />}
+                    </div>
+
+                    <h3 className="font-bold text-stone-900 dark:text-stone-100 text-sm leading-snug group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors">
                       {event.title}
                     </h3>
                     <p className="text-xs text-stone-500 dark:text-stone-400 line-clamp-2 leading-relaxed">
@@ -290,10 +267,7 @@ export const EventsView: React.FC = () => {
                   <div className="flex items-center gap-1">
                     {canEdit && (
                       <button
-                        onClick={() => {
-                          setEditingEvent(event);
-                          setFormModalOpen(true);
-                        }}
+                        onClick={() => navigate(`/events/${event.id}/edit`)}
                         className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
                         title="Edit Event"
                       >
@@ -380,11 +354,8 @@ export const EventsView: React.FC = () => {
                         <div className="flex items-center justify-end gap-1">
                           {canEdit && (
                             <button
-                              onClick={() => {
-                                setEditingEvent(event);
-                                setFormModalOpen(true);
-                              }}
-                              className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg cursor-pointer"
+                              onClick={() => navigate(`/events/${event.id}/edit`)}
+                              className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg cursor-pointer transition-colors"
                               title="Edit Event"
                             >
                               <Edit className="w-3.5 h-3.5" />
@@ -393,7 +364,7 @@ export const EventsView: React.FC = () => {
                           {canDelete && (
                             <button
                               onClick={() => setDeleteConfirmId(event.id)}
-                              className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg cursor-pointer"
+                              className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg cursor-pointer transition-colors"
                               title="Delete Event"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -408,20 +379,6 @@ export const EventsView: React.FC = () => {
             </table>
           </div>
         </div>
-      )}
-
-      {/* Modals */}
-      {formModalOpen && (
-        <EventsFormModal
-          isOpen={formModalOpen}
-          initialData={editingEvent}
-          onClose={() => {
-            setFormModalOpen(false);
-            setEditingEvent(null);
-          }}
-          onSubmit={handleCreateOrUpdate}
-          isLoading={createMutation.isPending || updateMutation.isPending}
-        />
       )}
 
       {deleteConfirmId && (

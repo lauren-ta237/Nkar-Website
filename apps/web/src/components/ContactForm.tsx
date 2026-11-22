@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -28,6 +29,10 @@ const labelClass = 'block text-[11px] font-semibold uppercase tracking-[0.24em] 
 const errorClass = 'mt-2 text-xs text-clay-700';
 
 export default function ContactForm() {
+  const [searchParams] = useSearchParams();
+  const queryTopic = searchParams.get('topic') || '';
+  const queryMessage = searchParams.get('message') || '';
+
   const [reviewed, setReviewed] = useState<FormValues | null>(null);
   const submitMutation = useSubmitContact();
   const {
@@ -41,11 +46,24 @@ export default function ContactForm() {
       name: '',
       email: '',
       where: '',
-      topic: '',
-      message: '',
+      topic: queryTopic,
+      message: queryMessage,
       consent: false
     }
   });
+
+  useEffect(() => {
+    if (queryTopic || queryMessage) {
+      reset({
+        name: '',
+        email: '',
+        where: '',
+        topic: queryTopic,
+        message: queryMessage,
+        consent: false
+      });
+    }
+  }, [queryTopic, queryMessage, reset]);
 
   const onSubmit = async (values: FormValues) => {
     try {
