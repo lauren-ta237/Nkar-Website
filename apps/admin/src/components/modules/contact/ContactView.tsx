@@ -2,27 +2,18 @@ import React, { useState } from 'react';
 import {
   Mail,
   Search,
-  CheckCircle2,
-  Clock,
   Trash2,
   Phone,
-  Calendar,
-  User,
   MessageSquare,
-  CornerDownRight,
-  Send,
-  Filter,
 } from 'lucide-react';
 import { useAdminContactsList, useAdminContactsMutations } from '@/lib/api/contacts.api';
-import { ContactSubmission, ContactStatus } from '../../../types';
+import { ContactStatus } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
-import { StatusBadge } from '../../common/StatusBadge';
-import { EmptyState } from '../../common/EmptyState';
 import { ConfirmModal } from '../../common/ConfirmModal';
 
 export const ContactView: React.FC = () => {
   const { currentUser } = useAdminStore();
-  const { data: contacts = [], isLoading } = useAdminContactsList();
+  const { data: contacts = [] } = useAdminContactsList();
   const { updateStatusMutation, deleteMutation } = useAdminContactsMutations();
 
   const [selectedId, setSelectedId] = useState<string | null>(contacts[0]?.id || null);
@@ -31,7 +22,10 @@ export const ContactView: React.FC = () => {
   const [internalNoteText, setInternalNoteText] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  const sortedContacts = [...contacts].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
+  const sortedContacts = [...contacts].sort(
+    (a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+  );
+
   const filtered = sortedContacts.filter((c) => {
     const matchesSearch =
       searchQuery === '' ||
@@ -141,19 +135,20 @@ export const ContactView: React.FC = () => {
             ) : (
               filtered.map((msg) => {
                 const isSelected = activeContact?.id === msg.id;
+                const isUnread = msg.status === 'UNREAD';
                 return (
                   <div
                     key={msg.id}
                     onClick={() => {
                       setSelectedId(msg.id);
-                      if (msg.status === 'UNREAD') {
+                      if (isUnread) {
                         handleStatusChange(msg.id, 'IN_PROGRESS');
                       }
                     }}
                     className={`p-3.5 cursor-pointer transition-colors text-xs ${
                       isSelected
                         ? 'bg-[#FAF6EE] border-l-4 border-l-[#D4AF37]'
-                        : msg.status === 'UNREAD'
+                        : isUnread
                         ? 'bg-amber-50/40 hover:bg-stone-50 font-semibold'
                         : 'hover:bg-stone-50'
                     }`}
@@ -170,12 +165,16 @@ export const ContactView: React.FC = () => {
                       {msg.message}
                     </p>
 
-                    <div className="mt-2 flex items-center justify-between">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${msg.status === "UNREAD" ? "bg-amber-100 text-amber-900" : "bg-emerald-100 text-emerald-900"}`}>{msg.status === "UNREAD" ? "Unread" : "Read"}</span> <StatusBadge status={msg.status} />
-                      {msg.assigned_to_id && (
-                        <span className="text-[10px] text-stone-400">Assigned</span>
-                      )}
-                    </div>
+                    {isUnread && (
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">
+                          Unread
+                        </span>
+                        {msg.assigned_to_id && (
+                          <span className="text-[10px] text-stone-400">Assigned</span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
               })
@@ -195,11 +194,11 @@ export const ContactView: React.FC = () => {
                   </h3>
                   <div className="flex items-center gap-3 text-xs text-stone-500 mt-1">
                     <span className="font-semibold text-stone-800">{activeContact.sender_name}</span>
-                    <span></span>
+                    <span>•</span>
                     <span>{activeContact.sender_email}</span>
                     {activeContact.phone && (
                       <>
-                        <span></span>
+                        <span>•</span>
                         <span className="flex items-center gap-1 font-mono">
                           <Phone className="w-3 h-3" /> {activeContact.phone}
                         </span>
@@ -225,44 +224,27 @@ export const ContactView: React.FC = () => {
                   {activeContact.message}
                 </div>
 
-                {/* Status Toggles */}
-                <div>
-                  <p className="text-[10px] font-bold text-stone-500 uppercase tracking-wider mb-2">
-                    Inquiry Lifecycle Status
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleStatusChange(activeContact.id, 'UNREAD')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer border ${
-                        activeContact.status === 'UNREAD'
-                          ? 'bg-amber-100 border-amber-300 text-amber-900'
-                          : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
-                      }`}
-                    >
-                      Mark Unread
-                    </button>
-                    <button
-                      onClick={() => handleStatusChange(activeContact.id, 'IN_PROGRESS')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer border ${
-                        activeContact.status === 'IN_PROGRESS'
-                          ? 'bg-blue-100 border-blue-300 text-blue-900'
-                          : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
-                      }`}
-                    >
-                      In Progress
-                    </button>
-                    <button
-                      onClick={() => handleStatusChange(activeContact.id, 'RESOLVED')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer border ${
-                        activeContact.status === 'RESOLVED'
-                          ? 'bg-emerald-100 border-emerald-300 text-emerald-900'
-                          : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
-                      }`}
-                    >
-                      Mark Resolved
-                    </button>
+                {activeContact.status === 'UNREAD' && (
+                  <div>
+                    <p className="text-[10px] font-bold text-stone-500 uppercase tracking-wider mb-2">
+                      Inquiry Lifecycle Status
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleStatusChange(activeContact.id, 'UNREAD')}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer border bg-amber-100 border-amber-300 text-amber-900"
+                      >
+                        Unread
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(activeContact.id, 'IN_PROGRESS')}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer border bg-white border-stone-200 text-stone-600 hover:bg-stone-50"
+                      >
+                        Mark as Read
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Internal Council Notes */}
                 <div className="pt-2">
