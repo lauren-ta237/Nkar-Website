@@ -93,7 +93,7 @@ export const ContactView: React.FC = () => {
             Total: {contacts.length}
           </span>
           <span className="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg font-semibold">
-            Unread: {contacts.filter((c) => c.status === 'UNREAD').length} � Read/Active: {contacts.filter((c) => c.status !== 'UNREAD').length}
+            Unread: {contacts.filter((c) => c.status === 'UNREAD').length}  Read/Active: {contacts.filter((c) => c.status !== 'UNREAD').length}
           </span>
         </div>
       </div>
@@ -195,11 +195,11 @@ export const ContactView: React.FC = () => {
                   </h3>
                   <div className="flex items-center gap-3 text-xs text-stone-500 mt-1">
                     <span className="font-semibold text-stone-800">{activeContact.sender_name}</span>
-                    <span>·</span>
+                    <span></span>
                     <span>{activeContact.sender_email}</span>
                     {activeContact.phone && (
                       <>
-                        <span>·</span>
+                        <span></span>
                         <span className="flex items-center gap-1 font-mono">
                           <Phone className="w-3 h-3" /> {activeContact.phone}
                         </span>
