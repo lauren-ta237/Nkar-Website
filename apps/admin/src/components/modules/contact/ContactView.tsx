@@ -23,7 +23,11 @@ export const ContactView: React.FC = () => {
   const [internalNoteText, setInternalNoteText] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  const filtered = contacts.filter((c) => {
+  const sortedContacts = [...contacts].sort(
+    (a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+  );
+
+  const filtered = sortedContacts.filter((c) => {
     const matchesSearch =
       searchQuery === '' ||
       c.sender_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -94,6 +98,9 @@ export const ContactView: React.FC = () => {
           </span>
           <span className="px-3 py-1 bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-200 rounded-lg font-semibold">
             Unread: {contacts.filter((c) => c.status === 'UNREAD').length}
+          </span>
+          <span className="px-3 py-1 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 rounded-lg font-semibold">
+            Active/Resolved: {contacts.filter((c) => c.status !== 'UNREAD').length}
           </span>
         </div>
       </div>
@@ -202,11 +209,11 @@ export const ContactView: React.FC = () => {
                   </h3>
                   <div className="flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400 mt-1">
                     <span className="font-semibold text-stone-800 dark:text-stone-200">{activeContact.sender_name}</span>
-                    <span>·</span>
+                    <span>•</span>
                     <span>{activeContact.sender_email}</span>
                     {activeContact.phone && (
                       <>
-                        <span>·</span>
+                        <span>•</span>
                         <span className="flex items-center gap-1 font-mono">
                           <Phone className="w-3 h-3" /> {activeContact.phone}
                         </span>
@@ -272,7 +279,7 @@ export const ContactView: React.FC = () => {
                           : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-700'
                       }`}
                     >
-                      In Progress
+                      Mark as Read / Active
                     </button>
                     <button
                       onClick={() => handleStatusChange(activeContact.id, 'RESOLVED')}

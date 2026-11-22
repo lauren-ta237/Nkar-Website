@@ -1,4 +1,4 @@
-// src/lib/api/contacts.api.ts
+﻿// src/lib/api/contacts.api.ts
 //
 // Pure API methods & TanStack Query hooks for Citizen Contacts & Inquiries.
 // Pattern: useAdminContacts...
@@ -15,9 +15,10 @@ export const CONTACTS_QUERY_KEYS = {
 // ---- pure api routes -----------------------------------------------------
 
 export async function fetchAdminContactsList(statusFilter?: string): Promise<ContactSubmission[]> {
-  const url = statusFilter && statusFilter !== 'ALL'
-    ? `/contacts/admin/items?status=${statusFilter}`
-    : '/contacts/admin/items';
+  const url =
+    statusFilter && statusFilter !== 'ALL'
+      ? '/contacts/admin/items?status=' + encodeURIComponent(statusFilter)
+      : '/contacts/admin/items';
   const { data } = await api.get<ApiResponse<ContactSubmission[]>>(url);
   return data.data || [];
 }
@@ -27,7 +28,7 @@ export async function updateAdminContactStatus(
   status: string,
   internalNotes?: string
 ): Promise<ContactSubmission> {
-  const { data } = await api.patch<ApiResponse<ContactSubmission>>(`/contacts/admin/items/${id}`, {
+  const { data } = await api.patch<ApiResponse<ContactSubmission>>('/contacts/admin/items/' + id, {
     status,
     internal_notes: internalNotes,
   });
@@ -35,7 +36,7 @@ export async function updateAdminContactStatus(
 }
 
 export async function deleteAdminContact(id: string): Promise<void> {
-  await api.delete(`/contacts/admin/items/${id}`);
+  await api.delete('/contacts/admin/items/' + id);
 }
 
 // ---- hooks ---------------------------------------------------------------
@@ -62,11 +63,17 @@ export function useAdminContactsMutations() {
     mutationFn: ({ id, status, internal_notes }: { id: string; status: any; internal_notes?: string }) =>
       updateAdminContactStatus(id, status, internal_notes),
     onSuccess: invalidateContacts,
+    onError: (err) => {
+      console.error('Failed to update contact status:', err);
+    },
   });
 
   const deleteMutation = useMutation({
     mutationFn: deleteAdminContact,
     onSuccess: invalidateContacts,
+    onError: (err) => {
+      console.error('Failed to delete contact:', err);
+    },
   });
 
   return { updateStatusMutation, deleteMutation };
