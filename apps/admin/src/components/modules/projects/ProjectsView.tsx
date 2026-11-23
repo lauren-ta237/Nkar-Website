@@ -1,34 +1,27 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Briefcase,
   Plus,
   Search,
   MapPin,
-  Calendar,
   Edit,
   Trash2,
-  DollarSign,
-  TrendingUp,
-  Clock,
 } from 'lucide-react';
 import { useAdminProjectsList, useAdminProjectsMutations } from '@/lib/api/projects.api';
-import { DevelopmentProject } from '../../../types';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { StatusBadge } from '../../common/StatusBadge';
 import { EmptyState } from '../../common/EmptyState';
 import { ConfirmModal } from '../../common/ConfirmModal';
-import { ProjectsFormModal } from './ProjectsFormModal';
 
 export const ProjectsView: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser } = useAdminStore();
   const { data: projects = [], isLoading } = useAdminProjectsList();
-  const { createMutation, updateMutation, deleteMutation } = useAdminProjectsMutations();
+  const { deleteMutation } = useAdminProjectsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
-
-  const [formModalOpen, setFormModalOpen] = useState(false);
-  const [editingProject, setEditingProject] = useState<DevelopmentProject | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const filtered = projects.filter((p) => {
@@ -41,24 +34,6 @@ export const ProjectsView: React.FC = () => {
     const matchesStatus = statusFilter === 'ALL' || p.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
-
-  const handleCreateOrUpdate = (data: Omit<DevelopmentProject, 'id' | 'created_at' | 'updated_at'>) => {
-    if (editingProject) {
-      updateMutation.mutate(
-        { id: editingProject.id, data },
-        {
-          onSuccess: () => {
-            setFormModalOpen(false);
-            setEditingProject(null);
-          },
-        }
-      );
-    } else {
-      createMutation.mutate(data, {
-        onSuccess: () => setFormModalOpen(false),
-      });
-    }
-  };
 
   const handleDelete = () => {
     if (deleteConfirmId) {
@@ -73,26 +48,32 @@ export const ProjectsView: React.FC = () => {
 
   const totalCommittedBudget = projects.reduce((acc, p) => acc + (p.budget_cfa || 0), 0);
 
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-stone-200 dark:bg-stone-800 rounded w-1/4 animate-pulse" />
+        <div className="h-64 bg-stone-100 dark:bg-stone-900 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-[#153E2E]" />
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
+            <Briefcase className="w-5 h-5 text-[#153E2E] dark:text-emerald-400" />
             Community Development Projects
           </h2>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 dark:text-stone-400">
             Water catchments, solar electrification, school labs, roads, and village civic infrastructure
           </p>
         </div>
 
         {canManage && (
           <button
-            onClick={() => {
-              setEditingProject(null);
-              setFormModalOpen(true);
-            }}
+            onClick={() => navigate('/projects/new')}
             className="px-4 py-2 text-xs font-bold text-[#153E2E] bg-[#D4AF37] hover:bg-[#E5B83B] rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
           >
             <Plus className="w-4 h-4" />
@@ -103,33 +84,33 @@ export const ProjectsView: React.FC = () => {
 
       {/* Overview Stat Strip */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl">
-          <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Total Development Capital</p>
-          <p className="text-xl font-bold text-stone-900 mt-1 tabular-nums">
+        <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl">
+          <p className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">Total Development Capital</p>
+          <p className="text-xl font-bold text-stone-900 dark:text-stone-100 mt-1 tabular-nums">
             {totalCommittedBudget.toLocaleString()} XAF
           </p>
-          <p className="text-[11px] text-stone-400 mt-0.5">Across {projects.length} community initiatives</p>
+          <p className="text-[11px] text-stone-400 dark:text-stone-500 mt-0.5">Across {projects.length} community initiatives</p>
         </div>
 
-        <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl">
-          <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Active Construction</p>
-          <p className="text-xl font-bold text-[#153E2E] mt-1 tabular-nums">
+        <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl">
+          <p className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">Active Construction</p>
+          <p className="text-xl font-bold text-[#153E2E] dark:text-emerald-400 mt-1 tabular-nums">
             {projects.filter((p) => p.status === 'IN_PROGRESS').length} Projects
           </p>
-          <p className="text-[11px] text-stone-400 mt-0.5">Under active engineering supervision</p>
+          <p className="text-[11px] text-stone-400 dark:text-stone-500 mt-0.5">Under active engineering supervision</p>
         </div>
 
-        <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl">
-          <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Completed & Commissioned</p>
-          <p className="text-xl font-bold text-emerald-700 mt-1 tabular-nums">
+        <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl">
+          <p className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">Completed & Commissioned</p>
+          <p className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mt-1 tabular-nums">
             {projects.filter((p) => p.status === 'COMPLETED').length} Handed Over
           </p>
-          <p className="text-[11px] text-stone-400 mt-0.5">100% community access verified</p>
+          <p className="text-[11px] text-stone-400 dark:text-stone-500 mt-0.5">100% community access verified</p>
         </div>
       </div>
 
       {/* Filter and Search */}
-      <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl shadow-xs">
+      <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="relative">
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -138,7 +119,7 @@ export const ProjectsView: React.FC = () => {
               placeholder="Search by project name, location or coordinator..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
             />
           </div>
 
@@ -146,7 +127,7 @@ export const ProjectsView: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
+              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-700 dark:text-stone-200"
             >
               <option value="ALL">All Project Statuses</option>
               <option value="IN_PROGRESS">In Progress</option>
@@ -166,21 +147,18 @@ export const ProjectsView: React.FC = () => {
           title="No Development Projects Found"
           description="Initiate a community infrastructure project for Nkar Village."
           actionLabel={canManage ? 'Initiate Project' : undefined}
-          onAction={() => {
-            setEditingProject(null);
-            setFormModalOpen(true);
-          }}
+          onAction={() => navigate('/projects/new')}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {filtered.map((proj) => (
             <div
               key={proj.id}
-              className="bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
+              className="bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
             >
               <div>
                 {proj.cover_image_url && (
-                  <div className="w-full h-44 bg-stone-100 overflow-hidden relative">
+                  <div className="w-full h-44 bg-stone-100 dark:bg-stone-800 overflow-hidden relative">
                     <img
                       src={proj.cover_image_url}
                       alt={proj.title}
@@ -194,38 +172,38 @@ export const ProjectsView: React.FC = () => {
                 )}
 
                 <div className="p-5 space-y-3">
-                  <div className="flex items-center gap-1.5 text-xs text-stone-500">
-                    <MapPin className="w-3.5 h-3.5 text-[#153E2E] shrink-0" />
-                    <span className="font-semibold text-stone-700 truncate">{proj.location}</span>
+                  <div className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
+                    <MapPin className="w-3.5 h-3.5 text-[#153E2E] dark:text-emerald-400 shrink-0" />
+                    <span className="font-semibold text-stone-700 dark:text-stone-300 truncate">{proj.location}</span>
                   </div>
 
-                  <h3 className="text-base font-bold text-stone-900 group-hover:text-[#153E2E] transition-colors leading-snug">
+                  <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors leading-snug">
                     {proj.title}
                   </h3>
 
-                  <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-stone-600 dark:text-stone-400 line-clamp-2 leading-relaxed">
                     {proj.description}
                   </p>
 
                   {/* Progress Bar & Budget */}
-                  <div className="p-3.5 bg-[#FAF8F5] rounded-xl border border-[#EAE6DD] space-y-2.5">
+                  <div className="p-3.5 bg-[#FAF8F5] dark:bg-stone-800/60 rounded-xl border border-[#EAE6DD] dark:border-stone-800 space-y-2.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-stone-500">Budget:</span>
-                      <span className="font-bold text-stone-900 tabular-nums">
+                      <span className="text-stone-500 dark:text-stone-400">Budget:</span>
+                      <span className="font-bold text-stone-900 dark:text-stone-100 tabular-nums">
                         {(proj.budget_cfa || 0).toLocaleString()} XAF
                       </span>
                     </div>
 
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-stone-500">Milestone Progress</span>
-                        <span className="font-bold text-[#153E2E] tabular-nums">
+                        <span className="text-stone-500 dark:text-stone-400">Milestone Progress</span>
+                        <span className="font-bold text-[#153E2E] dark:text-emerald-400 tabular-nums">
                           {proj.progress_percentage}%
                         </span>
                       </div>
-                      <div className="w-full h-2.5 bg-stone-200 rounded-full overflow-hidden">
+                      <div className="w-full h-2.5 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-[#153E2E] to-[#40916C] rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-[#153E2E] to-[#40916C] dark:from-emerald-600 dark:to-emerald-400 rounded-full transition-all duration-500"
                           style={{ width: `${proj.progress_percentage}%` }}
                         />
                       </div>
@@ -234,7 +212,7 @@ export const ProjectsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-4 bg-[#FAF8F5] border-t border-[#E8E4DA] flex items-center justify-between text-xs">
+              <div className="p-4 bg-[#FAF8F5] dark:bg-stone-950 border-t border-[#E8E4DA] dark:border-stone-800 flex items-center justify-between text-xs">
                 <span className="text-[11px] text-stone-400 font-mono">
                   Started {proj.start_date || '—'}
                 </span>
@@ -242,11 +220,8 @@ export const ProjectsView: React.FC = () => {
                 <div className="flex items-center gap-1">
                   {canManage && (
                     <button
-                      onClick={() => {
-                        setEditingProject(proj);
-                        setFormModalOpen(true);
-                      }}
-                      className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg cursor-pointer"
+                      onClick={() => navigate(`/projects/${proj.id}/edit`)}
+                      className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg cursor-pointer transition-colors"
                       title="Update Project"
                     >
                       <Edit className="w-3.5 h-3.5" />
@@ -256,7 +231,7 @@ export const ProjectsView: React.FC = () => {
                   {canDelete && (
                     <button
                       onClick={() => setDeleteConfirmId(proj.id)}
-                      className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg cursor-pointer transition-colors"
                       title="Delete Project"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -269,20 +244,7 @@ export const ProjectsView: React.FC = () => {
         </div>
       )}
 
-      {/* Modals */}
-      {formModalOpen && (
-        <ProjectsFormModal
-          isOpen={formModalOpen}
-          initialData={editingProject}
-          onClose={() => {
-            setFormModalOpen(false);
-            setEditingProject(null);
-          }}
-          onSubmit={handleCreateOrUpdate}
-          isLoading={createMutation.isPending || updateMutation.isPending}
-        />
-      )}
-
+      {/* Delete Modal */}
       {deleteConfirmId && (
         <ConfirmModal
           isOpen={true}

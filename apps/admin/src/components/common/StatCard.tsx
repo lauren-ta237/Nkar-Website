@@ -74,7 +74,8 @@ export const StatCard: React.FC<StatCardProps> = ({
                   cx="27"
                   cy="27"
                   r={radius}
-                  stroke="#F3F0E9"
+                  stroke="currentColor"
+                  className="text-stone-100 dark:text-stone-800"
                   strokeWidth="5"
                   fill="transparent"
                 />
@@ -91,7 +92,7 @@ export const StatCard: React.FC<StatCardProps> = ({
                   className="transition-all duration-700 ease-out"
                 />
               </svg>
-              <span className="absolute text-[11px] font-bold text-stone-700 tabular-nums">
+              <span className="absolute text-[11px] font-bold text-stone-700 dark:text-stone-300 tabular-nums">
                 {percentage}%
               </span>
             </div>

@@ -19,13 +19,18 @@ export default function ContentNotice({
   tone = 'gold',
   className = ''
 }: ContentNoticeProps) {
-  return (
-    <div className={`rounded-sm border p-5 md:p-6 ${tones[tone]} ${className}`}>
-      <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-gold-700">
-        <Info className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-        {title}
-      </p>
-      <div className="mt-3 text-sm leading-relaxed text-forest-800">{children}</div>
-    </div>
-  );
+
+  return null;
+
+  // TODO: To be removed (All Usages Across The Apps)
+  
+  // return (
+  //   <div className={`rounded-sm border p-5 md:p-6 ${tones[tone]} ${className}`}>
+  //     <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-gold-700">
+  //       <Info className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+  //       {title}
+  //     </p>
+  //     <div className="mt-3 text-sm leading-relaxed text-forest-800">{children}</div>
+  //   </div>
+  // );
 }

@@ -92,16 +92,25 @@ export const GalleryView: React.FC = () => {
     currentUser.role === 'CONTENT_EDITOR';
   const canDelete = currentUser.role === 'SUPER_ADMIN';
 
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-stone-200 dark:bg-stone-800 rounded w-1/4 animate-pulse" />
+        <div className="h-64 bg-stone-100 dark:bg-stone-900 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
-            <ImageIcon className="w-5 h-5 text-[#153E2E]" />
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
+            <ImageIcon className="w-5 h-5 text-[#153E2E] dark:text-emerald-400" />
             Multimedia & Photographic Archives
           </h2>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 dark:text-stone-400">
             Curated photographic galleries, ceremonial masquerade footage, and village landscapes
           </p>
         </div>
@@ -119,7 +128,7 @@ export const GalleryView: React.FC = () => {
       </div>
 
       {/* Filter */}
-      <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl shadow-xs">
+      <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="relative">
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -128,7 +137,7 @@ export const GalleryView: React.FC = () => {
               placeholder="Search by title, description or tag..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
             />
           </div>
 
@@ -136,7 +145,7 @@ export const GalleryView: React.FC = () => {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
+              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-700 dark:text-stone-200"
             >
               <option value="ALL">All Categories</option>
               {categories.map((cat) => (
@@ -150,9 +159,7 @@ export const GalleryView: React.FC = () => {
       </div>
 
       {/* Gallery Grid */}
-      {isLoading ? (
-        <div className="p-8 text-center text-xs text-stone-500">Loading gallery records...</div>
-      ) : filtered.length === 0 ? (
+      {filtered.length === 0 ? (
         <EmptyState
           icon={ImageIcon}
           title="No Media Items Found"
@@ -173,11 +180,11 @@ export const GalleryView: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
+                className="bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
               >
                 <div>
-                  <div className="p-2.5 pb-0 bg-[#FAF8F5]">
-                    <div className="relative aspect-[4/3] w-full bg-stone-900 overflow-hidden rounded-xl border border-[#E8E4DA]">
+                  <div className="p-2.5 pb-0 bg-[#FAF8F5] dark:bg-stone-950">
+                    <div className="relative aspect-[4/3] w-full bg-stone-900 overflow-hidden rounded-xl border border-[#E8E4DA] dark:border-stone-800">
                       {isVideo ? (
                         <video
                           src={mediaSrc}
@@ -198,6 +205,7 @@ export const GalleryView: React.FC = () => {
                       <div className="absolute top-2.5 right-2.5">
                         <StatusBadge status={item.status} />
                       </div>
+
                       <div className="absolute top-2.5 left-2.5 bg-black/65 text-white text-[10px] font-semibold px-2 py-0.5 rounded flex items-center gap-1 backdrop-blur-xs">
                         {isVideo ? (
                           <Video className="w-3 h-3" />
@@ -210,16 +218,16 @@ export const GalleryView: React.FC = () => {
                   </div>
 
                   <div className="p-4 space-y-2">
-                    <div className="flex items-center gap-1.5 text-[11px] text-[#153E2E] font-semibold">
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#153E2E] dark:text-emerald-400 font-semibold">
                       <Folder className="w-3 h-3 text-[#D4AF37]" />
                       <span className="truncate">{item.category}</span>
                     </div>
 
-                    <h3 className="text-sm font-bold text-stone-900 group-hover:text-[#153E2E] transition-colors line-clamp-1">
+                    <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
                       {item.title}
                     </h3>
 
-                    <p className="text-xs text-stone-500 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-stone-500 dark:text-stone-400 line-clamp-2 leading-relaxed">
                       {item.description || '—'}
                     </p>
 
@@ -228,7 +236,7 @@ export const GalleryView: React.FC = () => {
                         {item.tags.slice(0, 3).map((t) => (
                           <span
                             key={t}
-                            className="text-[10px] text-stone-600 bg-stone-100 px-1.5 py-0.5 rounded"
+                            className="text-[10px] text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded"
                           >
                             #{t}
                           </span>
@@ -238,7 +246,7 @@ export const GalleryView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-3 bg-[#FAF8F5] border-t border-[#E8E4DA] flex items-center justify-between text-xs">
+                <div className="p-3 bg-[#FAF8F5] dark:bg-stone-950 border-t border-[#E8E4DA] dark:border-stone-800 flex items-center justify-between text-xs">
                   <span className="text-[10px] text-stone-400 font-mono">
                     {item.uploaded_by_id ? 'By Admin' : 'System'}
                   </span>
@@ -258,7 +266,7 @@ export const GalleryView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setViewImage(item)}
-                      className="p-1.5 text-stone-500 hover:text-[#153E2E] hover:bg-stone-100 rounded-lg cursor-pointer"
+                      className="p-1.5 text-stone-500 hover:text-[#153E2E] dark:text-stone-400 dark:hover:text-emerald-400 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg cursor-pointer transition-colors"
                       title="View Full Resolution"
                     >
                       <Eye className="w-4 h-4" />
@@ -271,7 +279,7 @@ export const GalleryView: React.FC = () => {
                           setEditingItem(item);
                           setFormModalOpen(true);
                         }}
-                        className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg cursor-pointer"
+                        className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg cursor-pointer transition-colors"
                         title="Edit Item"
                       >
                         <Edit className="w-4 h-4" />
@@ -282,7 +290,7 @@ export const GalleryView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setDeleteConfirmId(item.id)}
-                        className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                        className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg cursor-pointer transition-colors"
                         title="Delete Media"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -340,9 +348,9 @@ export const GalleryView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setViewImage(null)}
-                  className="px-3 py-1 bg-stone-800 hover:bg-stone-700 text-white rounded-lg font-medium cursor-pointer transition-colors"
+                  className="text-stone-400 hover:text-white text-xs cursor-pointer"
                 >
-                  Close
+                  Close Preview
                 </button>
               </div>
             </div>
@@ -367,8 +375,8 @@ export const GalleryView: React.FC = () => {
       {deleteConfirmId && (
         <ConfirmModal
           isOpen={true}
-          title="Delete Media Asset"
-          message="Are you sure you want to delete this photographic record? It will be removed from the public cultural archive."
+          title="Delete Media Record"
+          message="Are you sure you want to permanently delete this media file from the public cultural archive? This cannot be undone."
           confirmLabel="Delete Media"
           onConfirm={handleDelete}
           onCancel={() => setDeleteConfirmId(null)}

@@ -12,15 +12,15 @@ import { usePublicationsList } from '@/lib/api/publications.api';
 const publicationsPolicy = [
   {
     title: 'Kept with author attribution',
-    text: 'Every publication acknowledges the original author, researcher, or institution that produced it.'
+    text: 'Every publication acknowledges the original author, researcher, or elder who produced it, guarding intellectual rights.'
   },
   {
-    title: 'Open community access',
-    text: 'Digital manuscripts and documents are preserved for direct reading and download by community members worldwide.'
+    title: 'Archival custody & access',
+    text: 'Digital manuscripts and documents are preserved in palace custody; access and copies are made available upon verified inquiry.'
   },
   {
     title: 'Continuous preservation',
-    text: 'Contributions of books, articles, theses, and essays on Nkar culture and history are welcomed and indexed.'
+    text: 'Contributions of books, articles, theses, and essays on Nkar culture and history are welcomed, indexed, and conserved.'
   }
 ];
 

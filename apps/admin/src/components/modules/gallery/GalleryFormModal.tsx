@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Image as ImageIcon, Video, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Gallery, MediaType, ContentStatus } from '../../../types';
-import { useAdminStore } from '../../../store/useAdminStore';
 import { FileUpload } from '../../common/FileUpload';
 import {
   Sheet,
@@ -19,15 +18,6 @@ interface GalleryFormModalProps {
   isLoading?: boolean;
 }
 
-const CATEGORIES = [
-  'Royal Ceremonies & Palace Heritage',
-  'Landscapes of Nkar',
-  'Arts & Traditional Crafts',
-  'Festivals & Dances',
-  'Community Development in Action',
-  'Historical Photographic Archive',
-];
-
 export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
   isOpen,
   initialData,
@@ -35,47 +25,48 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
   onSubmit,
   isLoading = false,
 }) => {
-  const { currentUser } = useAdminStore();
-
   const [title, setTitle] = useState('');
-  const [mediaType, setMediaType] = useState<MediaType>('IMAGE');
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [description, setDescription] = useState('');
   const [mediaUrl, setMediaUrl] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
-  const [description, setDescription] = useState('');
+  const [mediaType, setMediaType] = useState<MediaType>('IMAGE');
+  const [category, setCategory] = useState('Festivals & Culture');
   const [tagsInput, setTagsInput] = useState('');
   const [status, setStatus] = useState<ContentStatus>('PUBLISHED');
+  const [altText, setAltText] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title);
-      setMediaType(initialData.media_type);
-      setCategory(initialData.category);
+      setDescription(initialData.description || '');
       setMediaUrl(initialData.media_url);
       setThumbnailUrl(initialData.thumbnail_url || '');
-      setDescription(initialData.description || '');
-      setTagsInput(initialData.tags.join(', '));
+      setMediaType(initialData.media_type);
+      setCategory(initialData.category);
+      setTagsInput(initialData.tags ? initialData.tags.join(', ') : '');
       setStatus(initialData.status);
+      setAltText(initialData.alt_text || '');
     } else {
       setTitle('');
-      setMediaType('IMAGE');
-      setCategory(CATEGORIES[0]);
+      setDescription('');
       setMediaUrl('');
       setThumbnailUrl('');
-      setDescription('');
+      setMediaType('IMAGE');
+      setCategory('Festivals & Culture');
       setTagsInput('');
-      setStatus(currentUser.role === 'CONTENT_EDITOR' ? 'SUBMITTED' : 'PUBLISHED');
+      setStatus('PUBLISHED');
+      setAltText('');
     }
     setError('');
-  }, [initialData, isOpen, currentUser.role]);
+  }, [initialData, isOpen]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !mediaUrl.trim() || !description.trim()) {
-      setError('Title, media URL, and description are required.');
+    if (!title.trim() || !mediaUrl.trim()) {
+      setError('Title and media file upload are required.');
       return;
     }
 
@@ -86,145 +77,130 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
 
     onSubmit({
       title: title.trim(),
-      media_type: mediaType,
-      category: category.trim(),
+      description: description.trim() || null,
       media_url: mediaUrl.trim(),
       thumbnail_url: thumbnailUrl.trim() || null,
-      description: description.trim() || null,
-      alt_text: title.trim(),
+      media_type: mediaType,
+      category,
       tags,
       status,
+      alt_text: altText.trim() || title.trim(),
     });
   };
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white border-l border-[#E5E0D5]">
-        <SheetHeader className="p-5 border-b border-[#E8E4DA] bg-[#FAF8F5] text-left">
-          <SheetTitle className="font-bold text-stone-900 text-sm">
-            {initialData ? 'Edit Media Asset' : 'Upload Gallery Item'}
+      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white dark:bg-stone-900 border-l border-[#E5E0D5] dark:border-stone-800 text-stone-900 dark:text-stone-100">
+        <SheetHeader className="p-5 border-b border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5] dark:bg-stone-950 text-left">
+          <SheetTitle className="font-bold text-stone-900 dark:text-stone-100 text-sm">
+            {initialData ? 'Edit Media Metadata' : 'Upload Multimedia Asset'}
           </SheetTitle>
-          <SheetDescription className="text-xs text-stone-500">
-            Photographs, ceremonial videos, and historical visual documentation
+          <SheetDescription className="text-xs text-stone-500 dark:text-stone-400">
+            Village photography, ceremonial masquerade footage, and cultural regalia
           </SheetDescription>
         </SheetHeader>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4 flex-1 overflow-y-auto">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 rounded-xl text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Media Title *</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Media Title *</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Royal Procession with Leopard Skin Regalia"
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-900 font-semibold"
+              placeholder="e.g. Royal Palace Dance at Nkar Annual Festival"
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-900 dark:text-stone-100 font-semibold"
               required
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Media Type</label>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Archive Category *</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200"
+              >
+                <option value="Festivals & Culture">Festivals & Culture</option>
+                <option value="Palace & Lineage">Palace & Lineage</option>
+                <option value="Landscape & Village">Landscape & Village</option>
+                <option value="Institutions & Regalia">Institutions & Regalia</option>
+                <option value="Civic Works">Civic Works</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Media Format *</label>
               <select
                 value={mediaType}
                 onChange={(e) => setMediaType(e.target.value as MediaType)}
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200"
               >
-                <option value="PHOTO">Photograph</option>
-                <option value="VIDEO">Video Footage</option>
+                <option value="IMAGE">Photograph (JPEG / PNG / WebP)</option>
+                <option value="VIDEO">Video Footage (MP4 / WebM)</option>
               </select>
             </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value as ContentStatus)}
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              >
-                <option value="PUBLISHED">Published (Live Gallery)</option>
-                <option value="APPROVED">Approved</option>
-                <option value="SUBMITTED">Under Review</option>
-                <option value="DRAFT">Draft</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Category</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-            >
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
           </div>
 
           <FileUpload
-            label={mediaType === 'VIDEO' ? 'Gallery Video Asset *' : 'Gallery Image Asset *'}
+            label={mediaType === 'VIDEO' ? 'Video File (MP4, WebM) *' : 'High-Resolution Photography *'}
             value={mediaUrl}
-            onChange={setMediaUrl}
-            accept={mediaType === 'VIDEO' ? 'video/mp4,video/webm,video/ogg,video/*' : 'image/*'}
+            onChange={(url, file) => {
+              setMediaUrl(url);
+              if (file?.type?.startsWith('video')) {
+                setMediaType('VIDEO');
+              }
+            }}
+            accept={mediaType === 'VIDEO' ? 'video/*' : 'image/*'}
             mediaTypeHint={mediaType === 'VIDEO' ? 'video' : 'image'}
-            maxSizeBytes={mediaType === 'VIDEO' ? 50 * 1024 * 1024 : 15 * 1024 * 1024}
             folder="nkar_woo_lan/gallery"
-            helperText={
-              mediaType === 'VIDEO'
-                ? 'Upload MP4, WebM or OGG video (up to 50MB)'
-                : 'Upload high-resolution photography (JPEG, PNG, WebP up to 15MB)'
-            }
+            helperText={mediaType === 'VIDEO' ? 'Upload video file up to 100MB' : 'Upload photo up to 10MB'}
           />
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Description *</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Descriptive Caption</label>
             <textarea
+              rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Contextual description of the event, location, or cultural artifact shown..."
-              rows={3}
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              required
+              placeholder="Narrative description, historical context, photographer credit..."
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Tags (Comma-separated)</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Keywords / Search Tags</label>
             <input
               type="text"
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
-              placeholder="Royalty, Ndop, Weaving, Mountain"
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+              placeholder="festival, royal dance, toghu, fon (comma separated)"
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200"
             />
           </div>
 
-          <div className="pt-4 border-t border-[#E8E4DA] flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-[#E8E4DA] dark:border-stone-800 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2 text-xs font-semibold text-stone-600 bg-white border border-stone-200 hover:bg-stone-50 rounded-xl"
+              className="px-4 py-2 text-xs font-semibold text-stone-600 dark:text-stone-300 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-700 rounded-xl transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-5 py-2 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0D291F] rounded-xl shadow-xs transition-colors"
+              className="px-5 py-2 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0D291F] rounded-xl shadow-xs transition-colors cursor-pointer"
             >
-              {isLoading ? 'Saving...' : initialData ? 'Update Media' : 'Save Media'}
+              {isLoading ? 'Saving...' : initialData ? 'Save Changes' : 'Upload Asset'}
             </button>
           </div>
         </form>

@@ -144,3 +144,7 @@ During the Phase 0 API client alignment for `apps/admin`, several rich domain fi
 ---
 
 
+- Also, cleanup the login ui and other related ui states across the admin. Never disclose internal data to ui
+- image Assets are not imported correctly in login view and other files validate and fix
+- Never claim, don't blood the UI with unnecessary text (generated text)
+- there is still default legacy data on the app, also cleanup the useAdminStore

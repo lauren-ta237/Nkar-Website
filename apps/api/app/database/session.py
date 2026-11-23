@@ -30,7 +30,8 @@ def _prepare_async_database_config(raw_url: str) -> tuple[str, dict]:
     )
 
     connect_args: dict = {}
-    if "neon.tech" in parts.netloc.lower() or "asyncpg" in parts.scheme:
+    has_ssl_query = any(k.lower() == "sslmode" and v.lower() in {"require", "verify-ca", "verify-full"} for k, v in parse_qsl(parts.query))
+    if "neon.tech" in parts.netloc.lower() or has_ssl_query:
         connect_args["ssl"] = "require"
 
     return cleaned_url, connect_args

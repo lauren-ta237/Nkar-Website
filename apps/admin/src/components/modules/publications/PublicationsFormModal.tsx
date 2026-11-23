@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, BookOpen, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Publication, PublicationFileType, ContentStatus } from '../../../types';
-import { useAdminStore } from '../../../store/useAdminStore';
 import { FileUpload } from '../../common/FileUpload';
 import {
   Sheet,
@@ -73,162 +72,158 @@ export const PublicationsFormModal: React.FC<PublicationsFormModalProps> = ({
 
     onSubmit({
       title: title.trim(),
-      author_name: author.trim(),
       description: description.trim() || null,
+      author_name: author.trim(),
+      publication_year: parseInt(publicationYear) || new Date().getFullYear(),
       document_url: documentUrl.trim(),
       file_type: fileType,
-      file_size_bytes: Number(fileSizeBytes) || null,
+      file_size_bytes: fileSizeBytes,
       cover_image_url: coverImageUrl.trim() || null,
-      publication_year: Number(publicationYear) || new Date().getFullYear(),
       status,
     });
   };
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white border-l border-[#E5E0D5]">
-        <SheetHeader className="p-5 border-b border-[#E8E4DA] bg-[#FAF8F5] text-left">
-          <SheetTitle className="font-bold text-stone-900 text-sm">
-            {initialData ? 'Edit Publication Record' : 'Catalog Book or Publication'}
+      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white dark:bg-stone-900 border-l border-[#E5E0D5] dark:border-stone-800 text-stone-900 dark:text-stone-100">
+        <SheetHeader className="p-5 border-b border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5] dark:bg-stone-950 text-left">
+          <SheetTitle className="font-bold text-stone-900 dark:text-stone-100 text-sm">
+            {initialData ? 'Edit Archival Publication' : 'Preserve / Catalog Publication'}
           </SheetTitle>
-          <SheetDescription className="text-xs text-stone-500">
-            Monographs, anthropological papers, bilingual dictionaries, and annual reports
+          <SheetDescription className="text-xs text-stone-500 dark:text-stone-400">
+            Manuscripts, cultural dictionaries, royal monographs, and community research
           </SheetDescription>
         </SheetHeader>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4 flex-1 overflow-y-auto">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 rounded-xl text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Publication Title *</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Book / Document Title *</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. The Living Chronicles of Nkar (1750–2020)"
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-900 font-semibold"
+              placeholder="e.g. Traditional Institutions & Governance in Nkar Fondom"
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-900 dark:text-stone-100 font-semibold"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Author / Scholar *</label>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Author / Custodian *</label>
               <input
                 type="text"
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                placeholder="e.g. Prof. Emmanuel N. Tardzenyuy"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+                placeholder="e.g. Fai Woo / Dr. Shey Banboye"
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200 font-semibold"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Publication Year *</label>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Publication Year *</label>
               <input
                 type="number"
-                min="1800"
-                max="2100"
                 value={publicationYear}
                 onChange={(e) => setPublicationYear(e.target.value)}
                 placeholder="2026"
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200 font-mono"
                 required
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Format Type</label>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Format Type *</label>
               <select
                 value={fileType}
                 onChange={(e) => setFileType(e.target.value as PublicationFileType)}
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200 font-semibold"
               >
-                <option value="PDF">PDF Document</option>
-                <option value="EPUB">EPUB E-Book</option>
-                <option value="DOCX">DOCX Manuscript</option>
+                <option value="PDF">PDF (Portable Document)</option>
+                <option value="EPUB">EPUB (Electronic Book)</option>
+                <option value="DOCX">DOCX (Word Document)</option>
+                <option value="EXTERNAL_LINK">External Library Link</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value as ContentStatus)}
-                className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              >
-                <option value="PUBLISHED">Published (Available)</option>
-                <option value="APPROVED">Approved</option>
-                <option value="SUBMITTED">Under Review</option>
-                <option value="DRAFT">Draft</option>
-              </select>
+              <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">File Size (Bytes)</label>
+              <input
+                type="number"
+                value={fileSizeBytes}
+                onChange={(e) => setFileSizeBytes(parseInt(e.target.value) || 0)}
+                className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200 font-mono"
+              />
             </div>
           </div>
 
           <FileUpload
-            label="Publication Document File (PDF, DOCX, EPUB) *"
+            label="Digital Document File (PDF, EPUB, DOCX) *"
             value={documentUrl}
-            onChange={(url: string, file?: File) => {
+            onChange={(url, file) => {
               setDocumentUrl(url);
-              if (file) {
+              if (file?.size) {
                 setFileSizeBytes(file.size);
-                if (file.name.endsWith('.pdf')) setFileType('PDF');
-                else if (file.name.endsWith('.docx') || file.name.endsWith('.doc')) setFileType('DOCX');
-                else if (file.name.endsWith('.epub')) setFileType('EPUB');
+              }
+              if (file?.name) {
+                const ext = file.name.split('.').pop()?.toUpperCase();
+                if (ext && ['PDF', 'EPUB', 'DOCX'].includes(ext)) {
+                  setFileType(ext as PublicationFileType);
+                }
               }
             }}
-            accept=".pdf,.docx,.doc,.epub,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            accept=".pdf,.epub,.docx,application/pdf,application/epub+zip,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             mediaTypeHint="document"
-            maxSizeBytes={50 * 1024 * 1024}
             folder="nkar_woo_lan/publications"
-            helperText="Upload official manuscript or electronic publication (PDF, DOCX, EPUB up to 50MB)"
+            helperText="Upload official manuscript or monograph file (up to 50MB)"
           />
 
           <FileUpload
-            label="Book Cover / Frontispiece (Optional)"
+            label="Book Cover Art / Toghu Sleeve"
             value={coverImageUrl}
             onChange={setCoverImageUrl}
             accept="image/*"
             mediaTypeHint="image"
-            folder="nkar_woo_lan/publications"
-            helperText="Upload publication cover or title page illustration (JPEG, PNG, WebP up to 15MB)"
+            folder="nkar_woo_lan/publications/covers"
+            helperText="Upload publication cover or Toghu artwork (JPEG, PNG, WebP up to 10MB)"
           />
 
           <div>
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Description & Abstract *</label>
+            <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">Synopsis & Abstract</label>
             <textarea
+              rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Synopsis of research findings, chapters, and relevance to Nkar community..."
-              rows={4}
-              className="w-full text-xs p-2.5 bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-800"
-              required
+              placeholder="Abstract, historical provenance, chapter summary..."
+              className="w-full text-xs p-2.5 bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-800 dark:text-stone-200"
             />
           </div>
 
-          <div className="pt-4 border-t border-[#E8E4DA] flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-[#E8E4DA] dark:border-stone-800 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2 text-xs font-semibold text-stone-600 bg-white border border-stone-200 hover:bg-stone-50 rounded-xl"
+              className="px-4 py-2 text-xs font-semibold text-stone-600 dark:text-stone-300 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-700 rounded-xl transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-5 py-2 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0D291F] rounded-xl shadow-xs transition-colors"
+              className="px-5 py-2 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0D291F] rounded-xl shadow-xs transition-colors cursor-pointer"
             >
-              {isLoading ? 'Saving...' : initialData ? 'Update Record' : 'Save Publication'}
+              {isLoading ? 'Saving...' : initialData ? 'Save Changes' : 'Catalog Book'}
             </button>
           </div>
         </form>

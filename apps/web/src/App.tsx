@@ -20,6 +20,7 @@ import NewsDetail from '@/pages/NewsDetail';
 import EventDetail from '@/pages/EventDetail';
 import HeritageDetail from '@/pages/HeritageDetail';
 import ProjectDetail from '@/pages/ProjectDetail';
+import BookDetail from '@/pages/BookDetail';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError } = useAuth();
@@ -56,6 +57,7 @@ const AuthenticatedApp = () => {
         <Route path="/events/:slug" element={<EventDetail />} />
         <Route path="/heritage/:slug" element={<HeritageDetail />} />
         <Route path="/projects/:id" element={<ProjectDetail />} />
+        <Route path="/books/:id" element={<BookDetail />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
