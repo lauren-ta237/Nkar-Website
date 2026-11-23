@@ -164,7 +164,7 @@ export const DashboardView: React.FC = () => {
                 Publish Announcement
               </h4>
               <p className="text-[11px] text-stone-200 mt-0.5 line-clamp-1">
-                Official village notices & news
+                Official Kingdom/Fondom notices & news
               </p>
             </div>
           </div>
@@ -666,7 +666,7 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100">High-Priority Development Projects</h3>
-                <p className="text-xs text-stone-400 dark:text-stone-500">Village infrastructure and community facilities</p>
+                <p className="text-xs text-stone-400 dark:text-stone-500">Kingdom/Fondom infrastructure and community facilities</p>
               </div>
               <button
                 onClick={() => navigate('/projects')}

@@ -250,14 +250,19 @@ async def seed_database(db: AsyncSession) -> None:
         ),
         Heritage(
             id=uuid.uuid4(),
-            title="Brief History and Migration Routes of the Nkar People",
+            title="BRIEF HISTORY OF NKAR",
             slug="brief-history-migration-routes-nkar-people",
             content=(
-                "The history of Nkar is rooted in centuries of Grassfields migration, settlement, and institutional resilience. "
-                "Descending from ancestral lineages that navigated the highland ridgelines, the early settlers established "
-                "sacred groves, terraced agriculture, and defense outposts that defined the fondom borders.\n\n"
-                "Through strategic alliances and diplomatic ties with neighboring kingdoms, Nkar maintained its territorial autonomy "
-                "and distinct linguistic identity while fostering rich inter-tribal trade."
+                "Nkar kingdom was founded by Fon Gwarmbi in 1100. It is not yet very clear if Nkar is aborigines or came after the lost tribes of Israel. "
+                "If they settled where they had always been, then we can say that Nkar began the Nkar Clan where they are settled now. They would not be the first in Africa. "
+                "We already know of Lucy in East Africa. But if they are Israelites then we can trace them, since the conquest of Israel between 15th and 6th BCE. "
+                "The Jews were conquered and they spread to India, Syria, Germania, France, Spain, Greece, Egypt, Portugal, America, Ethiopia, Algeria \u2026 either as Israelites, Samaritans or Jews. "
+                "As such they became Islam, Christians, Jews, with diverse religions, rituals and cultures or practices. The Nkar should have passed through Egypt, Ethiopia, down to Niger, "
+                "and found themselves in Kov Nkar where they are presently settled. The Miriang dance looks to have come right from Niger. It is left for the DNA to discover it. "
+                "Whether as settlers or aborigines, Nkar has a unique culture in the North West Region of Cameroon.\n\n"
+                "Settlement and administration\n"
+                "Nkar has 24 Fons since 1100, starting with Fon Gwarmbi. There are about eight dynasties in the Foem (Burial area for the Fons). "
+                "The Fons are enthroned by Nwerong Nkar (A regulatory institution of the people). Then he is taken to the Lav wong, to TaaKibuh then to the Fai Kishiyi, before other places."
             ),
             category=HeritageCategory.HISTORY,
             images=[
@@ -269,21 +274,10 @@ async def seed_database(db: AsyncSession) -> None:
         ),
         Heritage(
             id=uuid.uuid4(),
-            title="The 11 Traditional Institutions and Governance of the Fondom",
+            title="The Traditional Institutions and Governance of the Fondom",
             slug="eleven-traditional-institutions-governance-fondom",
             content=(
-                "Traditional authority in Nkar operates through 11 sacred and civic institutions:\n"
-                "1. Settlement & Administration\n"
-                "2. The Fon (Lord of the Land)\n"
-                "3. The Spirit Fon\n"
-                "4. Palace Administration\n"
-                "5. Lavwong\n"
-                "6. The Atarntoh\n"
-                "7. The Nchiylav Fai\n"
-                "8. Ngiri Nkar\n"
-                "9. Manjong Nkar\n"
-                "10. The Queen Mother (Yaa)\n"
-                "11. The Fon as Religious and Spiritual Intercessor.\n\n"
+                "Governance administration comprises of the Fon, Lavwong, The Ataantoh, Ngiri Nkar, Manjong Nkar, The Queen Mother (Yaa), The Nchiylav Fai, The Spirit Fon, and the Religious and Spiritual Intercessor.\n\n"
                 "Together, these organs ensure checks and balances, dispute arbitration, and the continuity of communal harmony."
             ),
             category=HeritageCategory.CUSTOMS,

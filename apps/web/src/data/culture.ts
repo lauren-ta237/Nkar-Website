@@ -129,12 +129,7 @@ export const aboutSections: AboutSection[] = [
 
 export const traditions: Tradition[] = [
   {
-    title: 'Ceremonial Toghu Regalia',
-    text: 'Hand-embroidered heavy velvet cloth worn for palace ceremonies and state occasions, where royal motifs, colours, and symbolic embroidery communicate prestige and nobility.',
-    icon: 'shirt'
-  },
-  {
-    title: 'Sacred Drums & Rhythms',
+    title: 'Drums & Rhythms',
     text: 'Carved wooden drums with hide tension skins that articulate royal messages, sound the alarm, assemble warriors, and lead traditional dances.',
     icon: 'drum'
   },
@@ -150,7 +145,7 @@ export const traditions: Tradition[] = [
   },
   {
     title: 'Hospitality & Traditional Libations',
-    text: 'Fresh palm wine poured from carved gourds and breaking of the sacred kola nut, served as universal signs of goodwill, peace, and mutual covenant.',
+    text: 'Fresh palm wine poured from sacred royal calabash, red oil, salt, a sacrificial lamb (sheep or goat). Serve as a universal sign of goodwill, peace, and mutual covenant.',
     icon: 'utensils'
   },
   {
@@ -164,12 +159,12 @@ export const timeline: TimelineEntry[] = [
   {
     period: 'Foundational Era (c. 1100–1170)',
     title: 'Founding of the Kingdom by Fon Gwarmbi',
-    text: 'Fon Gwarmbi establishes the sovereign Nkar Kingdom at Kov Nkar, protected by a mystical trench and establishing the royal Foem and dynastic governance.'
+    text: 'Fon Gwarmbi establishes the sovereign Nkar Kingdom at Kov Nkar, protected by a mystical trench sehm (kai fon) for foundational era.'
   },
   {
-    period: 'Metallurgical Era (c. 1400)',
-    title: 'Introduction of Iron Smelting in Babungo',
-    text: 'Nkar metallurgists establish the metallurgy tradition in Babungo, forging copper axes, knives, spears, and royal regalia renowned across the Grassfields.'
+    period: 'Metallurgical Era (c. 1300)',
+    title: 'Introduction of Iron Smelting in Nkar',
+    text: 'Nkar metallurgists establish the metallurgy tradition in Nkar, forging copper axes, knives, spears, and royal regalia renowned across the Grassfields.'
   },
   {
     period: 'Regional Pacts & Diplomacy (1760–1849)',
@@ -185,15 +180,11 @@ export const timeline: TimelineEntry[] = [
 
 export const leadershipLead: string[] = [
   "Nkar has been governed by 24 successive sovereign Fons since its founding in 1100 by Fon Gwarmbi, with approximately eight dynasties interred in the sacred royal Foem. The Fon is enthroned by Nwerong Nkar and escorted through Lavwong, TaaKibuh, and Fai Kishiyi before assuming traditional governance.",
-  "The Fon does not rule alone. Administrative authority is vectored by the Fon alongside Nwerong Nkar, the Lords of the Land (Ve Wonghi), Notables, the Queen Mother (Yah Yefon), Atav Nwerong, and the Atarntoh, ensuring harmonious governance across all institutions."
+  "The Fon does not rule alone. He has got the Lords of the land (Ve Wonghi), the Notables, Nwerong and Ngiri. But the administrative acts of the Fondom are vectored by the Fon and Nwerong. Before Nwerong Nkar issues an act of governance, the Fon must have been aware of it, and when the Fon issues such, Nwerong Nkar must have been aware of it. Notables, Queen mothers, Atav Nwerong and the Atarntoh are those who assist the Fon in various spheres of administration. Each of these institutions knows its functions and limits. None of them interferes in the domain of the other. And not even the notables can know all about these spheres. It is only the Fon who can know what is happening in all of their circles. The Fon is therefore the overall commander or chief executive in Nkar Fondom. Once he analyses and judges issues, his verdict stands. The Fon therefore is the Spiritual, Administrative, Political and Religious Leader of the people."
 ];
 
 export const leadershipRoles: LeadershipRole[] = [
-  {
-    title: 'Settlement and Administration',
-    text: 'Nkar has 24 Fons since 1100, starting with Fon Gwarmbi. There are about eight dynasties in the Foem (Burial area for the Fons). The Fons are enthroned by Nwerong Nkar (A regulatory institution of the people). Then he is taken to the Lav wong, to TaaKibuh then to the Fai Kishiyi, before other places.',
-    icon: 'landmark'
-  },
+
   {
     title: 'The Fon',
     text: 'The Fon does not rule alone. He has got the Lords of the land (Ve Wonghi), the Notables, Nwerong and Ngiri. But the administrative acts of the Fondom are vectored by the Fon and Nwerong. Before Nwerong Nkar issues an act of governance, the Fon must have been aware of it, and when the Fon issues such, Nwerong Nkar must have been aware of it. Notables, Queen mothers, Atav Nwerong and the Atarntoh are those who assist the Fon in various spheres of administration. Each of these institutions knows its functions and limits. None of them interferes in the domain of the other. And not even the notables can know all about these spheres. It is only the Fon who can know what is happening in all of their circles. The Fon is therefore the overall commander or chief executive in Nkar Fondom. Once he analyses and judges issues, his verdict stands. The Fon therefore is the Spiritual, Administrative, Political and Religious Leader of the people.',
@@ -205,7 +196,7 @@ export const leadershipRoles: LeadershipRole[] = [
     icon: 'flame'
   },
   {
-    title: 'The Administrative Fon & Nwerong Nkar',
+    title: 'Nwerong Nkar',
     text: 'He has many institutions around him. The first is Nwerong Nkar. Nwerong Nkar is the custodian of the customary and the traditional values of the Fondom. It ensures the implementation of acts of governance, and so has the power to discipline wrong doers. It is the regulatory institution that can step in any sphere so as to put order. It monitors the birth and life of princes and princesses, and mourns their deaths. It is the only institution that has the legitimate authority to enthrone or even dethrone a Fon. It protects the Fon and the land against any encroachment in any form. Nwerong mourns the \'disappearances\' of Fons of other Fondoms with whom Nkar has diplomatic links. It is in charge of the orientation and initiation into values, of the tribe, of newly enthroned Fons. It ensures the observance of days of atonement. In some tribes there might be one; Nkar has two days of atonement which are Ntseri and Wailun. It is the security agent of the Fondom.',
     icon: 'scroll'
   },
@@ -215,7 +206,7 @@ export const leadershipRoles: LeadershipRole[] = [
     icon: 'home'
   },
   {
-    title: 'The Atarntoh (Palace Knights)',
+    title: 'The Ataa ntoh',
     text: 'The Atarntoh (Palace Knights) are carefully chosen persons either by Nwerong Nkar or the Fon, using some criteria, to take care of palace issues. They are however, placed in various categories. Palace issues may include the follow up of the paying of acts of fealty to the Fon by personalities, daily visits to the Fon, the acquiring of spouses of princes and princesses, official emissaries of the Fon, inner court issues of the Fondom, the cultivation of the Fon\'s farms, harvests and food preservations, settling of disputes and misunderstandings in the inner court, amongst others.',
     icon: 'shield'
   },
@@ -235,12 +226,12 @@ export const leadershipRoles: LeadershipRole[] = [
     icon: 'hammer'
   },
   {
-    title: 'Queen Mothers – The Yah Yefon',
-    text: 'The yahship emanates from the enthronement of a Fon. If at the time a Fon is enthroned, his queen mother is alive, she automatically becomes a Yah. She will be administering all the other queen mothers in the palace. When she shall die (and interned like a Fon) she shall have her successor who shall be given all the due respect. She shall be addressed a Shungar. At her death, she shall receive all the honours of a Fon. Another category is the Yah instituted at the internment of any Fon. As the new Fon comes up, one of his dynasty members is made a Yah. Yah Yefon is the leader of all the female royal family at a given time (that of her reigning Fon). She is a liaison between Tanfen, the female royal family and the Fon.',
+    title: 'Queen Mothers – The Yaah Yefon',
+    text: 'The yaahship emanates from the enthronement of a Fon. If at the time a Fon is enthroned, his queen mother is alive, she automatically becomes a Yaah. She will be administering all the other queen mothers in the palace. When she shall die (and interned like a Fon) she shall have her successor who shall be given all the due respect. She shall be addressed a Shungai. At her death, she shall receive all the honours of a Fon. Another category is the Yaah instituted at the internment of any Fon. As the new Fon comes up, one of his dynasty members is made a Yaah. Yaah Yefon is the leader of all the female royal family at a given time (that of her reigning Fon). She is a liaison between Tanfen, the female royal family and the Fon.',
     icon: 'heart'
   },
   {
-    title: 'Female Institutions of Governance (Tanfen Nkar)',
+    title: 'Tanfen Nkar',
     text: 'Tanfen Nkar takes care, mostly of the female descent of the royal family. It follows up where they are born, monitors their growth and mourns their deaths. It extends the acts of governance of the Fon to the whole female royal family. It initiates the young, and forms them into adult women. It accompanies princesses to their marital homes. It receives spouses of princes. It mourns the death of members of the royal family. It accompanies Nwerong Nkar to other Fondoms. It monitors the respect of norms and values of the land with regard to the female. It assists the Fon to realise palace projects.',
     icon: 'users-round'
   },
@@ -254,7 +245,7 @@ export const leadershipRoles: LeadershipRole[] = [
 export const sacredSites: SacredSiteEntry[] = [
   {
     title: 'Nkwenjang & River Bui Frontier',
-    text: 'The northeastern boundary sanctuary where Nwerong Nkar begins its ritual boundary purification along the River Bui frontier with Ndzen.',
+    text: 'The northeastern boundary sanctuary where the Fon of Nkar begins its ritual boundary purification along the River Bui frontier with the Fon of Ndzeen.',
     icon: 'mountain'
   },
   {
@@ -293,7 +284,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-gwarmbi-1',
     name: 'Fon Gwarmbi I',
-    era: '1170 - 1236',
+    era: '1100 - 1236',
     label: 'Founding Monarch',
     summary: 'Founding monarch who established the sovereign Nkar Kingdom at Kov Nkar, protected by a mystical trench.',
     image: images.fonSit,
