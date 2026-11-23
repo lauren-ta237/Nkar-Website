@@ -47,8 +47,8 @@ export interface LeadershipRecord {
 }
 
 export const aboutLead: string[] = [
-  "The Nkar Kingdom is a traditional administrative and cultural institution comprising several villages, sub-villages, and multiple family lineages. It is governed by a traditional ruler known as the Fon, who oversees the affairs and leadership of the land alongside the Lord of the Land and Nwerong, the supreme traditional institution at the helm of governance. Together, these institutions uphold the kingdom's traditional values, customs, authority, and heritage.",
-  "The Nkar Kingdom/Fondom is a community of the Cameroon Grassfields, in the Northwest Region of the country. Its people live on highland hills and farm the land around them; its fondom, its palace, and its customs carry a history that belongs to every Nkar son and daughter."
+  "The Nkar Kingdom/Fondom is a community of the Cameroon Grassfields, in the Northwest Region of the country. Its people live on highland hills and farm the land around them; its fondom, its palace, and its customs carry a history that belongs to every Nkar son and daughter.",
+  "The Nkar Kingdom is a traditional administrative and cultural institution comprising several villages, sub-villages, and multiple family lineages. It is governed by a traditional ruler known as the Fon, who oversees the affairs and leadership of the land alongside the Lord of the Land and Nwerong, the supreme traditional institution at the helm of governance. Together, these institutions uphold the kingdom's traditional values, customs, authority, and heritage."
 ];
 
 export const aboutSections: AboutSection[] = [
@@ -293,7 +293,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-gwarmbi-1',
     name: 'Fon Gwarmbi I',
-    era: '1170 – 1236',
+    era: '1170 - 1236',
     label: 'Founding Monarch',
     summary: 'Founding monarch who established the sovereign Nkar Kingdom at Kov Nkar, protected by a mystical trench.',
     image: images.fonSit,
@@ -302,7 +302,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-gambo-1',
     name: 'Fon Gambo I',
-    era: '1236 – 1295',
+    era: '1236 - 1295',
     label: 'Dynastic Succession',
     summary: 'Second ruler of Nkar, consolidating territorial boundaries and early palace institutions.',
     image: images.fonSit,
@@ -311,7 +311,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-beh',
     name: 'Fon Beh',
-    era: '1295 – 1351',
+    era: '1295 - 1351',
     label: 'Dynastic Succession',
     summary: 'Revered ancestral monarch who strengthened agricultural settlements and lineage councils.',
     image: images.fonSit,
@@ -320,7 +320,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-gwarmbi-2',
     name: 'Fon Gwarmbi II',
-    era: '1351 – 1410',
+    era: '1351 - 1410',
     label: 'Mystical Defender',
     summary: 'Celebrated for legendary mystical power and defense of the kingdom during early regional conflicts.',
     image: images.fonSit,
@@ -329,7 +329,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-gambo-2',
     name: 'Fon Gambo II',
-    era: '1410 – 1480',
+    era: '1410 - 1480',
     label: 'Dynastic Succession',
     summary: 'Reigned during the golden era of Grassfields metallurgy, expanding palace diplomatic alliances.',
     image: images.fonSit,
@@ -338,7 +338,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-mbihnkar',
     name: 'Fon Mbih Nkar',
-    era: '1480 – 1547',
+    era: '1480 - 1547',
     label: 'Dynastic Succession',
     summary: 'Consolidated royal authority across highland quarters and fostered customary crafts.',
     image: images.fonSit,
@@ -347,7 +347,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-bambo',
     name: 'Fon Bambo',
-    era: '1547 – 1575',
+    era: '1547 - 1575',
     label: 'Dynastic Succession',
     summary: 'Preserved dynastic stability and upheld sacred rites at the ancestral Foem.',
     image: images.fonSit,
@@ -356,7 +356,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-nunu-1',
     name: 'Fon Nunu I',
-    era: '1575 – 1605',
+    era: '1575 - 1605',
     label: 'Dynastic Succession',
     summary: 'Guided the kingdom through late sixteenth-century highland trade and cultural growth.',
     image: images.fonSit,
@@ -365,7 +365,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-forchuh-1',
     name: 'Fon Forchuh I',
-    era: '1605 – 1615',
+    era: '1605 - 1615',
     label: 'Dynastic Succession',
     summary: 'Maintained sovereign peace and customary laws across all constituent sub-villages.',
     image: images.fonSit,
@@ -374,7 +374,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-mapiri',
     name: 'Fon Mapiri',
-    era: '1615 – 1630',
+    era: '1615 - 1630',
     label: 'Dynastic Succession',
     summary: 'Distinguished for royal court administration and reinforcement of traditional warrior societies.',
     image: images.fonSit,
@@ -383,7 +383,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-mbunmbu',
     name: 'Fon Mbunmbu',
-    era: '1630 – 1650',
+    era: '1630 - 1650',
     label: 'Dynastic Succession',
     summary: 'Preserved civic harmony and traditional farming land allocations across the fondom.',
     image: images.fonSit,
@@ -392,7 +392,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-forchuh-2',
     name: 'Fon Forchuh II',
-    era: '1650 – 1670',
+    era: '1650 - 1670',
     label: 'Dynastic Succession',
     summary: 'Upheld ancestral traditions, palace rituals, and diplomatic covenants with neighboring territories.',
     image: images.fonSit,
@@ -410,7 +410,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-sembe',
     name: 'Fon Sembe',
-    era: '1670 – 1681',
+    era: '1670 - 1681',
     label: 'Dynastic Succession',
     summary: 'Guided Nkar during late seventeenth-century community reorganization and lineage alliances.',
     image: images.fonSit,
@@ -419,7 +419,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-fungung',
     name: 'Fon Fungung',
-    era: '1681 – 1704',
+    era: '1681 - 1704',
     label: 'Dynastic Succession',
     summary: 'Strengthened the authority of Nwerong Nkar and traditional regulatory councils.',
     image: images.fonSit,
@@ -428,7 +428,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-tumantir',
     name: 'Fon Tumantir',
-    era: '1704 – 1725',
+    era: '1704 - 1725',
     label: 'Dynastic Succession',
     summary: 'Oversaw early eighteenth-century territorial protection and cultural celebrations.',
     image: images.fonSit,
@@ -455,7 +455,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-kilai',
     name: 'Fon Kilai',
-    era: '1725 – 1759',
+    era: '1725 - 1759',
     label: 'Dynastic Leader',
     summary: 'Reigned for thirty-five years, guiding diplomatic relations and establishing early boundary accords in Kimbo.',
     image: images.fonSit,
@@ -464,7 +464,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-somndjom-2',
     name: 'Fon Somndjom II',
-    era: '1760 – 1849',
+    era: '1760 - 1849',
     label: 'Historic 90-Year Reign',
     summary: 'Reigned for nearly ninety years; established the historic accord of friendship at Tiy Minkan affirming Nkar sacred sites and kola nut groves.',
     image: images.fonSit,
@@ -482,7 +482,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-ntani-1',
     name: 'Fon Ntani I',
-    era: '1855 – 1941',
+    era: '1855 to 1941',
     label: '86-Year Monarch & Resistance Leader',
     summary: 'One of the longest-reigning Fons in Grassfields history. Defended sovereign integrity against the Bamoum in 1906 and guided Nkar through two World Wars.',
     image: images.fonNtani1,
@@ -491,7 +491,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-molo-1',
     name: 'Fon Mohlo I',
-    era: '1942 – 1953',
+    era: '1942 - 1953',
     label: 'Scholar & Statesman',
     summary: 'Educated monarch literate in German (Kimforkir); represented Nkar with intellectual distinction across regional administrative forums.',
     image: images.fonMolo1,
@@ -500,7 +500,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-tume-ntani-2',
     name: 'Fon Tumi Ntani II',
-    era: '1954 – 2008',
+    era: '1954 - 2008',
     label: '54-Year Peacemaker & Modernizer',
     summary: 'Beloved father and peacekeeper who reigned for 54 years; pioneered modern architecture as the first ruler in Bui to roof his palace with corrugated sheets.',
     image: images.fonTumeNtani2,
@@ -509,7 +509,7 @@ export const leadershipRecords: LeadershipRecord[] = [
   {
     id: 'fon-molo-2',
     name: 'HRM Fon Mohlo II',
-    era: '2008 – Present',
+    era: '2008 - now',
     label: 'Reigning Sovereign',
     summary: 'Paramount traditional ruler of the Nkar Kingdom/Fondom, championing cultural renaissance, community development, and international diplomatic engagements.',
     image: images.fonMolo2,
