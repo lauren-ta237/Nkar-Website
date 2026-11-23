@@ -190,63 +190,63 @@ export const leadershipLead: string[] = [
 
 export const leadershipRoles: LeadershipRole[] = [
   {
-    title: 'Settlement & Administration',
-    text: 'Coordinates the governance of central quarters, sub-villages, and constituent lineages. The Fon is enthroned by Nwerong Nkar and led through Lavwong, TaaKibuh, and Fai Kishiyi, binding the administrative framework of the Fondom.',
+    title: 'Settlement and Administration',
+    text: 'Nkar has 24 Fons since 1100, starting with Fon Gwarmbi. There are about eight dynasties in the Foem (Burial area for the Fons). The Fons are enthroned by Nwerong Nkar (A regulatory institution of the people). Then he is taken to the Lav wong, to TaaKibuh then to the Fai Kishiyi, before other places.',
     icon: 'landmark'
   },
   {
     title: 'The Fon',
-    text: 'The supreme chief executive, administrative, political, and spiritual leader of Nkar Fondom. He governs in concert with the Lords of the Land (Ve Wonghi), Notables, and Nwerong Nkar, cherishing truth and justice.',
+    text: 'The Fon does not rule alone. He has got the Lords of the land (Ve Wonghi), the Notables, Nwerong and Ngiri. But the administrative acts of the Fondom are vectored by the Fon and Nwerong. Before Nwerong Nkar issues an act of governance, the Fon must have been aware of it, and when the Fon issues such, Nwerong Nkar must have been aware of it. Notables, Queen mothers, Atav Nwerong and the Atarntoh are those who assist the Fon in various spheres of administration. Each of these institutions knows its functions and limits. None of them interferes in the domain of the other. And not even the notables can know all about these spheres. It is only the Fon who can know what is happening in all of their circles. The Fon is therefore the overall commander or chief executive in Nkar Fondom. Once he analyses and judges issues, his verdict stands. The Fon therefore is the Spiritual, Administrative, Political and Religious Leader of the people.',
     icon: 'crown'
   },
   {
     title: 'The Spirit Fon',
-    text: 'The metaphysical ruler who pertains to the spirit world, communion with ancestors, and reverence for Nyuy Nkar wo Shamwun. He oversees sacred sanctuaries, caves at Nfut and Ngomrin, and consultations at the Foem.',
+    text: 'He pertains to the spirits. He is from the spirit world. Therefore, he is to and from God and his spirits. He adores Nyuy Nkar wo Shamwun. Some of these spirits include the ancestors, the dealing with sacred places (Like at Nkeonjang, Tonsai Tan, the Lake Ber, the institution of Mame Nkar, the cleansing of the land and people, the Mkwatir at Wainamah, the cave at Nfut, going to Ngongbah at Vekeriv, the Outlet of the cave at Ngomrin, the Ntamir wo wiy at Yer, the going to Kintinen, the going to Shu Kindzev and the consulting of the ancestors at the Foem, amongst others). He equally acts in relation to the intellectual and higher endowments of the land; he is ecclesiastical and supernatural. He cherishes the TRUTH, and stands for Justice.',
     icon: 'flame'
   },
   {
-    title: 'Palace Administration & Nwerong Nkar',
-    text: 'The supreme regulatory institution and custodian of customary values. Nwerong enforces governance acts, holds sole legitimate authority to enthrone a Fon, and oversees the two days of atonement: Ntseri and Wailun.',
+    title: 'The Administrative Fon & Nwerong Nkar',
+    text: 'He has many institutions around him. The first is Nwerong Nkar. Nwerong Nkar is the custodian of the customary and the traditional values of the Fondom. It ensures the implementation of acts of governance, and so has the power to discipline wrong doers. It is the regulatory institution that can step in any sphere so as to put order. It monitors the birth and life of princes and princesses, and mourns their deaths. It is the only institution that has the legitimate authority to enthrone or even dethrone a Fon. It protects the Fon and the land against any encroachment in any form. Nwerong mourns the \'disappearances\' of Fons of other Fondoms with whom Nkar has diplomatic links. It is in charge of the orientation and initiation into values, of the tribe, of newly enthroned Fons. It ensures the observance of days of atonement. In some tribes there might be one; Nkar has two days of atonement which are Ntseri and Wailun. It is the security agent of the Fondom.',
     icon: 'scroll'
   },
   {
-    title: 'Lavwong & Spiritual Defense',
-    text: 'Territorial and spiritual guardians of the land using Ntamir. Comprises titled lords including Shufai Kibai, Shufai Shu Kindzev, Shufai Leboi, Shufai Roombi, Shufai Nsam, Shufai Minkun, Shufai Siy, and Fai wo Kuintoh.',
+    title: 'Lavwong',
+    text: 'Lavwong is in charge of the spiritual and geographic management of the land. Each member of the house or each Wirwong has a given area of the land where he continually appeases the gods of the land, while extending the acts of governance of the Fon. For example, Fai wo Kuintoh Nkar (one of Wir Wong), takes care of Wainamah, Ntseimbang, Ndzerem Nyam and Gwartang. He performs sacrifices in his given area, in the name of the Fondom. There are many other such lords who cover the entire Fondom. Where they are not placed, the Fon and Shu Fai wo Shu Kindzey are the ones who do it. Another group of personalities who enter the Lavwong takes care of the Spiritual defense of the land by and with the use of Ntamir. Some of such lords and Ntamir people are Shufai Kibai, Shufai Shu Kindzev, Shufai Leboi, Shufai Roombi, Shufai Nsam, Shufai Minkun, Shufai Siy, Shufai Rookov Jakiri, Fai wo Ntum, Fai wo Kov, Fai wo Kuintoh, Fai wo Fonsum, Fai wo Nkartsen.',
     icon: 'home'
   },
   {
     title: 'The Atarntoh (Palace Knights)',
-    text: 'Distinguished dignitaries chosen by the Fon and Nwerong to manage inner court affairs, receive acts of fealty, oversee royal farms and harvests, and serve as royal emissaries.',
+    text: 'The Atarntoh (Palace Knights) are carefully chosen persons either by Nwerong Nkar or the Fon, using some criteria, to take care of palace issues. They are however, placed in various categories. Palace issues may include the follow up of the paying of acts of fealty to the Fon by personalities, daily visits to the Fon, the acquiring of spouses of princes and princesses, official emissaries of the Fon, inner court issues of the Fondom, the cultivation of the Fon\'s farms, harvests and food preservations, settling of disputes and misunderstandings in the inner court, amongst others.',
     icon: 'shield'
   },
   {
     title: 'The Nchiylav Fai (Squire)',
-    text: 'Personal attendants of the Fon who undergo nine years of immersion in palace traditions. They carry the royal throne, accompany the Fon to sacred societies, and manage intimate palace errands.',
+    text: 'The Nchiylav Fai (Squire) is the personal attendant of the Fon who accompanies the Fon to many sacred and secret societies. He carries and places the throne where he is indicated. He gets immersed in palace issues for nine years and graduates as a full Nchiylav Fai. He runs intimate errands of the Fon like taking fowls to some notables and storekeeping, tethering of goats, inviting the Atav Nwerong to the inner courts, etc.',
     icon: 'award'
   },
   {
     title: 'Ngiri Nkar',
-    text: 'The esteemed fraternal society of male royal descent. Ngiri safeguards royal culture, mourns members, and boosts royal dignity through sacred masked juju displays.',
+    text: 'Ngiri Nkar is the society of all male who are of royal descent. It mourns the death of their members and those who have been initiated into it but who are not of the royal descent. Ngiri boosts the image of the royal family in its juju displays. It transmits acts of governance to the whole royal family.',
     icon: 'users'
   },
   {
     title: 'Manjong Nkar',
-    text: 'The defense arm of Nwerong and the land (Nsai Nkar). Manjong initiates youth into adulthood, constructs bridges and community roads, and provides physical protection and royal escort for the Fon.',
+    text: 'Manjong Nkar is the defense arm of Nwerong and the land (Nsai Nkar). It initiates adolescents into adulthood. The physical defense of the Fon and Fondom, the construction of bridges and roads, the protection of the Fon are in the hands of Manjong. Where the Fon officially goes, he does so with Manjong.',
     icon: 'hammer'
   },
   {
-    title: 'Queen Mothers (Yah Yefon)',
-    text: 'Paramount female royal authority instituted at the enthronement of a Fon. Yah Yefon leads all female royals, holds the dignity of a Shungar, and receives royal funeral honors equal to a Fon.',
+    title: 'Queen Mothers – The Yah Yefon',
+    text: 'The yahship emanates from the enthronement of a Fon. If at the time a Fon is enthroned, his queen mother is alive, she automatically becomes a Yah. She will be administering all the other queen mothers in the palace. When she shall die (and interned like a Fon) she shall have her successor who shall be given all the due respect. She shall be addressed a Shungar. At her death, she shall receive all the honours of a Fon. Another category is the Yah instituted at the internment of any Fon. As the new Fon comes up, one of his dynasty members is made a Yah. Yah Yefon is the leader of all the female royal family at a given time (that of her reigning Fon). She is a liaison between Tanfen, the female royal family and the Fon.',
     icon: 'heart'
   },
   {
-    title: 'Female Governance (Tanfen Nkar)',
-    text: 'Oversees the welfare, initiation, and moral formation of female royal descendants. Tanfen accompanies princesses to marital homes, mourns royal deaths, and partners with the Fon on palace development.',
+    title: 'Female Institutions of Governance (Tanfen Nkar)',
+    text: 'Tanfen Nkar takes care, mostly of the female descent of the royal family. It follows up where they are born, monitors their growth and mourns their deaths. It extends the acts of governance of the Fon to the whole female royal family. It initiates the young, and forms them into adult women. It accompanies princesses to their marital homes. It receives spouses of princes. It mourns the death of members of the royal family. It accompanies Nwerong Nkar to other Fondoms. It monitors the respect of norms and values of the land with regard to the female. It assists the Fon to realise palace projects.',
     icon: 'users-round'
   },
   {
     title: 'The Fon as a Religious Leader',
-    text: 'The high priest and spiritual leader embracing belief in Nyuy Nkar wo Shamwun. The Fon embodies peace symbolized by the sacred Kikeng plant, fostering mutual harmony between indigenous values and Christian faith.',
+    text: 'By religion here, I mean belief in a spiritual or metaphysical reality. This may include a deity that is worshiped by a set of practices and rituals. You may call it theism, or faith or simply belief. Others include cosmology, epistemology, philosophy, ontology, Islam, African Religions, Judaism, Spiritualism … The Fon is the head of all religions, even if he is not actively in them. Let us just take the Kikeng and see what it stands for. It is a plant, a peace plant, a symbol of peace, a sanctifier, a land demarcation … Therefore are we believing in cosmology, ontology, African religion, Christianity … ? The Fon does not refuse any religion that the state acknowledges.',
     icon: 'sun'
   }
 ];
