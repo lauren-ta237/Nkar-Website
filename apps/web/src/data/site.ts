@@ -75,8 +75,8 @@ export const site: SiteConfig = {
   contact: {
     email: "info@nkarwoolan.org",
     emailNote: "Official contact email for NKAR WOO LÀN.",
-    phone: "+237 679 632 780",
-    phones: ["+237 679 632 780", "+237 678 496 051"],
+    phone: "+237 6 74 77 45 46",
+    phones: ["+237 6 74 77 45 46", "+237 6 79 63 27 80", "+237 6 75 96 53 85"],
     phoneNote: "Official contact lines & WhatsApp.",
     address: "Nkar Kingdom/Fondom, Northwest Region, Cameroon",
     addressNote: "Nkar Palace and traditional council grounds.",

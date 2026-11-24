@@ -59,9 +59,19 @@ export default function About() {
 
           <div className="mt-12 grid gap-12 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="space-y-5 text-base leading-relaxed text-forest-800/90">
-              {aboutLead.map((paragraph) => (
-                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-              ))}
+              {aboutLead.map((paragraph) => {
+                const isLocation = paragraph.startsWith('The indigenous Fondom of Nkar is located');
+                return (
+                  <div key={paragraph.slice(0, 24)}>
+                    {isLocation && (
+                      <h3 className="mb-1.5 text-sm font-bold tracking-wide text-forest-900">
+                        Location
+                      </h3>
+                    )}
+                    <p>{paragraph}</p>
+                  </div>
+                );
+              })}
             </div>
 
             <aside className="h-fit border border-border bg-cream/60 p-8">
