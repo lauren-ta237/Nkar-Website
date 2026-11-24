@@ -1,11 +1,11 @@
-// images.ts
+﻿// images.ts
 //
 // Every photograph used on this site is listed here. Authentic photographs
 // are imported directly from assets, while remaining illustrative placeholders
 // are documented until replaced with verified Nkar photography.
 
 import heroLandscape from '@/assets/images/WhatsApp Image 2026-11-01 at 1.16.56 PM.jpeg';
-import fonSit from '@/assets/images/fon sit.jpeg';
+import fonSit from '@/assets/images/fon_throne_chamber.jpeg';
 import fonPopeAudience from '@/assets/images/WhatsApp Image 2026-11-01 at 2.12.47 PM.jpeg';
 import fonPope from '@/assets/images/fon pope.jpeg';
 import fonMolo1 from '@/assets/images/fon_molo_1.jpeg';

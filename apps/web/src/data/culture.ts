@@ -48,20 +48,19 @@ export interface LeadershipRecord {
 
 export const aboutLead: string[] = [
   "The Nkar Kingdom/Fondom is a community of the Cameroon Grassfields, in the Northwest Region of the country. Its people live on highland hills and farm the land around them; its fondom, its palace, and its customs carry a history that belongs to every Nkar son and daughter.",
-  "The Nkar Kingdom is a traditional administrative and cultural institution comprising several villages, sub-villages, and multiple family lineages. It is governed by a traditional ruler known as the Fon, who oversees the affairs and leadership of the land alongside the Lord of the Land and Nwerong, the supreme traditional institution at the helm of governance. Together, these institutions uphold the kingdom's traditional values, customs, authority, and heritage."
+  "The indigenous Kingdom/Fondom of Nkar is located in the Bamenda Grasslands in the present-day North-west Region of Cameroon. It is one among the largest Fondom in Bui division. The indigenous Fondom of Nkar shares its Eastern boundary with the kingdoms of Ndzen at Kfwenjang in river Bui, the southern frontier at Mekwatir in Wainamah at the boundary with Babessi, South East with the fondom of Bangolan at lake Ber and the Bamun ethnic group in the Noun valley, Western borders with the Oku group in the Kilum mountain forest area and to the North with Nso' ethnic group in the north (IFORD 1987). Nkar highlands are found between latitude 6.2617 and longitude 10.686, at an altitude of 1650 to 2086 m, above sea level."
 ];
 
 export const aboutSections: AboutSection[] = [
   {
     id: 'history',
-    eyebrow: 'Brief History of Nkar',
-    title: 'Foundations and Origins of the Kingdom',
+    eyebrow: 'BRIEF HISTORY OF NKAR',
+    title: 'Brief History Of Nkar People',
     image: images.villagePath,
     imageAlt: 'Highland path and traditional setting of the Nkar Fondom',
     paragraphs: [
-      'Nkar Kingdom was founded by Fon Gwarmbi in 1100. Oral tradition and palace chronicles trace the ancient path of the Nkar people through Egypt, Ethiopia, and down through the Niger basin before their permanent settlement in Kov Nkar, where the kingdom remains anchored today. Whether through ancient migrations or primordial settlement, Nkar has cultivated a distinct sovereign culture and civilization in the Northwest Region of Cameroon.',
-      'From its sacred capital at Kov Nkar, the kingdom flourished under the protection of a mystical trench where only those deemed ritually clean were permitted to reside. Across centuries, the Fondom has been governed by 25 Fons spanning eight royal dynasties interred in the sacred royal burial grounds of the Foem.',
-      'Nkar is also historically celebrated for its ancient metallurgical civilization. Research validated in academic defenses (Dr. Atle Dzeawuni, 2024) established that Nkar master metallurgists instituted iron smelting in Babungo around 1400. From sacred forges, copper axes, knives, spears, and royal ceremonial ornaments were produced, establishing an enduring legacy of craftsmanship and technology across the Grassfields.'
+      'Nkar kingdom was founded by Fon Gwarmbi in 1100. It is not yet very clear if Nkar is aborigines or came after the lost tribes of Israel. If they settled where they had always been, then we can say that Nkar began the Nkar Clan where they are settled now. They would not be the first in Africa. We already know of Lucy in East Africa. But if they are Israelites then we can trace them, since the conquest of Israel between 15th and 6th BCE. The Jews were conquered and they spread to India, Syria, Germania, France, Spain, Greece, Egypt, Portugal, America, Ethiopia, Algeria … either as Israelites, Samaritans or Jews. As such they became Islam, Christians, Jews, with diverse religions, rituals and cultures or practices. The Nkar should have passed through Egypt, Ethiopia, down to Niger, and found themselves in Kov Nkar where they are presently settled. The Miriang dance looks to have come right from Niger. It is left for the DNA to discover it. Whether as settlers or aborigines, Nkar has a unique culture in the North West Region of Cameroon.',
+      'Settlement and administration\nNkar has 24 Fons since 1100, starting with Fon Gwarmbi. There are about eight dynasties in the Foem (Burial area for the Fons). The Fons are enthroned by Nwerong Nkar (A regulatory institution of the people). Then he is taken to the Lav wong, to TaaKibuh then to the Fai Kishiyi, before other places.'
     ]
   },
   {
@@ -91,29 +90,88 @@ export const aboutSections: AboutSection[] = [
   },
   {
     id: 'geography',
-    eyebrow: 'Location & Climate',
-    title: 'Climate, Topography and Vegetation',
+    eyebrow: 'Location, Climate & Vegetation',
+    title: 'Climate, Topography and Highland Vegetation',
     image: images.highlands,
     imageAlt: 'Rolling green highland hills and valleys of Nkar',
     paragraphs: [
-      'The indigenous Fondom of Nkar is located in the Bamenda Grassfields of the Northwest Region of Cameroon, standing as one of the largest fondoms in Bui Division. The Nkar highlands lie between latitude 6.2617°N and longitude 10.686°E, with elevations ranging from 1,650 to 2,086 meters above sea level.',
-      'The kingdom shares historic boundaries on the East with the kingdom of Ndzen at Kfwenjang on River Bui; on the South at Mekwatir in Wainamah bordering Babessi; on the Southeast with Bangolan at Lake Ber and the Bamoum in the Noun Valley; on the West with Oku across the Kilum Mountain forest; and on the North with Nso.',
-      'Nkar experiences a temperate highland tropical climate, with temperatures ranging between 15°C and 30°C and an average annual rainfall of 2,525 mm influenced by the Intertropical Convergence Zone (ITCZ). The landscape features a continuous tropical savannah with rich Sporobolus (kikuyu) grass cover, punctuated by ancient relic forest groves preserved at Vekovi (Ngongbaa), Kov Nkar, and Ndzerem, alongside fertile river valleys lined with ferns, mosses, and raffia palms.'
+      'The indigenous Kingdom/Fondom of Nkar is located in the Bamenda Grassfields of the present-day North-west Region of Cameroon, standing as one of the largest fondoms in Bui Division. The Nkar highlands lie between latitude 6.2617\u00b0N and longitude 10.686\u00b0E, at an altitude of 1,650 to 2,086 meters above sea level (IFORD 1987).',
+      'Nkar shares its eastern boundary with the kingdom of Ndzen at Kfwenjang on River Bui; its southern frontier at Mekwatir in Wainamah bordering Babessi; its southeast with Bangolan at Lake Ber and the Bamun ethnic group in the Noun Valley; its western borders with Oku in the Kilum mountain forest area; and its north with the Nso ethnic group.',
+      'Vegetation and hydrology\nThe advancing Sahara desert, deforestation, and slash-and-burn farming practices have produced a grass cover vegetation known as the tropical savannah, with patches of relic forests surviving at Vekovi (Ngongbaa), Kov Nkar, and Ndzerem, alongside many river valleys lined with groves of palms, ferns, moss, and creeping plants (Awoni, 2022). These grasslands form a continuous tropical savannah with kikuyu (Sporobolus) grass cover. Alternating dry and wet seasons cause soil wash, especially on steep mountainous slopes, affecting volumes of streams and intermittent springs flowing from hill watersheds that sometimes dry out completely in the heart of the dry season (Yufenyuy Muhamed, 2020).'
     ]
   },
   {
     id: 'economy',
     eyebrow: 'Economic Activities',
-    title: 'Farming, Agriculture and Enterprise',
+    title: 'Agriculture, Enterprise and Craftsmanship',
     image: images.nkarHillFarms,
     imageAlt: 'Terraced agricultural farms and iconic conical hill of Nkar',
     paragraphs: [
-      'The people of Nkar have sustained a rich agricultural tradition grounded in the extraordinary fertility of their volcanic soils. Staple crops include maize, climbing beans, cassava, groundnuts, yams, cow peas, plantains, bananas, pumpkins, and highland huckleberry (njama-njama). Major agricultural cash crops include arabica coffee, sweet oranges, and extensive raffia palm bushes.',
-      'Livestock husbandry is practiced alongside crop cultivation, with families rearing oxen, goats, sheep, and local poultry across the highland pastures.',
-      'Nkar is also renowned for master raffia bamboo architecture and craftsmanship. With local bamboo, artisans design durable cupboards, beds, chairs, ceilings, stools, mats, and fences, as well as entire traditional structures. Fon Tumi Ntani II pioneered modern architecture in Bui Division by becoming the first traditional ruler to roof his palace with corrugated metal sheets.'
+      'The population of the Nkar indigenous kingdom is involved in diverse activities including agriculture, hunting, trade, and small livestock rearing. Economic operators are active and community forestry is developing in certain areas (MINFOF 2011), supported by fertile land and rich crops such as maize, cassava, oranges, kola nuts, vegetables of all kinds, and raffia palms for wine.',
+      'Craftsmanship and artistic heritage\nThe land of Nkar also supported blacksmithing and decorative arts such as crafting and weaving for which the Nkar people are known. Where migration history suggests broader links, these traditions may be traced to North or West African civilizations sharing similar artistic practices, alongside master raffia bamboo craftsmanship and architectural milestones such as Fon Tumi Ntani II roofing the palace with corrugated metal sheets in Bui Division.'
     ]
   },
   {
+    id: 'christianity-education',
+    eyebrow: 'Christianity & Early Education',
+    title: 'Faith, Schools and Inculturation in Nkar',
+    image: images.palaceGathering,
+    imageAlt: 'Community gathering and heritage celebrations in Nkar',
+    paragraphs: [
+      'After Shisong, Nkar was the second locality in the area to establish a Catholic church, a primary school, and a Home Economics Centre (a girls\u2019 vocational training institution). The construction of the Nkar Catholic Church remains legendary across all Bui communities, inspiring local proverbs referencing tasks as deliberate and enduring \u201cas the building of the church of Nkar.\u201d',
+      'Building lore and perseverance\nDuring construction, stones had to be transported from considerable distances. Local oral history recounts beliefs that stones carried to the site would mysteriously return to their quarry overnight or that newly laid walls would collapse before dawn, prompting HRH the Fon of Nkar to perform solemn traditional sacrifices to appease the custodians of the land. Because labor was strenuous and organized on a task basis, villagers famously joked that the Reverend Father would leave his eyeglasses perched on a tree so workers believed he was watching them even in his absence. After years of perseverance, the church was completed.',
+      'Inculturation and clergy legacy\nThis church also houses a landmark piece of cultural-religious art: the statue of St. Charles Lwanga, whose arrival sparked immense celebration across Bui Division and continues to attract visitors from afar. Following Shisong, Nkar hosted the second priestly ordination in Bui Division, that of Rev. Fr. Bushu\u2014an unprecedented gathering for which the historic stadium grandstand was constructed. Inculturation took root through the integration of local musical instruments into Catholic liturgy, and Nkar boasts one of the highest numbers of men who harmonize traditional Nso duties with devout Christian faith, alongside a rich legacy of producing numerous Catholic clergy and religious sisters across Bui Division and Cameroon.'
+    ]
+  },
+  {
+    id: 'socio-cultural-heritage',
+    eyebrow: 'Socio-Cultural Heritage',
+    title: 'Community Infrastructure, Institutions and Rites',
+    image: images.villagePath,
+    imageAlt: 'Traditional pathways and community spaces of Nkar',
+    paragraphs: [
+      'Prior to the administrative creation of Jakiri Subdivision, Nkar served as the undisputed center of socio-cultural life in Dzekwa. Its expansive Catholic school playground hosted major national celebrations on February 11 (Youth Day) and May 20 (National Day). Pupils traveled from across Dzekwa\u2014including Sop, Messiah, Vekovi, Wainamah, Ngomrin, Kisedzam, Matum, Berr, Shiy, Nooyi, Visovmboo, Kiluun, Tan, and Jakiri\u2014to receive First Holy Communion and sit for their Common Entrance and First School Leaving Certificate examinations.',
+      'Water, vocational training and sacred rites\nNkar secured its pipe-borne water supply through joint efforts between the Catholic Mission and community labor. Participation was mandatory: absentees were barred from njangi houses and heavily fined, while the Nwerong regulatory society enforced compliance by confiscating hoes from women who bypassed community labor for their farms. Today, the community continues extending the water catchment network so every quarter has clean water.',
+      'Purification and ancestral memory\nSimilarly, the Nkar Girls\u2019 Vocational Training Centre trained generations of young women from across Dzekwa in home economics and domestic management. Culturally, Nkar is renowned across Bui fondoms for its princesses and for its distinguished Nwerong society, particularly during annual sacrifices at the top of the Holy Mountain (Kiruminin) when sacred music resonates across Nso and neighboring fondoms. Oral tradition also preserves the memory of a defensive trench around the fondom with hidden crossings known only to Nkar natives, as well as the periodic \u201cbreaking of the Kilun,\u201d a communal purification ritual in which sons and daughters of Nkar return home to shout in unison, break their kilun, and blow wood ash into the air to banish evil spirits and misfortune.'
+    ]
+  },
+  {
+    id: 'touristic-sites',
+    eyebrow: 'Touristic Sites',
+    title: 'Notable Landmarks and Heritage Sites in Nkar',
+    image: images.nkarHillFarms,
+    imageAlt: 'Scenic hills and landmarks of the Nkar Fondom',
+    paragraphs: [
+      '1. Nkongchoor\nA renowned local blacksmith specializing in traditional drum craftsmanship in Wainkar.',
+      '2. Historic Old Nkar Market & Former Home Economics Centre\nThe historic old Nkar market in Wainkar located beside the Nursery School, alongside the historic former Home Economics Centre.',
+      '3. Nkar Catholic Church, Primary School & Health Centre\nThe Nkar Catholic Church (featuring the landmark statue of St. Charles Lwanga), the Nkar Catholic Primary School with its historic playground, the adjacent Catholic Health Centre, and the new Nkar Community Hall.',
+      '4. Ancient Baobab Trees, Palace & Sacred Sites\nThe iconic ancient Baobab trees scattered across the fondom, the Fon\u2019s Palace and its resident colony of bats, the Holy Mountain (Kiruminin), and the sacred royal shrine where past Fons are laid to rest.'
+    ]
+  },
+  {
+    id: 'sports-hospitality',
+    eyebrow: 'Sports & Hospitality',
+    title: 'Athletics, Hospitality and Local Livelihoods',
+    image: images.palaceGathering,
+    imageAlt: 'Community life and sporting heritage of Nkar and Dzekwa',
+    paragraphs: [
+      'Nkar has long been a premier sporting hub in Bui Division. Before the creation of Jakiri Subdivision, athletic gatherings drew crowds from all four corners of Dzekwa. In the early 1960s, visits by the celebrated traveling football club \u201cHoly Joe\u201d brought immense excitement, particularly their clash against Nkar\u2019s second-division side, BBC. Local football lore also recalls the rivalry match between BBC and SAC, marked by dramatic pitch-side commotion when a spectator attempted to place a charm behind BBC\u2019s goalpost.',
+      'Football figures and local hospitality\nCelebrated football figures include Shufai Manfe (popularly known as \u201cNyam Boker\u201d in his playing days) and longtime goalkeeper Mr. Raphael (\u201cTaah Suum\u201d), while the visit of football legend His Excellency Roger Milla on Saturday, March 6, was anticipated as a catalyst to revitalize sporting and civic energy across Nkar and Dzekwa. Despite a lack of commercial hotels, Nkar people are renowned for warm hospitality and never leave a visitor stranded, while abundant raffia palm wine (\u201cmimboo\u201d) and sweet oranges support youth livelihoods across Dzekwa.'
+    ]
+  },
+  {
+    id: 'sacred-shrines-rituals',
+    eyebrow: 'Sacred Shrines & Rituals',
+    title: 'Traditional Deities and Consultation Sites',
+    image: images.highlands,
+    imageAlt: 'Sacred highland terrain and ritual sites of Nkar',
+    paragraphs: [
+      'Nyuy wo Nkwoenjang (Gwarkang)\nMale deity: before leaving for Nkwoenjang, the land lords worship the gods of Kirumen hill (male) and Woe at Minsai, and the Fon of Nkar worships Nkwoenjang together with the Fon of Ndzoeen.',
+      'Nyuy wo Kibang\nWorshipped by the Fon of Nkar together with the Fon of Ngoran\u2014each standing on his own land while consulting. On the way to Kibang at Ber, the Fon of Nkar and his lords consult and worship Nyuy wo Njah (near Baptist Church Nkar), Nyuy wo Mbishah Nkar, Nyuy wo Ntsulong (near the Gendarmerie Brigade Jakiri), Nyuy wo Abakwa Jakiri, Nyuy wo Fafoem at Mantum, Nyuy wo Ngewir (male), Nyuy wo Kilankenyuy (at Ber), Nyuy wo Kimbvevrin (on the way to Kutupit), and then Nyuy wo Kibang ke Ber.',
+      'Nyuy wo Kov Ngongbaa\nMale deity consulted by the Fon of Nkar with the Fon of Oku, each standing on his land while consulting. Before reaching Ngongbaa, the gods consulted along the way include Nyuy wo Vikuvtsen, Nyuy wo Taamboh (Kintsenjam), Nyuy wo Kah Vekovi, Nyuy wo Shulav Mfuh (Vekovi), Nyuy wo Tiy Nkui (Vekovi), and Nyuy wo Shuu Kov Ngonbaa.',
+      'Nyuy wo Tonsai & Nyuy wo Kirumen\nBefore reaching Nyuy wo Tonsai Tan, way-station consultations include Nyuy wo Shuu Kishaar (Kifom), Nyuy wo Liv (near Tan), and Nyuy wo Yenih (on the way to Mbokam, near the residence of Ardo Karimo). For Nyuy wo Kirumen, the Fon first consults Nyuy wo Shah Kinying before reaching Kirumen.'
+    ]
+  },  {
     id: 'dances',
     eyebrow: 'Social Life & Culture',
     title: 'Traditional Dances, Music and Community Life',
@@ -191,13 +249,13 @@ export const leadershipRoles: LeadershipRole[] = [
     icon: 'crown'
   },
   {
-    title: 'The Spirit Fon',
+    title: 'The spirit of the fon',
     text: 'He pertains to the spirits. He is from the spirit world. Therefore, he is to and from God and his spirits. He adores Nyuy Nkar wo Shamwun. Some of these spirits include the ancestors, the dealing with sacred places (Like at Nkeonjang, Tonsai Tan, the Lake Ber, the institution of Mame Nkar, the cleansing of the land and people, the Mkwatir at Wainamah, the cave at Nfut, going to Ngongbah at Vekeriv, the Outlet of the cave at Ngomrin, the Ntamir wo wiy at Yer, the going to Kintinen, the going to Shu Kindzev and the consulting of the ancestors at the Foem, amongst others). He equally acts in relation to the intellectual and higher endowments of the land; he is ecclesiastical and supernatural. He cherishes the TRUTH, and stands for Justice.',
     icon: 'flame'
   },
   {
     title: 'Nwerong Nkar',
-    text: 'He has many institutions around him. The first is Nwerong Nkar. Nwerong Nkar is the custodian of the customary and the traditional values of the Fondom. It ensures the implementation of acts of governance, and so has the power to discipline wrong doers. It is the regulatory institution that can step in any sphere so as to put order. It monitors the birth and life of princes and princesses, and mourns their deaths. It is the only institution that has the legitimate authority to enthrone or even dethrone a Fon. It protects the Fon and the land against any encroachment in any form. Nwerong mourns the \'disappearances\' of Fons of other Fondoms with whom Nkar has diplomatic links. It is in charge of the orientation and initiation into values, of the tribe, of newly enthroned Fons. It ensures the observance of days of atonement. In some tribes there might be one; Nkar has two days of atonement which are Ntseri and Wailun. It is the security agent of the Fondom.',
+    text: 'Nwerong Nkar is the custodian of the customary and the traditional values of the Fondom. It ensures the implementation of acts of governance, and so has the power to discipline wrong doers. It is the regulatory institution that can step in any sphere so as to put order. It monitors the birth and life of princes and princesses, and mourns their deaths. It is the only institution that has the legitimate authority to enthrone or even dethrone a Fon. It protects the Fon and the land against any encroachment in any form. Nwerong mourns the \'disappearances\' of Fons of other Fondoms with whom Nkar has diplomatic links. It is in charge of the orientation and initiation into values, of the tribe, of newly enthroned Fons. It ensures the observance of days of atonement. In some tribes there might be one; Nkar has two days of atonement which are Ntseri and Wailun. It is the security agent of the Fondom.',
     icon: 'scroll'
   },
   {
