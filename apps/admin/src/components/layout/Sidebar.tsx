@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   Newspaper,
@@ -23,9 +24,8 @@ import {
   Moon,
   User as UserIcon,
 } from 'lucide-react';
-import { useAdminStore, AdminPage, INITIAL_USERS } from '../../store/useAdminStore';
+import { useAdminStore } from '@/store/useAdminStore';
 import { useAdminDashboardStats } from '@/lib/api/dashboard.api';
-import { useAdminUsersList } from '@/lib/api/users.api';
 import {
   Sheet,
   SheetContent,
@@ -42,7 +42,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface NavItem {
-  page: AdminPage;
+  path: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   badgeKey?: 'pendingReviews' | 'unreadMessages';
@@ -51,57 +51,52 @@ interface NavItem {
 
 export const Sidebar: React.FC = () => {
   const {
-    currentPage,
-    setCurrentPage,
     sidebarCollapsed,
     toggleSidebar,
     currentUser,
     mobileSidebarOpen,
     setMobileSidebarOpen,
     setProfileModalOpen,
-    setPublicPreviewOpen,
     setLogoutConfirmOpen,
     theme,
     toggleTheme,
-    switchRole,
   } = useAdminStore();
-  const { data: stats } = useAdminDashboardStats();
 
-  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'https://nkar-website.vercel.app';
-  const toHttpsAvatar = (url?: string | null): string => {
-  if (!url) return '';
-  return url.trim().replace(/^http:\/\//i, 'https://');
-};
-  const { data: liveUsers = [] } = useAdminUsersList();
-  const councilUsers = liveUsers.length > 0 ? liveUsers : INITIAL_USERS;
-  const matchedCurrentUser = liveUsers.find((u: any) => (currentUser?.id && u.id === currentUser.id) || (currentUser?.email && u.email?.toLowerCase() === currentUser.email?.toLowerCase()));
-  const effectiveAvatarUrl = toHttpsAvatar(currentUser?.avatar_url || matchedCurrentUser?.avatar_url);
-
+  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173';
   const handleOpenPublicSite = () => {
     window.open(publicSiteUrl, '_blank', 'noopener,noreferrer');
   };
 
+  const { data: stats } = useAdminDashboardStats();
+
+  const toHttpsAvatar = (url?: string | null): string =>
+    url ? url.trim().replace(/^http:\/\//i, 'https://') : '';
+
+  const effectiveAvatarUrl = toHttpsAvatar(currentUser?.avatar_url);
+
   const navItems: NavItem[] = [
-    { page: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { page: 'news', label: 'News & Announcements', icon: Newspaper, badgeKey: 'pendingReviews' },
-    { page: 'events', label: 'Events Management', icon: CalendarDays },
-    { page: 'heritage', label: 'Heritage Management', icon: Landmark },
-    { page: 'leadership', label: 'Traditional Leadership', icon: Crown },
-    { page: 'gallery', label: 'Gallery Management', icon: ImageIcon },
-    { page: 'publications', label: 'Books & Publications', icon: BookOpen },
-    { page: 'projects', label: 'Development Projects', icon: Briefcase },
-    { page: 'contact', label: 'Contact Submissions', icon: Mail, badgeKey: 'unreadMessages' },
-    { page: 'users', label: 'User Management', icon: Users, superAdminOnly: true },
-    { page: 'audit', label: 'Audit Logs', icon: ShieldAlert, superAdminOnly: true },
-    { page: 'settings', label: 'Settings', icon: Settings },
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/news', label: 'News & Announcements', icon: Newspaper, badgeKey: 'pendingReviews' },
+    { path: '/events', label: 'Events Management', icon: CalendarDays },
+    { path: '/heritage', label: 'Heritage Management', icon: Landmark },
+    { path: '/leadership', label: 'Traditional Leadership', icon: Crown },
+    { path: '/gallery', label: 'Gallery Management', icon: ImageIcon },
+    { path: '/publications', label: 'Books & Publications', icon: BookOpen },
+    { path: '/projects', label: 'Development Projects', icon: Briefcase },
+    { path: '/contact', label: 'Contact Submissions', icon: Mail, badgeKey: 'unreadMessages' },
+    { path: '/users', label: 'User Management', icon: Users, superAdminOnly: true },
+    { path: '/audit', label: 'Audit Logs', icon: ShieldAlert, superAdminOnly: true },
+    { path: '/settings', label: 'Settings', icon: Settings },
   ];
+
+  const visibleNavItems = navItems.filter(
+    (item) => !item.superAdminOnly || currentUser?.role === 'SUPER_ADMIN'
+  );
 
   const renderNavList = (isMobile: boolean = false) => (
     <div className="flex-1 overflow-y-auto py-3 px-3 space-y-1">
-      {navItems.map((item) => {
-        const isActive = currentPage === item.page;
+      {visibleNavItems.map((item) => {
         const Icon = item.icon;
-        const isRestricted = item.superAdminOnly && currentUser?.role !== 'SUPER_ADMIN';
 
         let badgeCount = 0;
         if (item.badgeKey === 'pendingReviews') {
@@ -111,116 +106,61 @@ export const Sidebar: React.FC = () => {
         }
 
         return (
-          <button
-            key={item.page}
+          <NavLink
+            key={item.path}
+            to={item.path}
             onClick={() => {
-              setCurrentPage(item.page);
               if (isMobile) setMobileSidebarOpen(false);
             }}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all group cursor-pointer relative ${
-              isActive
-                ? 'bg-[#153E2E] text-white shadow-sm shadow-[#153E2E]/20'
-                : isRestricted
-                ? 'text-stone-400 hover:bg-stone-50'
-                : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100/70'
-            }`}
+            className={({ isActive }: { isActive: boolean }) =>
+              `w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all group relative select-none ${
+                isActive
+                  ? 'bg-[#153E2E] dark:bg-emerald-950 text-white shadow-sm shadow-[#153E2E]/20'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/80 dark:hover:bg-stone-800'
+              }`
+            }
             title={item.label}
           >
-            {isActive && (
-              <span className="absolute left-0 top-2 bottom-2 w-1 bg-[#D4AF37] rounded-r-full" />
+            {({ isActive }: { isActive: boolean }) => (
+              <>
+                {isActive && (
+                  <span className="absolute left-0 top-2 bottom-2 w-1 bg-[#D4AF37] rounded-r-full" />
+                )}
+
+                <Icon
+                  className={`w-4 h-4 shrink-0 transition-transform ${
+                    isActive
+                      ? 'text-[#D4AF37]'
+                      : 'text-stone-500 dark:text-stone-400 group-hover:text-stone-800 dark:group-hover:text-stone-200'
+                  }`}
+                />
+
+                {(!sidebarCollapsed || isMobile) && (
+                  <div className="flex-1 flex items-center justify-between min-w-0">
+                    <span className="truncate">{item.label}</span>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {badgeCount > 0 && (
+                        <span
+                          className={`px-1.5 py-0.5 text-[10px] font-semibold rounded-md tabular-nums ${
+                            isActive
+                              ? 'bg-[#D4AF37] text-[#153E2E]'
+                              : 'bg-[#D4AF37]/20 text-[#8B6508] dark:text-[#D4AF37]'
+                          }`}
+                        >
+                          {badgeCount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
-
-            <Icon
-              className={`w-4 h-4 shrink-0 transition-transform ${
-                isActive ? 'text-[#D4AF37]' : isRestricted ? 'text-stone-300' : 'text-stone-500 group-hover:text-stone-800'
-              }`}
-            />
-
-            {(!sidebarCollapsed || isMobile) && (
-              <div className="flex-1 flex items-center justify-between min-w-0">
-                <span className="truncate">{item.label}</span>
-
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {badgeCount > 0 && (
-                    <span
-                      className={`px-1.5 py-0.5 text-[10px] font-semibold rounded-md tabular-nums ${
-                        isActive
-                          ? 'bg-[#D4AF37] text-[#153E2E]'
-                          : 'bg-[#D4AF37]/20 text-[#8B6508]'
-                      }`}
-                    >
-                      {badgeCount}
-                    </span>
-                  )}
-
-                  {isRestricted && (
-                    <span className="text-[9px] uppercase px-1 py-0.5 rounded text-stone-400 bg-stone-100 font-mono">
-                      Locked
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-          </button>
+          </NavLink>
         );
       })}
     </div>
   );
-
-  const renderCouncilAdmins = (isMobile: boolean = false) => {
-    if (sidebarCollapsed && !isMobile) {
-      return (
-        <div className="p-3 border-t border-[#E8E4DA] dark:border-stone-800 flex justify-center shrink-0">
-          <div className="w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-emerald-50 dark:ring-emerald-950" title="System Online" />
-        </div>
-      );
-    }
-
-    return (
-      <div className="p-3 border-t border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5]/50 dark:bg-stone-950/40 shrink-0">
-        <div className="flex items-center justify-between mb-2 px-1">
-          <span className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
-            Council Admins
-          </span>
-          <span className="w-2 h-2 rounded-full bg-emerald-500" title="System Online" />
-        </div>
-
-        <div className="space-y-1.5 max-h-[84px] overflow-y-auto pr-0.5">
-          {councilUsers.map((user: any) => {
-            const isCurrent = currentUser?.id === user.id;
-            return (
-              <div
-                key={user.id}
-                className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs transition-colors ${
-                  isCurrent
-                    ? 'bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800'
-                    : 'text-stone-600 dark:text-stone-400'
-                }`}
-              >
-                <div className="relative shrink-0">
-                  <img
-                    src={toHttpsAvatar(user.avatar_url)}
-                    alt={user.name}
-                    className="w-6 h-6 rounded-full object-cover object-top"
-                    referrerPolicy="no-referrer"
-                  />
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-stone-900" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-medium text-stone-800 dark:text-stone-200 truncate leading-tight">
-                    {user.name.split(' ')[0]} {user.name.split(' ')[1] || ''}
-                  </p>
-                  <p className="text-[10px] text-stone-400 dark:text-stone-500 truncate leading-tight">
-                    {String(user.role || '').toUpperCase() === 'SUPER_ADMIN' ? 'Super Admin' : String(user.role || '').toUpperCase() === 'CONTENT_REVIEWER' ? 'Reviewer' : 'Editor'}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
 
   const renderSidebarFooter = (isMobile: boolean = false) => {
     const isCollapsed = sidebarCollapsed && !isMobile;
@@ -280,14 +220,24 @@ export const Sidebar: React.FC = () => {
 
           {/* Quick Icon: Public Site */}
           <button
-            onClick={handleOpenPublicSite}
-            className="p-2 text-stone-500 dark:text-stone-400 hover:text-[#153E2E] dark:hover:text-[#D4AF37] hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
-            title="Visit Public Website"
+            onClick={() => setProfileModalOpen(true)}
+            className="w-8 h-8 rounded-full overflow-hidden bg-[#153E2E] dark:bg-emerald-800 text-white flex items-center justify-center font-bold text-xs shrink-0 border border-[#D4AF37]/50 shadow-xs hover:ring-2 hover:ring-[#D4AF37] transition-all cursor-pointer"
+            title={currentUser?.name || 'My Profile'}
           >
-            <Globe className="w-4 h-4" />
+            {effectiveAvatarUrl ? (
+              <img
+                src={effectiveAvatarUrl}
+                alt={currentUser?.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLElement).style.display = 'none';
+                }}
+              />
+            ) : (
+              <span>{currentUser?.name?.charAt(0)?.toUpperCase() || 'A'}</span>
+            )}
           </button>
 
-          {/* Quick Icon: Logout */}
           <button
             onClick={() => setLogoutConfirmOpen(true)}
             className="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
@@ -313,11 +263,11 @@ export const Sidebar: React.FC = () => {
                   referrerPolicy="no-referrer"
                 />
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-stone-900" />
-              </div>
+            </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate leading-tight">
-                  {currentUser?.name || 'Administrator'}
-                </p>
+                {currentUser?.name || 'Administrator'}
+              </p>
                 <p className="text-[10px] text-stone-400 dark:text-stone-500 truncate leading-tight">
                   {currentUser?.role === 'SUPER_ADMIN' ? 'Super Admin' : currentUser?.role === 'CONTENT_REVIEWER' ? 'Content Reviewer' : 'Content Editor'}
                 </p>
@@ -365,12 +315,12 @@ export const Sidebar: React.FC = () => {
               {theme === 'dark' ? (
                 <>
                   <Sun className="w-3.5 h-3.5 text-[#D4AF37]" />
-                  <span>Switch to Light Theme</span>
+                  <span>Light Theme</span>
                 </>
               ) : (
                 <>
                   <Moon className="w-3.5 h-3.5 text-stone-500" />
-                  <span>Switch to Dark Theme</span>
+                  <span>Dark Theme</span>
                 </>
               )}
             </DropdownMenuItem>
@@ -409,11 +359,10 @@ export const Sidebar: React.FC = () => {
               setLogoutConfirmOpen(true);
               if (isMobile) setMobileSidebarOpen(false);
             }}
-            className="py-1.5 px-2 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-600 text-stone-600 dark:text-stone-400 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer shrink-0"
             title="Log Out"
           >
-            <LogOut className="w-3.5 h-3.5 text-red-500" />
-            <span>Log Out</span>
+            <LogOut className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -431,7 +380,6 @@ export const Sidebar: React.FC = () => {
         {/* Brand Header */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-[#E8E4DA] dark:border-stone-800 shrink-0">
           <div className="flex items-center gap-3 overflow-hidden">
-            {/* Official Nkar Woo Làn Emblem Logo */}
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
               <img
                 src="/assets/logo.jpeg"
@@ -446,13 +394,12 @@ export const Sidebar: React.FC = () => {
                   NKAR WOO LÀN
                 </h1>
                 <p className="text-[10px] text-stone-500 dark:text-stone-400 uppercase tracking-widest truncate font-medium">
-                  Heritage Admin Portal
+                  Heritage Admin
                 </p>
               </div>
             )}
           </div>
 
-          {/* Sidebar Toggle Button */}
           <button
             onClick={toggleSidebar}
             className="p-1.5 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
@@ -466,16 +413,16 @@ export const Sidebar: React.FC = () => {
         {/* Main Navigation List */}
         {renderNavList(false)}
 
-        {/* Council Admins List */}
-        {renderCouncilAdmins(false)}
-
-        {/* Footer: Profile Dropdown, Public Site & Logout */}
+        {/* Footer */}
         {renderSidebarFooter(false)}
       </aside>
 
-      {/* 2. Mobile Responsive Navigation Drawer (shadcn Sheet with side="left") */}
+      {/* 2. Mobile Responsive Navigation Drawer */}
       <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
-        <SheetContent side="left" className="w-[280px] sm:w-[320px] p-0 flex flex-col bg-white dark:bg-stone-900 border-r border-[#E8E4DA] dark:border-stone-800">
+        <SheetContent
+          side="left"
+          className="w-[280px]! sm:w-[320px]! p-0 flex flex-col bg-white dark:bg-stone-900 border-r border-[#E8E4DA] dark:border-stone-800"
+        >
           <SheetHeader className="p-4 border-b border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5] dark:bg-stone-950 text-left">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#D4AF37]/60 shadow-xs bg-black flex items-center justify-center">
@@ -491,7 +438,7 @@ export const Sidebar: React.FC = () => {
                   NKAR WOO LÀN
                 </SheetTitle>
                 <p className="text-[10px] text-stone-500 dark:text-stone-400 uppercase tracking-widest truncate font-medium">
-                  Heritage Admin Portal
+                  Heritage Admin
                 </p>
               </div>
             </div>
@@ -500,9 +447,6 @@ export const Sidebar: React.FC = () => {
           {/* Nav List */}
           {renderNavList(true)}
 
-          {/* Council Admins in Mobile Sheet */}
-          {renderCouncilAdmins(true)}
-
           {/* Footer in Mobile Sheet */}
           {renderSidebarFooter(true)}
         </SheetContent>
@@ -510,7 +454,3 @@ export const Sidebar: React.FC = () => {
     </>
   );
 };
-
-
-
-

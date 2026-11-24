@@ -4,7 +4,6 @@ import {
   Plus,
   Search,
   Download,
-  ExternalLink,
   Edit,
   Trash2,
   FileText,
@@ -21,7 +20,7 @@ import { PublicationsFormModal } from './PublicationsFormModal';
 export const PublicationsView: React.FC = () => {
   const { currentUser } = useAdminStore();
   const { data: publications = [], isLoading } = useAdminPublicationsList();
-  const { createMutation, updateMutation, publishMutation, deleteMutation } =
+  const { createMutation, updateMutation, deleteMutation } =
     useAdminPublicationsMutations();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -71,16 +70,25 @@ export const PublicationsView: React.FC = () => {
   const canEdit = currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER' || currentUser.role === 'CONTENT_EDITOR';
   const canDelete = currentUser.role === 'SUPER_ADMIN';
 
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-stone-200 dark:bg-stone-800 rounded w-1/4 animate-pulse" />
+        <div className="h-64 bg-stone-100 dark:bg-stone-900 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-[#153E2E]" />
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-[#153E2E] dark:text-emerald-400" />
             Books & Scholarly Publications
           </h2>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 dark:text-stone-400">
             Historical monographs, linguistic dictionaries, customary law essays, and development blueprints
           </p>
         </div>
@@ -98,7 +106,7 @@ export const PublicationsView: React.FC = () => {
       </div>
 
       {/* Filter and Search */}
-      <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl shadow-xs">
+      <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="relative">
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -107,7 +115,7 @@ export const PublicationsView: React.FC = () => {
               placeholder="Search by title, scholar or keywords..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
             />
           </div>
 
@@ -115,7 +123,7 @@ export const PublicationsView: React.FC = () => {
             <select
               value={formatFilter}
               onChange={(e) => setFormatFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none text-stone-700"
+              className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none text-stone-700 dark:text-stone-200"
             >
               <option value="ALL">All File Formats</option>
               <option value="PDF">PDF Documents</option>
@@ -144,7 +152,7 @@ export const PublicationsView: React.FC = () => {
           {filtered.map((pub) => (
             <div
               key={pub.id}
-              className="bg-white border border-[#E8E4DA] rounded-2xl p-5 shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
+              className="bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl p-5 shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-start gap-4">
@@ -152,11 +160,11 @@ export const PublicationsView: React.FC = () => {
                     <img
                       src={pub.cover_image_url}
                       alt={pub.title}
-                      className="w-20 h-28 rounded-xl object-cover border border-stone-200 shadow-xs shrink-0"
+                      className="w-20 h-28 rounded-xl object-cover border border-stone-200 dark:border-stone-700 shadow-xs shrink-0 bg-stone-100 dark:bg-stone-800"
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <div className="w-20 h-28 rounded-xl bg-stone-100 border border-stone-200 flex flex-col items-center justify-center text-stone-400 shrink-0">
+                    <div className="w-20 h-28 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex flex-col items-center justify-center text-stone-400 shrink-0">
                       <FileText className="w-8 h-8" />
                       <span className="text-[10px] font-bold mt-1 uppercase">{pub.file_type}</span>
                     </div>
@@ -164,37 +172,37 @@ export const PublicationsView: React.FC = () => {
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="text-[10px] font-bold text-stone-600 bg-stone-100 px-2 py-0.5 rounded font-mono uppercase">
+                      <span className="text-[10px] font-bold text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded font-mono uppercase">
                         {pub.file_type} {pub.file_size_bytes && `· ${(pub.file_size_bytes / (1024 * 1024)).toFixed(1)} MB`}
                       </span>
                       <StatusBadge status={pub.status} />
                     </div>
 
-                    <h3 className="text-sm font-bold text-stone-900 group-hover:text-[#153E2E] transition-colors line-clamp-2 leading-snug">
+                    <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors line-clamp-2 leading-snug">
                       {pub.title}
                     </h3>
-                    <p className="text-xs font-semibold text-[#8B6508] mt-1 truncate">
+                    <p className="text-xs font-semibold text-[#8B6508] dark:text-amber-400 mt-1 truncate">
                       By {pub.author_name}
                     </p>
 
-                    <div className="flex items-center gap-1.5 text-[11px] text-stone-400 mt-2 font-mono">
+                    <div className="flex items-center gap-1.5 text-[11px] text-stone-400 font-mono mt-2">
                       <Calendar className="w-3 h-3 text-stone-400" />
                       <span>{pub.publication_year || '—'}</span>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-xs text-stone-600 mt-3.5 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-stone-600 dark:text-stone-400 mt-3.5 line-clamp-2 leading-relaxed">
                   {pub.description || '—'}
                 </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-[#F2EFE9] flex items-center justify-between text-xs">
+              <div className="mt-4 pt-3 border-t border-[#F2EFE9] dark:border-stone-800 flex items-center justify-between text-xs">
                 <a
                   href={pub.document_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-[#153E2E] hover:underline flex items-center gap-1"
+                  className="font-semibold text-[#153E2E] dark:text-emerald-400 hover:underline flex items-center gap-1"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Access Document</span>
@@ -207,7 +215,7 @@ export const PublicationsView: React.FC = () => {
                         setEditingPub(pub);
                         setFormModalOpen(true);
                       }}
-                      className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg cursor-pointer"
+                      className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg cursor-pointer transition-colors"
                       title="Edit Publication"
                     >
                       <Edit className="w-3.5 h-3.5" />
@@ -217,7 +225,7 @@ export const PublicationsView: React.FC = () => {
                   {canDelete && (
                     <button
                       onClick={() => setDeleteConfirmId(pub.id)}
-                      className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg cursor-pointer transition-colors"
                       title="Delete Publication"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

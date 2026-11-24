@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Calendar, User, Eye, Tag, CheckCircle2, Clock, ShieldCheck, ArrowRight, BookOpen } from 'lucide-react';
+import { Calendar, User, Eye } from 'lucide-react';
 import { News } from '../../../types';
 import { StatusBadge } from '../../common/StatusBadge';
 import { useAdminStore } from '../../../store/useAdminStore';
@@ -30,136 +30,136 @@ export const NewsDetailModal: React.FC<NewsDetailModalProps> = ({
 
   return (
     <Sheet open={!!article} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white border-l border-[#E5E0D5]">
+      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col bg-white dark:bg-stone-900 border-l border-[#E5E0D5] dark:border-stone-800 text-stone-900 dark:text-stone-100">
         {article && (
           <>
             {/* Header */}
-            <SheetHeader className="p-4 border-b border-[#E8E4DA] bg-[#FAF8F5] text-left">
+            <SheetHeader className="p-4 border-b border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5] dark:bg-stone-950 text-left">
               <div className="flex items-center gap-2">
                 <StatusBadge status={article.status} />
-                <span className="text-xs font-semibold text-stone-500">· {article.category}</span>
+                <span className="text-xs font-semibold text-stone-500 dark:text-stone-400">· {article.category}</span>
               </div>
-              <SheetTitle className="font-bold text-stone-900 text-sm mt-1">
+              <SheetTitle className="font-bold text-stone-900 dark:text-stone-100 text-sm mt-1">
                 Article Verification & Preview
               </SheetTitle>
-              <SheetDescription className="text-xs text-stone-500">
+              <SheetDescription className="text-xs text-stone-500 dark:text-stone-400">
                 Detailed metadata, readership engagement, and review status
               </SheetDescription>
             </SheetHeader>
 
-        {/* Content body */}
-        <div className="p-6 overflow-y-auto space-y-5">
-          {article.cover_image && (
-            <div className="w-full h-52 rounded-xl overflow-hidden border border-[#E8E4DA] bg-stone-100">
-              <img
-                src={article.cover_image}
-                alt={article.title}
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          )}
+            {/* Content body */}
+            <div className="p-6 overflow-y-auto space-y-5">
+              {article.cover_image && (
+                <div className="w-full h-52 rounded-xl overflow-hidden border border-[#E8E4DA] dark:border-stone-800 bg-stone-100 dark:bg-stone-800">
+                  <img
+                    src={article.cover_image}
+                    alt={article.title}
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              )}
 
-          <div>
-            <h2 className="text-xl font-bold text-stone-900 leading-snug">{article.title}</h2>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500 mt-2">
-              <span className="flex items-center gap-1">
-                <User className="w-3.5 h-3.5 text-stone-400" />
-                {article.author_id ? 'Editor' : 'Editorial Desk'}
-              </span>
-              <span>·</span>
-              <span className="flex items-center gap-1 font-mono">
-                <Calendar className="w-3.5 h-3.5 text-stone-400" />
-                {new Date(article.created_at).toLocaleDateString()}
-              </span>
-              <span>·</span>
-              <span className="flex items-center gap-1 tabular-nums">
-                <Eye className="w-3.5 h-3.5 text-stone-400" />
-                {article.views} views
-              </span>
-            </div>
-          </div>
-
-          <div className="p-3.5 bg-[#FAF8F5] rounded-xl border border-[#E8E4DA]">
-            <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Executive Summary</p>
-            <p className="text-xs font-medium text-stone-800 leading-relaxed">{article.summary || '—'}</p>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Article Body</p>
-            <div className="text-xs text-stone-700 leading-relaxed whitespace-pre-line bg-white p-4 rounded-xl border border-stone-100">
-              {article.content}
-            </div>
-          </div>
-
-          {article.review_notes && (
-            <div className="p-3.5 bg-amber-50 rounded-xl border border-amber-200">
-              <p className="text-xs font-bold text-amber-900 uppercase tracking-wider mb-0.5">Editorial Review Notes</p>
-              <p className="text-xs text-amber-800">{article.review_notes}</p>
-            </div>
-          )}
-
-          {article.tags.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-1.5">Tags</p>
-              <div className="flex flex-wrap gap-1.5">
-                {article.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[11px] font-medium text-stone-600 bg-stone-100 px-2 py-0.5 rounded-md"
-                  >
-                    #{tag}
+              <div>
+                <h2 className="text-xl font-bold text-stone-900 dark:text-stone-100 leading-snug">{article.title}</h2>
+                <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500 dark:text-stone-400 mt-2">
+                  <span className="flex items-center gap-1">
+                    <User className="w-3.5 h-3.5 text-stone-400" />
+                    {article.author_id ? 'Editor' : 'Editorial Desk'}
                   </span>
-                ))}
+                  <span>·</span>
+                  <span className="flex items-center gap-1 font-mono">
+                    <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                    {new Date(article.created_at).toLocaleDateString()}
+                  </span>
+                  <span>·</span>
+                  <span className="flex items-center gap-1 tabular-nums">
+                    <Eye className="w-3.5 h-3.5 text-stone-400" />
+                    {article.views} views
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-3.5 bg-[#FAF8F5] dark:bg-stone-800/60 rounded-xl border border-[#E8E4DA] dark:border-stone-800">
+                <p className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-1">Executive Summary</p>
+                <p className="text-xs font-medium text-stone-800 dark:text-stone-200 leading-relaxed">{article.summary || '—'}</p>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-2">Article Body</p>
+                <div className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-line bg-white dark:bg-stone-950 p-4 rounded-xl border border-stone-100 dark:border-stone-800">
+                  {article.content}
+                </div>
+              </div>
+
+              {article.review_notes && (
+                <div className="p-3.5 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200 dark:border-amber-800/60">
+                  <p className="text-xs font-bold text-amber-900 dark:text-amber-200 uppercase tracking-wider mb-0.5">Editorial Review Notes</p>
+                  <p className="text-xs text-amber-800 dark:text-amber-300">{article.review_notes}</p>
+                </div>
+              )}
+
+              {article.tags.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-stone-400 dark:text-stone-500 uppercase tracking-wider mb-1.5">Tags</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {article.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[11px] font-medium text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer controls */}
+            <div className="p-4 border-t border-[#E8E4DA] dark:border-stone-800 bg-[#FAF8F5] dark:bg-stone-950 flex items-center justify-between">
+              <span className="text-[11px] font-mono text-stone-400 dark:text-stone-500 truncate max-w-xs">
+                Slug: /{article.slug}
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    onClose();
+                    onEdit(article);
+                  }}
+                  className="px-3.5 py-1.5 text-xs font-semibold text-stone-700 dark:text-stone-200 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-700 rounded-lg cursor-pointer transition-colors"
+                >
+                  Edit Article
+                </button>
+
+                {article.status === 'SUBMITTED' && (currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER') && onReview && (
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onReview(article);
+                    }}
+                    className="px-3.5 py-1.5 text-xs font-semibold text-[#153E2E] bg-[#D4AF37] hover:bg-[#E5B83B] rounded-lg cursor-pointer flex items-center gap-1 transition-colors"
+                  >
+                    Decide Review
+                  </button>
+                )}
+
+                {article.status === 'APPROVED' && (currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER') && onPublish && (
+                  <button
+                    onClick={() => {
+                      onPublish(article.id);
+                      onClose();
+                    }}
+                    className="px-3.5 py-1.5 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0E2C20] rounded-lg cursor-pointer flex items-center gap-1 transition-colors"
+                  >
+                    Publish Live
+                  </button>
+                )}
               </div>
             </div>
-          )}
-        </div>
-
-        {/* Footer controls */}
-        <div className="p-4 border-t border-[#E8E4DA] bg-[#FAF8F5] flex items-center justify-between">
-          <span className="text-[11px] font-mono text-stone-400 truncate max-w-xs">
-            Slug: /{article.slug}
-          </span>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                onClose();
-                onEdit(article);
-              }}
-              className="px-3.5 py-1.5 text-xs font-semibold text-stone-700 bg-white border border-stone-200 hover:bg-stone-50 rounded-lg cursor-pointer"
-            >
-              Edit Article
-            </button>
-
-            {article.status === 'SUBMITTED' && (currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER') && onReview && (
-              <button
-                onClick={() => {
-                  onClose();
-                  onReview(article);
-                }}
-                className="px-3.5 py-1.5 text-xs font-semibold text-[#153E2E] bg-[#D4AF37] hover:bg-[#E5B83B] rounded-lg cursor-pointer flex items-center gap-1"
-              >
-                Decide Review
-              </button>
-            )}
-
-            {article.status === 'APPROVED' && (currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER') && onPublish && (
-              <button
-                onClick={() => {
-                  onPublish(article.id);
-                  onClose();
-                }}
-                className="px-3.5 py-1.5 text-xs font-bold text-white bg-[#153E2E] hover:bg-[#0E2C20] rounded-lg cursor-pointer flex items-center gap-1"
-              >
-                Publish Live
-              </button>
-            )}
-          </div>
-        </div>
-        </>
-      )}
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );

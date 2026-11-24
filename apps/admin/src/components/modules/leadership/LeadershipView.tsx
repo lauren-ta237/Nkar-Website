@@ -3,11 +3,9 @@ import {
   Crown,
   Plus,
   Search,
-  Eye,
   Edit,
   Trash2,
   Calendar,
-  ArrowUpDown,
 } from 'lucide-react';
 import { useAdminLeadershipList, useAdminLeadershipMutations } from '@/lib/api/leadership.api';
 import { Leadership } from '../../../types';
@@ -20,7 +18,9 @@ import { LeadershipFormModal } from './LeadershipFormModal';
 const toHttpsLeaderPortrait = (url?: string | null): string => {
   if (!url) return '';
   return url.trim().replace(/^http:\/\//i, 'https://');
-};export const LeadershipView: React.FC = () => {
+};
+
+export const LeadershipView: React.FC = () => {
   const { currentUser } = useAdminStore();
   const { data: leadership = [], isLoading } = useAdminLeadershipList();
   const { createMutation, updateMutation, deleteMutation } = useAdminLeadershipMutations();
@@ -67,16 +67,25 @@ const toHttpsLeaderPortrait = (url?: string | null): string => {
   const canManage = currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'CONTENT_REVIEWER';
   const canDelete = currentUser.role === 'SUPER_ADMIN';
 
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-stone-200 dark:bg-stone-800 rounded w-1/4 animate-pulse" />
+        <div className="h-64 bg-stone-100 dark:bg-stone-900 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
             <Crown className="w-5 h-5 text-[#D4AF37]" />
             Traditional Leadership Directory
           </h2>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 dark:text-stone-400">
             Royal Fon, Seven Kingmakers (Fais of Nkar), Queen Mothers (Yaa Woo), and traditional dignitaries
           </p>
         </div>
@@ -96,7 +105,7 @@ const toHttpsLeaderPortrait = (url?: string | null): string => {
       </div>
 
       {/* Search */}
-      <div className="p-4 bg-white border border-[#E8E4DA] rounded-2xl shadow-xs">
+      <div className="p-4 bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl shadow-xs">
         <div className="relative">
           <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -104,7 +113,7 @@ const toHttpsLeaderPortrait = (url?: string | null): string => {
             placeholder="Search by traditional title, royal name, or dynasty..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-[#E5E0D5] rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#153E2E]"
+            className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] dark:bg-stone-800 border border-[#E5E0D5] dark:border-stone-700 rounded-xl focus:bg-white dark:focus:bg-stone-900 focus:outline-none focus:ring-1 focus:ring-[#153E2E] text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
           />
         </div>
       </div>
@@ -126,7 +135,7 @@ const toHttpsLeaderPortrait = (url?: string | null): string => {
           {filtered.map((leader) => (
             <div
               key={leader.id}
-              className="bg-white border border-[#E8E4DA] rounded-2xl p-5 shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
+              className="bg-white dark:bg-stone-900 border border-[#E8E4DA] dark:border-stone-800 rounded-2xl p-5 shadow-xs hover:border-[#D4AF37] transition-all flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-start gap-4">
@@ -134,44 +143,44 @@ const toHttpsLeaderPortrait = (url?: string | null): string => {
                     <img
                       src={toHttpsLeaderPortrait(leader.portrait_url)}
                       alt={leader.name}
-                      className="w-16 h-16 rounded-2xl object-cover object-top border-2 border-[#D4AF37] shadow-sm"
+                      className="w-16 h-16 rounded-2xl object-cover object-top border-2 border-[#D4AF37] shadow-sm bg-stone-100 dark:bg-stone-800"
                       referrerPolicy="no-referrer"
                     />
-                    <span className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-[#153E2E] text-[#D4AF37] font-bold text-[11px] flex items-center justify-center border border-white">
+                    <span className="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-[#153E2E] text-[#D4AF37] font-bold text-[11px] flex items-center justify-center border border-white dark:border-stone-900">
                       #{leader.order_index}
                     </span>
                   </div>
 
                   <div className="min-w-0 flex-1">
                     <StatusBadge status={leader.status} />
-                    <h3 className="text-sm font-bold text-stone-900 group-hover:text-[#153E2E] transition-colors mt-1.5 leading-tight">
+                    <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-[#153E2E] dark:group-hover:text-emerald-400 transition-colors mt-1.5 leading-tight">
                       {leader.name}
                     </h3>
-                    <p className="text-xs font-semibold text-[#8B6508] mt-0.5 leading-snug">
+                    <p className="text-xs font-semibold text-[#8B6508] dark:text-amber-400 mt-0.5 leading-snug">
                       {leader.traditional_title}
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-3.5 space-y-2 text-xs">
-                  <div className="flex items-center gap-1.5 text-stone-500 font-mono text-[11px]">
+                  <div className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400 font-mono text-[11px]">
                     <Calendar className="w-3.5 h-3.5 text-stone-400" />
                     <span>Period: {leader.period_label || '—'}</span>
                   </div>
 
                   {leader.historical_notes && (
-                    <p className="text-[11px] text-stone-500 bg-[#FAF8F5] p-2 rounded-lg border border-[#EAE6DD] truncate">
-                      Notes: <span className="font-semibold text-stone-700">{leader.historical_notes}</span>
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400 bg-[#FAF8F5] dark:bg-stone-800/60 p-2 rounded-lg border border-[#EAE6DD] dark:border-stone-800 truncate">
+                      Notes: <span className="font-semibold text-stone-700 dark:text-stone-300">{leader.historical_notes}</span>
                     </p>
                   )}
 
-                  <p className="text-xs text-stone-600 line-clamp-3 leading-relaxed mt-2">
+                  <p className="text-xs text-stone-600 dark:text-stone-400 line-clamp-3 leading-relaxed mt-2">
                     {leader.biography}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-[#F2EFE9] flex items-center justify-between">
+              <div className="mt-4 pt-3 border-t border-[#F2EFE9] dark:border-stone-800 flex items-center justify-between">
                 <span className="text-[10px] text-stone-400 font-mono">
                   Order Index: #{leader.order_index}
                 </span>
@@ -183,7 +192,7 @@ const toHttpsLeaderPortrait = (url?: string | null): string => {
                         setEditingLeader(leader);
                         setFormModalOpen(true);
                       }}
-                      className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
                       title="Edit Profile"
                     >
                       <Edit className="w-3.5 h-3.5" />
@@ -193,7 +202,7 @@ const toHttpsLeaderPortrait = (url?: string | null): string => {
                   {canDelete && (
                     <button
                       onClick={() => setDeleteConfirmId(leader.id)}
-                      className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
                       title="Delete Leader"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

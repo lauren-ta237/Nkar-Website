@@ -38,14 +38,21 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
         </span>
       );
 
+    case 'UNREAD':
+      return (
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-900 dark:text-amber-200 bg-amber-100/90 dark:bg-amber-950/70 px-2.5 py-1 rounded-md border border-amber-300 dark:border-amber-700/80">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+          <span>Unread</span>
+        </span>
+      );
+
     case 'DRAFT':
     case 'PLANNING':
     case 'PROPOSED':
-    case 'UNREAD':
       return (
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-700 bg-stone-100 px-2.5 py-1 rounded-md border border-stone-200">
-          <FileEdit className="w-3.5 h-3.5 text-stone-500" />
-          <span>{norm === 'DRAFT' ? 'Draft' : norm === 'UNREAD' ? 'Unread' : norm === 'PROPOSED' ? 'Proposed' : 'Planning'}</span>
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-700 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2.5 py-1 rounded-md border border-stone-200 dark:border-stone-700">
+          <FileEdit className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
+          <span>{norm === 'DRAFT' ? 'Draft' : norm === 'PROPOSED' ? 'Proposed' : 'Planning'}</span>
         </span>
       );
 

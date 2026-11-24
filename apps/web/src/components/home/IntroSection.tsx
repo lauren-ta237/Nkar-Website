@@ -26,13 +26,22 @@ export default function IntroSection() {
           <SectionHeading
             eyebrow="Welcome to Nkar"
             title="An indigenous Kingdom in the Grassfields, kept by its own people"
-            description="Nkar's heritage, culture, and traditional leadership, preserved by the community that upholds them."
             ornament
           />
           <div className="mt-6 space-y-5 text-base leading-relaxed text-forest-800/90">
-            {aboutLead.map((paragraph) => (
-              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-            ))}
+            {aboutLead.map((paragraph) => {
+              const isLocation = paragraph.startsWith('The indigenous Fondom of Nkar is located');
+              return (
+                <div key={paragraph.slice(0, 24)}>
+                  {isLocation && (
+                    <h3 className="mb-1.5 text-sm font-bold tracking-wide text-forest-900">
+                      Location
+                    </h3>
+                  )}
+                  <p>{paragraph}</p>
+                </div>
+              );
+            })}
           </div>
           <Link
             to="/about"
