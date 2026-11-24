@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
 
   const { data: stats } = useAdminDashboardStats();
 
-  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'http://localhost:5173';
+  const publicSiteUrl = import.meta.env.VITE_SITE_URL || 'https://nkar-website.vercel.app';
   const toHttpsHeaderAvatar = (url?: string | null): string =>
     url ? url.trim().replace(/^http:\/\//i, 'https://') : '';
 
