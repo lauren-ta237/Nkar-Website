@@ -48,7 +48,7 @@ export interface LeadershipRecord {
 
 export const aboutLead: string[] = [
   "The Nkar Kingdom/Fondom is a community of the Cameroon Grassfields, in the Northwest Region of the country. Its people live on highland hills and farm the land around them; its fondom, its palace, and its customs carry a history that belongs to every Nkar son and daughter.",
-  "The Nkar Kingdom is a traditional administrative and cultural institution comprising several villages, sub-villages, and multiple family lineages. It is governed by a traditional ruler known as the Fon, who oversees the affairs and leadership of the land alongside the Lord of the Land and Nwerong, the supreme traditional institution at the helm of governance. Together, these institutions uphold the kingdom's traditional values, customs, authority, and heritage."
+  "The indigenous Kingdom/Fondom of Nkar is located in the Bamenda Grasslands in the present-day North-west Region of Cameroon. It is one among the largest Fondom in Bui division. The indigenous Fondom of Nkar shares its Eastern boundary with the kingdoms of Ndzen at Kfwenjang in river Bui, the southern frontier at Mekwatir in Wainamah at the boundary with Babessi, South East with the fondom of Bangolan at lake Ber and the Bamun ethnic group in the Noun valley, Western borders with the Oku group in the Kilum mountain forest area and to the North with Nso' ethnic group in the north (IFORD 1987). Nkar highlands are found between latitude 6.2617 and longitude 10.686, at an altitude of 1650 to 2086 m, above sea level."
 ];
 
 export const aboutSections: AboutSection[] = [
