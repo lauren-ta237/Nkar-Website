@@ -33,13 +33,14 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     }
   }, [user, setCurrentUser]);
 
-  // If request failed with 401/auth failure, clean up token
+  // Only clear token on explicit 401 authentication failure
   useEffect(() => {
-    if (isError && token) {
+    const status = (error as (Error & { status?: number | null }) | null)?.status;
+    if (isError && token && status === 401) {
       clearToken();
       setTokenState(null);
     }
-  }, [isError, token]);
+  }, [isError, error, token]);
 
   // 1. If no token is present, user must sign in
   if (!token) {

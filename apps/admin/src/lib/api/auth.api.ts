@@ -149,11 +149,11 @@ export const AUTH_QUERY_KEYS = {
 
 /** GET /auth/me */
 export function useMe(options: { enabled?: boolean; retry?: number | boolean } = {}) {
-  const token = typeof window !== 'undefined' ? getToken() : null;
+  const hasToken = typeof window !== 'undefined' ? Boolean(getToken()) : false;
   return useQuery({
     queryKey: AUTH_QUERY_KEYS.ME,
     queryFn: () => me(),
-    enabled: options.enabled ?? Boolean(token),
+    enabled: options.enabled ?? hasToken,
     retry: options.retry ?? false,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
@@ -164,7 +164,10 @@ export function useLogin() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data?.user) {
+        queryClient.setQueryData(AUTH_QUERY_KEYS.ME, data.user);
+      }
       queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.ALL });
     },
   });
