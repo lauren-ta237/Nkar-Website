@@ -249,13 +249,13 @@ export const leadershipRoles: LeadershipRole[] = [
     icon: 'crown'
   },
   {
-    title: 'The Spirit Fon',
+    title: 'The spirit of the fon',
     text: 'He pertains to the spirits. He is from the spirit world. Therefore, he is to and from God and his spirits. He adores Nyuy Nkar wo Shamwun. Some of these spirits include the ancestors, the dealing with sacred places (Like at Nkeonjang, Tonsai Tan, the Lake Ber, the institution of Mame Nkar, the cleansing of the land and people, the Mkwatir at Wainamah, the cave at Nfut, going to Ngongbah at Vekeriv, the Outlet of the cave at Ngomrin, the Ntamir wo wiy at Yer, the going to Kintinen, the going to Shu Kindzev and the consulting of the ancestors at the Foem, amongst others). He equally acts in relation to the intellectual and higher endowments of the land; he is ecclesiastical and supernatural. He cherishes the TRUTH, and stands for Justice.',
     icon: 'flame'
   },
   {
     title: 'Nwerong Nkar',
-    text: 'He has many institutions around him. The first is Nwerong Nkar. Nwerong Nkar is the custodian of the customary and the traditional values of the Fondom. It ensures the implementation of acts of governance, and so has the power to discipline wrong doers. It is the regulatory institution that can step in any sphere so as to put order. It monitors the birth and life of princes and princesses, and mourns their deaths. It is the only institution that has the legitimate authority to enthrone or even dethrone a Fon. It protects the Fon and the land against any encroachment in any form. Nwerong mourns the \'disappearances\' of Fons of other Fondoms with whom Nkar has diplomatic links. It is in charge of the orientation and initiation into values, of the tribe, of newly enthroned Fons. It ensures the observance of days of atonement. In some tribes there might be one; Nkar has two days of atonement which are Ntseri and Wailun. It is the security agent of the Fondom.',
+    text: 'Nwerong Nkar is the custodian of the customary and the traditional values of the Fondom. It ensures the implementation of acts of governance, and so has the power to discipline wrong doers. It is the regulatory institution that can step in any sphere so as to put order. It monitors the birth and life of princes and princesses, and mourns their deaths. It is the only institution that has the legitimate authority to enthrone or even dethrone a Fon. It protects the Fon and the land against any encroachment in any form. Nwerong mourns the \'disappearances\' of Fons of other Fondoms with whom Nkar has diplomatic links. It is in charge of the orientation and initiation into values, of the tribe, of newly enthroned Fons. It ensures the observance of days of atonement. In some tribes there might be one; Nkar has two days of atonement which are Ntseri and Wailun. It is the security agent of the Fondom.',
     icon: 'scroll'
   },
   {
