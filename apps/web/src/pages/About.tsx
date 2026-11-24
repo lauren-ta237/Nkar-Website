@@ -60,7 +60,7 @@ export default function About() {
           <div className="mt-12 grid gap-12 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="space-y-5 text-base leading-relaxed text-forest-800/90">
               {aboutLead.map((paragraph) => {
-                const isLocation = paragraph.startsWith('The indigenous Fondom of Nkar is located');
+                const isLocation = paragraph.startsWith('The indigenous Kingdom/Fondom of Nkar is located') || paragraph.startsWith('The indigenous Fondom of Nkar is located');
                 return (
                   <div key={paragraph.slice(0, 24)}>
                     {isLocation && (

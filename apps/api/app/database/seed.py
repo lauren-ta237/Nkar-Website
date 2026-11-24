@@ -250,7 +250,7 @@ async def seed_database(db: AsyncSession) -> None:
         ),
         Heritage(
             id=uuid.uuid4(),
-            title="BRIEF HISTORY OF NKAR",
+            title="Brief History Of Nkar People",
             slug="brief-history-migration-routes-nkar-people",
             content=(
                 "Nkar kingdom was founded by Fon Gwarmbi in 1100. It is not yet very clear if Nkar is aborigines or came after the lost tribes of Israel. "
@@ -274,15 +274,87 @@ async def seed_database(db: AsyncSession) -> None:
         ),
         Heritage(
             id=uuid.uuid4(),
-            title="The Traditional Institutions and Governance of the Fondom",
+            title="The Traditional institutions and Governance of Nkar Fondom",
             slug="eleven-traditional-institutions-governance-fondom",
             content=(
-                "Governance administration comprises of the Fon, Lavwong, The Ataantoh, Ngiri Nkar, Manjong Nkar, The Queen Mother (Yaa), The Nchiylav Fai, The Spirit Fon, and the Religious and Spiritual Intercessor.\n\n"
+                "Governance administration comprises of the Fon, the Nwerong, the lav Wong, the Ngiri, the Manjong, Ntanfen, the Vibai (lords of the land), the \u00e0 Yaah (queen mother), the \u00e0tah Ntoh (palace Knighs), the Nchiylav fai, the \u00e0 Sheys and the religious and spiritual leaders.\n\n"
                 "Together, these organs ensure checks and balances, dispute arbitration, and the continuity of communal harmony."
             ),
             category=HeritageCategory.CUSTOMS,
             images=[
                 "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80"
+            ],
+            author_id=editor_id,
+            reviewed_by_id=reviewer_id,
+            status=ContentStatus.PUBLISHED,
+        ),
+        Heritage(
+            id=uuid.uuid4(),
+            title="Christianity and Early Education in Nkar",
+            slug="christianity-early-education-nkar",
+            content=(
+                "After Shisong, Nkar was the second locality in the area to establish a Catholic church, a primary school, and a Home Economics Centre (a girls\u2019 vocational training institution). "
+                "The construction of the Nkar Catholic Church remains legendary across all Bui communities, inspiring local proverbs referencing tasks as deliberate and enduring \u201cas the building of the church of Nkar.\u201d "
+                "Stones were carried from afar, with oral lore of stones returning overnight or walls collapsing before dawn until HRH the Fon performed traditional sacrifices, and villagers joking that the Reverend Father left his eyeglasses on a tree.\n\n"
+                "Inculturation and clergy legacy\n"
+                "The church houses the statue of St. Charles Lwanga, and after Shisong, Nkar hosted the second priestly ordination in Bui Division (Rev. Fr. Bushu), for which the stadium grandstand was built. "
+                "Local musical instruments were integrated into Catholic liturgy, and Nkar has many men harmonizing traditional Nso duties with Christian faith alongside many clergy and religious sisters."
+            ),
+            category=HeritageCategory.CULTURE,
+            images=[
+                "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80"
+            ],
+            author_id=editor_id,
+            reviewed_by_id=reviewer_id,
+            status=ContentStatus.PUBLISHED,
+        ),
+        Heritage(
+            id=uuid.uuid4(),
+            title="Socio-Cultural Heritage, Infrastructure and Sacred Rites",
+            slug="socio-cultural-heritage-infrastructure-rites",
+            content=(
+                "Before Jakiri Subdivision was created, Nkar was the center of socio-cultural life in Dzekwa, hosting February 11 and May 20 celebrations and pupils from Sop, Messiah, Vekovi, Wainamah, Ngomrin, Kisedzam, Matum, Berr, Shiy, Nooyi, Visovmboo, Kiluun, Tan, and Jakiri.\n\n"
+                "Water, vocational training and sacred rites\n"
+                "Pipe-borne water came through joint Catholic Mission and community labor enforced by Nwerong and njangi rules, alongside the Nkar Girls\u2019 Vocational Training Centre, Nwerong sacrifices at Kiruminin (Holy Mountain), the defensive trench, and \u201cbreaking of the Kilun\u201d with wood ash."
+            ),
+            category=HeritageCategory.TRADITIONS,
+            images=[
+                "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80"
+            ],
+            author_id=editor_id,
+            reviewed_by_id=reviewer_id,
+            status=ContentStatus.PUBLISHED,
+        ),
+        Heritage(
+            id=uuid.uuid4(),
+            title="Notable Touristic Sites, Sports and Hospitality in Nkar",
+            slug="touristic-sites-sports-hospitality-nkar",
+            content=(
+                "Key sites include Nkongchoor (blacksmith and drum maker in Wainkar), the historic old Nkar market beside the Nursery School, Nkar Catholic Church (St. Charles Lwanga statue), the new Nkar Community Hall, the former Home Economics Centre, Nkar Catholic Primary School and playground, the Catholic Health Centre, ancient Baobab trees, the Fon\u2019s Palace and bat colony, the Holy Mountain (Kiruminin), and the sacred royal shrine.\n\n"
+                "Sports and hospitality\n"
+                "Nkar has a rich sporting history across Dzekwa (1960s \u201cHoly Joe\u201d vs. BBC, BBC vs. SAC, Shufai Manfe / \u201cNyam Boker,\u201d Mr. Raphael / \u201cTaah Suum,\u201d and the anticipated visit of Roger Milla on Saturday, March 6), warm hospitality, and raffia palm wine (\u201cmimboo\u201d) and sweet oranges."
+            ),
+            category=HeritageCategory.ARTIFACTS,
+            images=[
+                "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80"
+            ],
+            author_id=editor_id,
+            reviewed_by_id=reviewer_id,
+            status=ContentStatus.PUBLISHED,
+        ),
+        Heritage(
+            id=uuid.uuid4(),
+            title="Traditional Deities and Sacred Consultation Sites",
+            slug="traditional-deities-sacred-consultation-sites",
+            content=(
+                "Nyuy wo Nkwoenjang (Gwarkang)\n"
+                "Male deity: land lords worship Kirumen hill (male) and Woe at Minsai beforehand, and the Fon of Nkar worships Nkwoenjang with the Fon of Ndzoeen.\n\n"
+                "Nyuy wo Kibang, Kov Ngongbaa, Tonsai and Kirumen\n"
+                "Includes Nyuy wo Kibang with the Fon of Ngoran (via Njah, Mbishah Nkar, Ntsulong, Abakwa Jakiri, Fafoem at Mantum, Ngewir, Kilankenyuy at Ber, and Kimbvevrin to Kibang ke Ber), Nyuy wo Kov Ngongbaa with the Fon of Oku (via Vikuvtsen, Taamboh, Kah Vekovi, Shulav Mfuh, Tiy Nkui, and Shuu Kov Ngonbaa), Nyuy wo Tonsai (via Shuu Kishaar, Liv, and Yenih near Ardo Karimo\u2019s residence), and Nyuy wo Kirumen (after consulting Nyuy wo Shah Kinying)."
+            ),
+            category=HeritageCategory.TRADITIONS,
+            images=[
+                "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&auto=format&fit=crop&q=80"
             ],
             author_id=editor_id,
             reviewed_by_id=reviewer_id,
