@@ -32,7 +32,7 @@ export async function fetchGalleryList(params: GalleryQueryParams = {}): Promise
   const items = data.data || [];
 
   // Keep the main Leadership & Team portraits pinned at the top (first 7),
-  // placing "Resource Person Shey Njong Sebastian" at position #7
+  // placing "Resource Person Shey Njong Sebastian" at position #4 (index 3)
   const leadership = items.filter((item) => item.category === 'Leadership & Team');
   if (leadership.length === 0) return items;
 
@@ -41,7 +41,12 @@ export async function fetchGalleryList(params: GalleryQueryParams = {}): Promise
 
   const coreLeadership = leadership.filter((item) => !isResourcePerson(item));
   const resourcePerson = leadership.filter(isResourcePerson);
-  const pinned = [...coreLeadership, ...resourcePerson].slice(0, 7);
+  const orderedLeadership = [
+    ...coreLeadership.slice(0, 3),
+    ...resourcePerson,
+    ...coreLeadership.slice(3),
+  ];
+  const pinned = orderedLeadership.slice(0, 7);
 
   const pinnedIds = new Set(pinned.map((item) => item.id));
   const remaining = items.filter((item) => !pinnedIds.has(item.id));
