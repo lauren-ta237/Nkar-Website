@@ -158,11 +158,11 @@ export const ProjectsView: React.FC = () => {
             >
               <div>
                 {proj.cover_image_url && (
-                  <div className="w-full h-44 bg-stone-100 dark:bg-stone-800 overflow-hidden relative">
+                  <div className="w-full h-64 bg-stone-100 dark:bg-stone-950 overflow-hidden relative flex items-center justify-center">
                     <img
                       src={proj.cover_image_url}
                       alt={proj.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain transition-transform duration-300"
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute top-2.5 right-2.5">

@@ -64,7 +64,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             {project.title}
           </Link>
         </h3>
-        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
           {project.description}
         </p>
 
