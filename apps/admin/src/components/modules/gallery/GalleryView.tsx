@@ -198,6 +198,13 @@ export const GalleryView: React.FC = () => {
                         <img
                           src={mediaSrc}
                           alt={item.alt_text || item.title}
+                          style={
+                            /software engineer|platform architect|nsambu laurenta|technical team/i.test(
+                              item.title || ''
+                            )
+                              ? { objectPosition: '50% 42%' }
+                              : undefined
+                          }
                           className="w-full h-full object-cover object-top group-hover:scale-103 transition-transform duration-500"
                           referrerPolicy="no-referrer"
                         />
