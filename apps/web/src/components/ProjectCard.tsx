@@ -27,13 +27,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className="grid overflow-hidden border border-border bg-card md:grid-cols-[0.85fr_1.15fr]">
       {project.cover_image_url ? (
-        <div className="relative min-h-[240px]">
+        <div className="relative bg-cream/40 md:min-h-[320px]">
           <Image
             src={project.cover_image_url}
             alt={project.title}
-            className="absolute inset-0 h-full w-full"
-            fittingType="fill"
-            quality={80}
+            className="block h-auto w-full object-contain md:absolute md:inset-0 md:h-full md:w-full md:object-cover"
+            fittingType="fit"
+            quality={85}
           />
         </div>
       ) : (
