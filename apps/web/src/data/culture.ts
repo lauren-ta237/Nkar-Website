@@ -280,7 +280,7 @@ export const leadershipRoles: LeadershipRole[] = [
   },
   {
     title: 'Manjong Nkar',
-    text: 'Manjong Nkar is the defense arm of Nwerong and the land (Nsai Nkar). It initiates adolescents into adulthood. The physical defense of the Fon and Fondom, the construction of bridges and roads, the protection of the Fon are in the hands of Manjong. Where the Fon officially goes, he does so with Manjong.',
+    text: 'Manjong Nkar is the defense arm of the Fon and the land (Nsai Nkar). It initiates adolescents into adulthood. The physical defense of the Fon and Fondom, the construction of bridges and roads, the protection of the Fon are in the hands of Manjong. Where the Fon officially goes, he does so with Manjong.',
     icon: 'hammer'
   },
   {
