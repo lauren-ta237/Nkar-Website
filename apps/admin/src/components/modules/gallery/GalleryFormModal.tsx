@@ -130,6 +130,7 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
               >
                 <option value="Festivals & Culture">Festivals & Culture</option>
                 <option value="Palace & Lineage">Palace & Lineage</option>
+                <option value="Leadership & Team">Leadership & Team</option>
                 <option value="Landscape & Village">Landscape & Village</option>
                 <option value="Institutions & Regalia">Institutions & Regalia</option>
                 <option value="Civic Works">Civic Works</option>
