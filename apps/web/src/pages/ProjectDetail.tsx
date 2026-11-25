@@ -119,11 +119,12 @@ export default function ProjectDetail() {
             <article className="space-y-8">
               {/* Cover Image */}
               {project.cover_image_url ? (
-                <div className="overflow-hidden border border-border shadow-sm">
+                <div className="overflow-hidden border border-border bg-cream/40 shadow-sm">
                   <Image
                     src={project.cover_image_url}
                     alt={project.title}
-                    className="w-full h-auto max-h-[500px] object-cover"
+                    className="block w-full h-auto object-contain"
+                    fittingType="fit"
                   />
                 </div>
               ) : (
