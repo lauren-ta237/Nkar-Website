@@ -29,7 +29,15 @@ export async function fetchGalleryList(params: GalleryQueryParams = {}): Promise
   const qs = query.toString();
   const url = qs ? `/gallery?${qs}` : '/gallery';
   const { data } = await api.get<ApiResponse<Gallery[]>>(url);
-  return data.data || [];
+  const items = data.data || [];
+
+  // Keep the main Leadership & Team portraits pinned at the top (first 6)
+  const pinned = items.filter((item) => item.category === 'Leadership & Team').slice(0, 6);
+  if (pinned.length === 0) return items;
+
+  const pinnedIds = new Set(pinned.map((item) => item.id));
+  const remaining = items.filter((item) => !pinnedIds.has(item.id));
+  return [...pinned, ...remaining];
 }
 
 export function useGalleryList(params: GalleryQueryParams = {}, options: { enabled?: boolean } = {}) {
