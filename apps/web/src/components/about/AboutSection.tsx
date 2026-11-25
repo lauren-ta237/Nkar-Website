@@ -27,7 +27,8 @@ export default function AboutSection({ section, index }: AboutSectionProps) {
             {section.title}
           </h2>
           <div className="mt-6 space-y-5 text-base leading-relaxed text-forest-800/90">
-            {section.paragraphs.map((paragraph) => {
+            {section.paragraphs.map((rawParagraph) => {
+              const paragraph = rawParagraph.replace(/^Settlement and administration\s*\n+/i, '');
               const lines = paragraph.split('\n');
               const hasSubheading = lines.length > 1 && lines[0].trim().length < 60;
               if (hasSubheading) {
