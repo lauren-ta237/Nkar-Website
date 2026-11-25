@@ -155,9 +155,14 @@ export default function ProjectDetail() {
                   Scope &amp; Community Impact
                 </h3>
                 <div className="prose max-w-none text-base leading-relaxed text-forest-800 space-y-4">
-                  {project.description.split('\n\n').map((paragraph, idx) => (
-                    <p key={idx}>{paragraph}</p>
-                  ))}
+                  {project.description
+                    .split(/\n\s*\n/)
+                    .filter((paragraph) => paragraph.trim().length > 0)
+                    .map((paragraph, idx) => (
+                      <p key={idx} className="whitespace-pre-line">
+                        {paragraph.trim()}
+                      </p>
+                    ))}
                 </div>
               </div>
 
