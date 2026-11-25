@@ -31,9 +31,9 @@ export default function GalleryGrid({ items, onOpen }: GalleryGridProps) {
             type="button"
             onClick={() => onOpen(index)}
             aria-label={`Open ${isVideo ? 'video' : 'image'}: ${item.title}`}
-            className="group relative aspect-[4/3] overflow-hidden rounded-sm border border-gold-500/25 bg-cream/60 p-1.5 shadow-sm transition-colors hover:border-gold-500/60"
+            className="group flex flex-col overflow-hidden rounded-sm border border-gold-500/25 bg-card p-1.5 text-left shadow-sm transition-colors hover:border-gold-500/60"
           >
-            <span className="relative block h-full w-full overflow-hidden rounded-sm bg-stone-950">
+            <span className="relative block aspect-[4/3] w-full overflow-hidden rounded-sm bg-stone-950">
               {isVideo ? (
                 <video
                   src={mediaSrc}
@@ -59,16 +59,14 @@ export default function GalleryGrid({ items, onOpen }: GalleryGridProps) {
                   Video
                 </span>
               )}
+            </span>
 
-              <span
-                className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/25 to-transparent"
-                aria-hidden="true"
-              />
-              <span className="absolute inset-x-0 bottom-0 p-5 text-left">
-                <span className="block text-[10px] uppercase tracking-[0.26em] text-gold-300">
-                  {item.category}
-                </span>
-                <span className="mt-2 block font-display text-xl text-ivory">{item.title}</span>
+            <span className="block px-3 py-3.5 sm:px-4 sm:py-4">
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.24em] text-gold-600">
+                {item.category}
+              </span>
+              <span className="mt-1.5 block font-display text-base leading-snug text-forest-700 line-clamp-2 sm:text-lg group-hover:text-gold-600 transition-colors">
+                {item.title}
               </span>
             </span>
           </button>
