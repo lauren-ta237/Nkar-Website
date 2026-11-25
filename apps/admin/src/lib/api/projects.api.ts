@@ -13,8 +13,22 @@ export const PROJECTS_QUERY_KEYS = {
   LIST: ['admin', 'projects', 'list'] as const,
 };
 
+function normalizeProjectStatus(status: unknown): 'proposed' | 'ongoing' | 'completed' {
+  const normalized = String(status || 'proposed').trim().toLowerCase();
+  if (normalized === 'in_progress' || normalized === 'ongoing' || normalized === 'active') {
+    return 'ongoing';
+  }
+  if (normalized === 'completed' || normalized === 'done' || normalized === 'published') {
+    return 'completed';
+  }
+  return 'proposed';
+}
+
 function cleanProjectPayload(payload: any) {
   const sanitized = sanitizePayload(payload);
+  if (sanitized.status !== undefined) {
+    sanitized.status = normalizeProjectStatus(sanitized.status);
+  }
   if (sanitized.budget_cfa !== undefined && (sanitized.budget_cfa === null || Number(sanitized.budget_cfa) <= 0)) {
     sanitized.budget_cfa = null;
   }
