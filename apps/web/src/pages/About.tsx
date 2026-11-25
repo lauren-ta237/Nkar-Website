@@ -47,7 +47,31 @@ export default function About() {
 
     const historySections = mapped.filter(isHistory);
     const otherSections = mapped.filter((s) => !isHistory(s));
-    return [...historySections, ...otherSections];
+    const isHistorySection = (s: AboutSectionData) =>
+      /(?:^|-)history(?:$|-)|brief history/i.test(`${s.id} ${s.eyebrow} ${s.title}`);
+    const isArtifactsSection = (s: AboutSectionData) =>
+      /(?:^|-)artifacts(?:$|-)|notable touristic/i.test(`${s.id} ${s.eyebrow} ${s.title}`);
+
+    const ordered = [...historySections, ...otherSections];
+    const histIdx = ordered.findIndex(isHistorySection);
+    const artIdx = ordered.findIndex(isArtifactsSection);
+
+    if (histIdx !== -1 && artIdx !== -1 && histIdx !== artIdx) {
+      const histItem = ordered[histIdx];
+      const artItem = ordered[artIdx];
+      ordered[histIdx] = {
+        ...histItem,
+        image: artItem.image,
+        imageAlt: artItem.imageAlt || artItem.title,
+      };
+      ordered[artIdx] = {
+        ...artItem,
+        image: histItem.image,
+        imageAlt: histItem.imageAlt || histItem.title,
+      };
+    }
+
+    return ordered;
   }, [heritageItems]);
 
   useEffect(() => {
