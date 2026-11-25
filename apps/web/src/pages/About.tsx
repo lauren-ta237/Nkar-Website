@@ -24,23 +24,30 @@ export default function About() {
   const { data: heritageItems = [], isLoading } = useHeritageList();
 
   const sections = useMemo<AboutSectionData[]>(() => {
-    if (Array.isArray(heritageItems) && heritageItems.length > 0) {
-      return heritageItems.map((h) => {
-        const rawCategory = h.category ? h.category.replace(/_/g, ' ') : 'Heritage';
-        const isReligion =
-          rawCategory.toLowerCase() === 'culture' ||
-          /christianity|religion|faith/i.test(h.title || '');
-        return {
-          id: h.slug || h.id,
-          eyebrow: isReligion ? 'Religion' : rawCategory,
-          title: h.title,
-          image: Array.isArray(h.images) && h.images.length > 0 ? h.images[0] : null,
-          imageAlt: h.title,
-          paragraphs: (h.content || '').split('\n\n').filter(Boolean),
-        };
-      });
-    }
-    return staticAboutSections;
+    const mapped: AboutSectionData[] =
+      Array.isArray(heritageItems) && heritageItems.length > 0
+        ? heritageItems.map((h) => {
+            const rawCategory = h.category ? h.category.replace(/_/g, ' ') : 'Heritage';
+            const isReligion =
+              rawCategory.toLowerCase() === 'culture' ||
+              /christianity|religion|faith/i.test(h.title || '');
+            return {
+              id: h.slug || h.id,
+              eyebrow: isReligion ? 'Religion' : rawCategory,
+              title: h.title,
+              image: Array.isArray(h.images) && h.images.length > 0 ? h.images[0] : null,
+              imageAlt: h.title,
+              paragraphs: (h.content || '').split('\n\n').filter(Boolean),
+            };
+          })
+        : staticAboutSections;
+
+    const isHistory = (s: AboutSectionData) =>
+      /history/i.test(s.eyebrow) || /brief history/i.test(s.title);
+
+    const historySections = mapped.filter(isHistory);
+    const otherSections = mapped.filter((s) => !isHistory(s));
+    return [...historySections, ...otherSections];
   }, [heritageItems]);
 
   useEffect(() => {
