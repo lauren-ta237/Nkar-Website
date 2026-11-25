@@ -25,14 +25,20 @@ export default function About() {
 
   const sections = useMemo<AboutSectionData[]>(() => {
     if (Array.isArray(heritageItems) && heritageItems.length > 0) {
-      return heritageItems.map((h) => ({
-        id: h.slug || h.id,
-        eyebrow: h.category ? h.category.replace(/_/g, ' ') : 'Heritage',
-        title: h.title,
-        image: Array.isArray(h.images) && h.images.length > 0 ? h.images[0] : null,
-        imageAlt: h.title,
-        paragraphs: (h.content || '').split('\n\n').filter(Boolean),
-      }));
+      return heritageItems.map((h) => {
+        const rawCategory = h.category ? h.category.replace(/_/g, ' ') : 'Heritage';
+        const isReligion =
+          rawCategory.toLowerCase() === 'culture' ||
+          /christianity|religion|faith/i.test(h.title || '');
+        return {
+          id: h.slug || h.id,
+          eyebrow: isReligion ? 'Religion' : rawCategory,
+          title: h.title,
+          image: Array.isArray(h.images) && h.images.length > 0 ? h.images[0] : null,
+          imageAlt: h.title,
+          paragraphs: (h.content || '').split('\n\n').filter(Boolean),
+        };
+      });
     }
     return staticAboutSections;
   }, [heritageItems]);
@@ -59,19 +65,9 @@ export default function About() {
 
           <div className="mt-12 grid gap-12 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="space-y-5 text-base leading-relaxed text-forest-800/90">
-              {aboutLead.map((paragraph) => {
-                const isLocation = paragraph.startsWith('The indigenous Kingdom/Fondom of Nkar is located') || paragraph.startsWith('The indigenous Fondom of Nkar is located');
-                return (
-                  <div key={paragraph.slice(0, 24)}>
-                    {isLocation && (
-                      <h3 className="mb-1.5 text-sm font-bold tracking-wide text-forest-900">
-                        Location
-                      </h3>
-                    )}
-                    <p>{paragraph}</p>
-                  </div>
-                );
-              })}
+              {aboutLead.map((paragraph) => (
+                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+              ))}
             </div>
 
             <aside className="h-fit border border-border bg-cream/60 p-8">
