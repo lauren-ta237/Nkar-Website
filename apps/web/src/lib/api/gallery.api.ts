@@ -29,7 +29,29 @@ export async function fetchGalleryList(params: GalleryQueryParams = {}): Promise
   const qs = query.toString();
   const url = qs ? `/gallery?${qs}` : '/gallery';
   const { data } = await api.get<ApiResponse<Gallery[]>>(url);
-  const items = data.data || [];
+function frameOwnerPortrait(item: Gallery): Gallery {
+  const isOwnerCard =
+    /software engineer|platform architect|nsambu laurenta|technical team/i.test(item.title || '');
+  if (!isOwnerCard || !item.media_url) return item;
+
+  const url = item.media_url.trim().replace(/^http:\/\//i, 'https://');
+  const cloudinaryUploadSegment = '/image/upload/';
+  const idx = url.indexOf(cloudinaryUploadSegment);
+  if (idx === -1) return item;
+
+  const prefix = url.slice(0, idx + cloudinaryUploadSegment.length);
+  const rest = url.slice(idx + cloudinaryUploadSegment.length);
+  const cleanRest = rest.replace(/^(?:[a-z]+_[^/,]+,)*[a-z]+_[^/]+\//i, '');
+  const framedUrl = `${prefix}c_fill,g_face,ar_4:3,w_1200,q_auto,f_auto/${cleanRest}`;
+
+  return {
+    ...item,
+    media_url: framedUrl,
+    thumbnail_url: item.thumbnail_url ? framedUrl : item.thumbnail_url,
+  };
+}
+
+  const items = (data.data || []).map(frameOwnerPortrait);
 
   // Keep the main Leadership & Team portraits pinned at the top (first 7),
   // placing "Resource Person Shey Njong Sebastian" at position #4 (index 3)
