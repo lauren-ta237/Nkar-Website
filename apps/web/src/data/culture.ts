@@ -250,7 +250,7 @@ export const leadershipRoles: LeadershipRole[] = [
   },
   {
     title: 'The spirit of the fon',
-    text: 'He pertains to the spirits. He is from the spirit world. Therefore, he is to and from God and his spirits. He adores Nyuy Nkar wo Shamwun. Some of these spirits include the ancestors, the dealing with sacred places (Like at Nkeonjang, Tonsai Tan, the Lake Ber, the institution of Mame Nkar, the cleansing of the land and people, the Mkwatir at Wainamah, the cave at Nfut, going to Ngongbah at Vekeriv, the Outlet of the cave at Ngomrin, the Ntamir wo wiy at Yer, the going to Kintinen, the going to Shu Kindzev and the consulting of the ancestors at the Foem, amongst others). He equally acts in relation to the intellectual and higher endowments of the land; he is ecclesiastical and supernatural. He cherishes the TRUTH, and stands for Justice.',
+    text: 'He pertains to the spirits. He is from the spirit world. Therefore, he is to and from God and his spirits. He adores Nyuy Nkar wo Shamwun. Some of these spirits include the ancestors, the dealing with sacred places (Like at Nkeonjang, Tonsai Tan, the Lake Ber, the institution of Mame Nkar, the cleansing of the land and people, the Mkwatir at Wainamah, the cave at Ntur, going to Ngongbah at Vekeriv, the Outlet of the cave at Ngomrin, the Ntamir wo wiy at Yer, the going to Kintinen, the going to Shu Kindzev and the consulting of the ancestors at the Foem, amongst others). He equally acts in relation to the intellectual and higher endowments of the land; he is ecclesiastical and supernatural. He cherishes the TRUTH, and stands for Justice.',
     icon: 'flame'
   },
   {
@@ -327,7 +327,7 @@ export const sacredSites: SacredSiteEntry[] = [
     icon: 'flame'
   },
   {
-    title: 'Mountain Sanctuary of Krumen (Taa Nkiy Nkar)',
+    title: 'Mountain Sanctuary of Kirumen (Taa Nkiy Nkar)',
     text: 'Revered mountain summit where the Nkar people make an annual pilgrimage to thank God (Nyuy Nkar wo Shamwun) for harvests and invoke divine blessings.',
     icon: 'sprout'
   },
